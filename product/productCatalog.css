@@ -1,0 +1,6 @@
+body{
+    background-image: url("wallpaper_02.png");
+    background-size: cover; /* or 'contain', depending on desired behavior */
+    background-repeat: no-repeat;
+    background-position: center center;
+}

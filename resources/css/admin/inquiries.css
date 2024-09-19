@@ -1,0 +1,59 @@
+body {
+    background-image: url('../../images/bg1.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+     background-size: cover; 
+}
+
+
+.bg-translucent {
+    background-color: rgba(255, 255, 255, 0.6); 
+}
+
+.scrollable-list {
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto;  /* Enable vertical scrolling */
+}
+
+.tkt-header{
+    background-color: rgba(116, 81, 45, 0.9);
+}
+
+.btn-disabled {
+    background-color: #D1D5DB; 
+    cursor: not-allowed;
+}
+.btn-enabled {
+    background-color: #DC2626;
+    cursor: pointer;
+}
+.btn-update {
+    background-color: #3B82F6;
+    cursor: pointer;
+}
+.btn-update:hover {
+    background-color: #2563EB;
+}
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+/* .btn-enabled {
+    background-color:  #dc2626; 
+    border-color:  #dc2626;
+    color: #ffffff; 
+}
+.btn-enabled:hover {
+    background-color: #f87171; 
+    border-color:  #f87171; 
+}
+.btn-disabled {
+    background-color: #d1d5db; 
+    border-color: #d1d5db; 
+    color: #6b7280; 
+    cursor: not-allowed; 
+} */

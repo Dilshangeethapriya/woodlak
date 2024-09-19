@@ -1,0 +1,106 @@
+*{
+    margin: 0;
+    padding: 0;
+
+}
+
+body{
+    background-color: #c19a6b;
+    background-image: url(download\ \(1\).jpeg);
+    background-size: cover;
+}
+
+.about-1A{
+    margin: 30px;
+    padding: 5px;
+}
+
+.about-1A h1{
+    text-align: center;
+    color: rgb(231, 196, 144);
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.about-1A p{
+    text-align: center;
+    padding: 3px;
+    color: rgb(231, 196, 144);
+    
+    margin-top: 10px;
+    
+}
+
+.about-1A h2{
+    text-align: center;
+    color: rgb(231, 196, 144);
+    font-family: 'Courier New', Courier, monospace;
+   
+}
+.about-item{
+    border-radius: 4%;
+    margin-bottom: 70px;
+    margin-top: 5px;
+    background-color: rgb(226, 187, 131);
+    padding: 80px,30px;
+    box-shadow: 0 0 9px  rgb(48, 38, 12);
+}
+
+.about-item i{
+    font-size: 30px;
+    margin: 0;
+}
+
+.about-item h3{
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.about-item hr{
+    width: 49px;
+    height: 3px;
+    background-color: #201506;
+    margin: 0 auto;
+    border: none;
+}
+
+.about-item p{
+    margin-top: 20px;
+    margin-bottom: 10px;
+   
+} 
+
+.about-item:hover{
+    background-color: #201506;
+}
+
+.about-item:hover i,
+.about-item:hover h3,
+.about-item:hover p{
+    color: #c19a6b;
+}
+
+.about-item:hover hr{
+    background-color: #c19a6b;
+}
+
+.about-item:hover i{
+    transform: translateY(-10px);
+}
+
+.about-item:hover i,
+.about-item:hover h3,
+.about-item:hover hr{
+    transition: all 400ms ease-in-out;
+
+}
+
+.about-item i{
+    margin-top: 24px;
+}
+
+.about-item p{
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+

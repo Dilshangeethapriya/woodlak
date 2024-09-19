@@ -1,0 +1,69 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.payment-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-option {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: background-color 0.3s ease;
+}
+
+.payment-option:hover {
+    background-color: #f1f1f1;
+}
+
+.payment-option img {
+    width: 80px; /* Increase the width */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 10px; /* Increase space below the image */
+}
+
+.payment-option p {
+    margin: 0;
+    color: #333;
+    font-size: 16px; /* Optionally increase font size */
+}
+
+.payment-option a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.payment-option a:hover {
+    text-decoration: none;
+    color: inherit;
+}

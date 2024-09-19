@@ -1,0 +1,111 @@
+*
+{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "poppins", sans-serif;
+}
+
+body{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	background: url("Customer_details.jpg") no-repeat;
+	background-size: cover;
+	background-position: center;
+	
+}
+
+
+	
+
+.wrapper{
+	width: 90%;
+	max-width: 420px;
+	background: transparent;
+	border: 2px solid rgba(255,255,255, .2);
+	backdrop-filter: blur(20px);
+	box-shadow: 0 0 10px rgba(0,0,0, .2);
+	color: #050303;
+	border-radius: 20px;
+	padding: 30px 40px;
+	margin: 10px;
+}
+.wrapper:first-child {
+    margin-right: 10px; 
+}
+
+.wrapper h1{
+	font-size: 24px;
+	text-align: center;
+	
+}
+.wrapper .input-box{
+	position: relative;
+	width: 100%;
+	height: auto;
+	margin: 15px 0;
+}
+
+.input-box p{
+	width: 100%;
+	
+	background:#fff;
+	border: none;
+	outline: none;
+	border: 2px solid rgba(255,255,255, .2);
+	border-radius: 40px;
+	font-size: 16px;
+	color: #050303;
+	padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder{
+	color: #fff;
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    .wrapper h1 {
+        font-size: 20px;
+    }
+
+    .input-box p {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .wrapper {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .wrapper h1 {
+        font-size: 18px;
+    }
+
+    .input-box p {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

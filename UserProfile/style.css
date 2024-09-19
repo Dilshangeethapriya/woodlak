@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;700&display=swap');
+
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    
+    background-size: cover;
+    background-image: url(images/download\ \(1\).jpeg);
+}
+
+
+
+html::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.message{
+    margin: 5px 0;
+    width: 100%;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    background-color: var(--red);
+    color: var(--white);
+    font-size: 13px;
+}
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.register-form {
+    background: #8f7350;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(233, 230, 230, 0.5);
+    width: 360px;
+}
+
+.register-form h2 {
+    margin-bottom: 20px;
+    color: #000a04;
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #550f0a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #911911;
+}
+
+.register-form p {
+    text-align: center;
+}
+
+.register-form p a {
+    color: #6211cc;
+    text-decoration: none;
+}
+
+.register-form p a:hover {
+    text-decoration: underline;
+}
+
+.profile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: rgb(1, 14, 9);
+    background: url('images/download\ \(1\).jpeg') no-repeat center center fixed;
+    padding: 20px;
+}
+
+.profile form{
+    background: rgba(143, 216, 182, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(233, 230, 230, 0.5);
+    text-align: center;
+    width: 500px;
+}
+
+.profile form .greeeting p{
+   font-weight: bolder;
+   font-size: 17px;
+   padding-right: 300px;
+   color: #550f0a;
+}
+
+.profile form img{
+    height: 200px;
+    width: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 5px;
+    box-shadow: rgb(71, 39, 39);
+}
+
+.profile form .flex{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    gap: 35px;
+}
+
+.profile form .flex .input-roup{
+    width: 49%;
+}
+
+.profile form .flex .input-roup .profile_password{
+    text-align: left;
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+    font-size: 17px;
+    color: var(--black);
+
+}
+
+.profile form .flex .input-roup span{
+    text-align: left;
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+    font-size: 17px;
+    color: var(--black);
+}
+
+.profile form .flex .input-roup .box{
+    width: 90%;
+    border-radius: 5px;
+    background-color: #b0d1b6;
+    padding: 12px 14px;
+    font-size: 17px;
+    color: black;
+    margin-top: 10px;
+}
+
+@media (max-width:650px){
+    .profile form .flex{
+        flex-wrap: wrap;
+        gap: 0;
+    }
+    .profile form .flex .input-roup{
+        width: 98%;
+    }
+}
+
+.container{
+    min-height: 100vh;
+    background-color: #550f0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container .profileH{
+    padding: 20px;
+    background-color: #550f0a;
+    box-shadow: #1f9410;
+    text-align: center;
+    width: 400px;
+    border-radius: 5px;
+}
+
+.container .profileH img{
+    height: 15px;
+    width: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 5px;
+    box-shadow: rgb(71, 39, 39);
+}
+
+.container .profileH h3{
+    margin: 5px 0;
+    font-size: 20px;
+    color: black;
+}
+
+.container .profileH p{
+    margin-top: 15px;
+    color: aqua;
+    font-size: 17px;
+}
+
+.container .profileH p a{
+    color: #c45b5b;
+}
+
+.container .profileH p a:hover{
+    text-decoration: underline;
+}
+
+table{
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+table .table{
+    margin-top: 10px;
+    margin-bottom: 20px;
+}

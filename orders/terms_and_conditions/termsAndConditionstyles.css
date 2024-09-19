@@ -1,0 +1,154 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Background for Terms and Conditions Section */
+.terms {
+    min-height: 100vh;
+    background: url('background.jpeg') center / cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styling the Terms and Conditions Box */
+main.background {
+    width: 80vw;
+    height: auto;
+    padding: 3rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    overflow: hidden;
+    color: #333;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    z-index: 1; /* Keep the content behind the navbar */
+    position: relative;
+}
+
+
+
+
+
+
+
+/* Headings for Terms and Conditions */
+main.background h6, main.background h3 {
+    font-size: 1.5rem;
+    color: #543310;
+    margin-bottom: 1rem;
+}
+
+main.background h6 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Paragraph and List Styles */
+main.background p,
+main.background ul {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+main.background ul li {
+    margin-left: 1.5rem;
+    list-style: disc;
+}
+
+/* Responsive Styling for Mobile Devices */
+@media (max-width: 992px) {
+    main.background {
+        width: 90vw;
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    main.background h6 {
+        font-size: 1.8rem;
+    }
+
+    main.background h3, main.background p, main.background ul {
+        font-size: 0.9rem;
+    }
+}
+
+/* Smaller Devices */
+@media (max-width: 480px) {
+    main.background {
+        width: 95vw;
+        padding: 1.5rem;
+    }
+
+    main.background h6 {
+        font-size: 1.6rem;
+    }
+
+    main.background h3, main.background p, main.background ul {
+        font-size: 0.8rem;
+    }
+}
+
+/* Adjusted the header to remain static while the navigation expands */
+header {
+    position: relative;
+    z-index: 100; /* Ensure it's on top */
+}
+
+nav #content {
+    transition: all 0.3s ease; /* Smooth animation */
+    position: absolute;
+    top: 100%; /* Ensure it starts below the header */
+    left: 0;
+    right: 0;
+    background-color: #543310;
+    padding: 1rem 0;
+    z-index: 50; /* Ensures it's on top of the main content */
+}
+
+nav .flex {
+    position: relative;
+    z-index: 100; /* Keep logo and buttons visible */
+}
+
+/* Fix hidden menu visibility */
+.hidden {
+    display: none;
+}
+
+/* Styling for when the menu is shown */
+nav #content.show {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ensure content is pushed down when nav is open */
+body {
+    overflow-x: hidden;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    nav #content {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main.background {
+        padding-top: 10vh; /* Ensures content isn't hidden */
+    }
+}

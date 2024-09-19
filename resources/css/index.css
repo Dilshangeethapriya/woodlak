@@ -1,0 +1,52 @@
+.bg-translucent {
+    background-color: rgba(255, 255, 255, 0.7); 
+}
+body {
+    background-image: url('../images/bg1.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: sans-serif;
+    color: #fff;
+}
+
+
+.header-title {
+    color: #D0B8A8;
+}
+.comb-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.comb-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+.hero {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 50px;
+}
+.btn-primary-custom {
+    background-color: #74512D;
+    color: #fff;
+    border: none;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+.btn-primary-custom:hover {
+    background-color: #D0B8A8;
+    color: #543310;
+    transform: scale(1.05);
+}
+.subheading {
+    color: #E2D1C3;
+}
+.feature-section {
+    background-color: rgba(116, 81, 45, 0.9);
+    padding: 60px;
+    border-radius: 15px;
+    margin-top: 30px;
+}
+img {
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+}
