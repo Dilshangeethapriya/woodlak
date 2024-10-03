@@ -17,34 +17,19 @@ $reviews = $reviewsQuery->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Reviews</title>
-    <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> 
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../resources/css/ratingCounts.css">
 </head>
 <body class="bg-gray-100" style=" background-image: url('../resources/images/bg2.png');background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
 
-    <!-- Navbar -->
-    <nav class="bg-[#78350f] text-white py-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="index.php" class="text-xl font-semibold">WOODLAK</a>
-            <ul class="flex space-x-4">
-                <li><a href="index.php" class="hover:text-gray-200">Home</a></li>
-                <li><a href="shop.php" class="hover:text-gray-200">Shop</a></li>
-                <li><a href="contact.php" class="hover:text-gray-200">Contact</a></li>
-                <li><a href="about.php" class="hover:text-gray-200">About Us</a></li>
-                <!-- Conditionally show login/logout buttons -->
-                <?php if (isset($_SESSION['user_name'])): ?>
-                    <li><a href="profile.php" class="hover:text-gray-200">Profile</a></li>
-                    <li><a href="logout.php" class="hover:text-gray-200">Logout</a></li>
-                <?php else: ?>
-                    <li><a href="login.php" class="hover:text-gray-200">Login</a></li>
-                    <li><a href="register.php" class="hover:text-gray-200">Register</a></li>
-                <?php endif; ?>
-            </ul>
-        </div>
-    </nav>
+    <?php include '../includes/navbar.php' ?>
 
     <!-- Main Content -->
     <div class="container mx-auto my-10">
+        <?php include 'ratingCounts.php' ?>
         <div class="review-section max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(220, 255, 220, 0.7);">
             <h2 class="text-[#C4A484] text-4xl mb-4 text-center">All Product Reviews</h2>
 
@@ -66,14 +51,6 @@ $reviews = $reviewsQuery->get_result();
             <?php endwhile; ?>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-[#78350f] text-white py-6">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 WOODLAK. All rights reserved.</p>
-            <p><a href="privacy.php" class="hover:underline">Privacy Policy</a> | <a href="terms.php" class="hover:underline">Terms of Service</a></p>
-        </div>
-    </footer>
-
+    <?php include '../includes/footer.php' ?>
 </body>
 </html>

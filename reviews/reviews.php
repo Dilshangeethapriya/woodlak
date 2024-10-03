@@ -158,7 +158,14 @@ if ($reviews === false) {
         <?php endwhile; ?>
     <?php else: ?>
         <p class="text-gray-700">No reviews available yet. Be the first one to leave a review!</p>
+    <?php endif;
+    if($reviews->num_rows >=10) : ?>
+        <div class="text-center">
+        <a href="../reviews/allReviews.php?PRODUCTC=<?php echo $productID; ?>" class="text-[#C4A484] text-lg hover:underline">View All Reviews &#10093;&#10093; </a>
+    </div>
+
     <?php endif; ?>
+    
 
 </div>
 

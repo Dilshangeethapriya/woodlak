@@ -20,10 +20,9 @@
 body {
     min-height: 100vh;
     background:url(back.avif) center / cover ;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
+
+
 
 main.table {
     width: 90vw;

@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
             if ($stmt->execute()) {
     
-                header("Location: viewInquiry.php?id=$ticketID&success=1");
+                header("Location: viewInquiry.php?id=$ticketID&success=Status updated successfully..!");
                 exit;
             } else {
       

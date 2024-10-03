@@ -1,9 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
 body {
     background-image: url('../images/bg2.png');
     background-repeat: no-repeat;
     background-attachment: fixed;
      background-size: cover; 
 }
+
+
 .bg-translucent {
     background-color: rgba(220, 255, 220, 0.8); 
 }
@@ -44,4 +54,24 @@ input::placeholder {
     font-weight: bold;
     font-size: 20px;
     opacity: 1 !important;
+  }
+
+
+    
+
+
+.inquiry-container {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 0.75rem; 
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+  }
+
+  .reply-container {
+    background-color: rgba(240, 248, 255, 0.7); 
+    border-left: 4px solid #43A047; 
+    padding: 0.75rem;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
   }

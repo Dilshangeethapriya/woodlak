@@ -4,19 +4,42 @@ session_start();
 
 include '../config/dbconnect.php';
 
+
+
+$customerID = null;
+$customerName = null;
+$customerEmail = null;
+$customerContact = null;
+
+if (isset($_SESSION['user_name'])) {
+    $customerID = $_SESSION['user_id'];
+    $customerName = $_SESSION['user_name'];
+
+    // Fetch customer data
+    $CustomerDataSql = "SELECT * FROM `customer` WHERE customerID = '$customerID'";
+    $customerData = mysqli_query($conn, $CustomerDataSql) or die('query failed');
+    if (mysqli_num_rows($customerData) > 0) {
+        $customerInfo = mysqli_fetch_assoc($customerData);
+        $customerEmail = $customerInfo['email']; // Corrected column name
+        $customerContact = $customerInfo['contact'];
+    }
+}
+
 // ---- inquiry ----
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['inquiry_submit'])) {
+
+
     $name = $_POST['name'];
     $phone = $_POST['phone'];
     $email = $_POST['email'];
     $subject = $_POST['subject'];
     $message = $_POST['message'];
     
-    $sql = "INSERT INTO tickets (name, phone, email, subject, ticketText, ticketStatus, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, 'New', NOW(), NOW())";
+    $sql = "INSERT INTO tickets (customerID,name, phone, email, subject, ticketText, ticketStatus, created_at, updated_at)
+            VALUES (?,?, ?, ?, ?, ?, 'New', NOW(), NOW())";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $name, $phone, $email, $subject, $message);
+    $stmt->bind_param("isssss",$customerID, $name, $phone, $email, $subject, $message);
 
     if ($stmt->execute()) {
         $_SESSION['success'] = "Inquiry sent successfully!";
@@ -58,6 +81,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - WOODLAK</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css">
     <link rel="stylesheet" href="../resources/css/contactUs.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -67,7 +91,7 @@ $conn->close();
   <?php include "../includes/navbar.php"; ?>
 
     <div class="bg bg-transparent text-white p-10 mb-20">
-        <h2 class="text-center text-3xl font-semibold mt-32 mb-10">GET IN TOUCH</h2>
+        <h2 class="text-center text-3xl font-semibold mt-32 mb-10">GET IN TOUCH  <? echo "$customerName" ?></h2>
         <div class="flex justify-around text-center">
            
             <div class="flex flex-col items-center">
@@ -110,11 +134,14 @@ $conn->close();
     <form method="post" action="">
         <div class="flex flex-col  max-w-3xl mx-auto">
         
-            <input type="text" id="name" name="name" class="flex-1 p-2  bg-transparent  border-b-2 border-green-500 " placeholder="Name"  required>
-    
-            <input type="text" id="phone" name="phone" class="flex-1 p-2  bg-transparent  border-b-2 border-green-500 " placeholder="Contact No" required>
+            <input type="text" id="name" name="name" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
+                placeholder="Name" value="<?= isset($customerName) ? htmlspecialchars($customerName) : '' ?>" required>
 
-            <input type="email" id="email" name="email" class="flex-1 p-2  bg-transparent  border-b-2 border-green-500 " placeholder="Email" required>
+            <input type="text" id="phone" name="phone" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
+                placeholder="Contact No" value="<?= isset($customerContact) ? htmlspecialchars($customerContact) : '' ?>" required>
+
+            <input type="email" id="email" name="email" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
+                placeholder="Email" value="<?= isset($customerEmail) ? htmlspecialchars($customerEmail) : '' ?>" required>
           
             <input type="text" id="subject" name="subject" class="flex-1 p-2  bg-transparent  border-b-2 border-green-500 " placeholder="Subject" required>
      
@@ -134,9 +161,11 @@ $conn->close();
                 <h2 class="text-3xl text-center font-semibold my-10">Request a Callback</h2>
                 <form method="post" action="">
     <div class="flex flex-col max-w-3xl mx-auto">
-        <input type="text" id="name" name="name" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" placeholder="Name" required>
+    <input type="text" id="name" name="name" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
+                placeholder="Name" value="<?= isset($customerName) ? htmlspecialchars($customerName) : '' ?>" required>
     
-        <input type="text" id="phone" name="phone" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" placeholder="Phone" required>
+            <input type="text" id="phone" name="phone" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
+                placeholder="Phone" value="<?= isset($customerContact) ? htmlspecialchars($customerContact) : '' ?>" required>
 
         <legend class="mt-4 text-xl font-bold text-gray-400">Available Time</legend>
         <div class="flex items-center mt-2">
@@ -177,35 +206,17 @@ $conn->close();
                     <?php unset($_SESSION['error']); ?>
                 </div>
             <?php endif; ?>
+
+            <?php if (isset($customerID)): ?>
+                   <div class="mx-auto mb-20 flex justify-center">
+                       <a class="text-lg text-white font-bold hover:underline bg-transparent rounded-md px-2 py-1" href="inquiryHistory.php" title="View detailed inquiry analytics reports">
+                           <i class="fa-solid fa-clock-rotate-left"></i> My Inquiry History
+                       </a>
+                   </div>
+            <?php endif; ?>
+
             
-    <footer class="bg-[#543310] text-white mt-10">
-    <div class="container mx-auto py-6 px-4 flex flex-col md:flex-row justify-between items-center">
-        
-        <div class="flex justify-center md:justify-start mb-4 md:mb-0">
-            <a href="https://web.facebook.com/woodlak123" class="text-white mx-2 hover:text-gray-400">
-                <i class="bi bi-facebook text-xl"></i>
-            </a>
-            <a href="#" class="text-white mx-2 hover:text-gray-400">
-                <i class="bi bi-instagram text-xl"></i>
-            </a>
-
-        </div>
-
-        
-         <div class="text-center md:text-left">
-            <p>&copy; 2024 WOODLAK. All rights reserved. 
-                <a href="../orders/terms_and_conditions/termsAndCondition.php" class="text-white hover:text-gray-400 ml-2">Terms and Conditions</a>
-            </p>
-        </div>
-
-       
-        <div class="mt-4 md:mt-0">
-            <a href="#" class="text-white hover:text-gray-400">
-                <i class="bi bi-arrow-up-circle-fill text-2xl"></i>
-            </a>
-        </div>
-    </div>
-</footer>
+   <?php include '../includes/footer.php'; ?>
 <script type="text/javascript">
         window.$crisp = [];
         window.CRISP_WEBSITE_ID = "a8e437fa-4387-4062-95ab-74a78f886f17";

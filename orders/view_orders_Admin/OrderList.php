@@ -31,8 +31,10 @@
 
 <body>
 
+<?php include "../../includes/adminNavbar.php" ?> 
 
-    <main class="table mt-20" id="customers_table">
+
+    <main class="table my-40 flex justify-center mx-auto" id="customers_table">
         <section class="table__header">
             <h1 class="text-2xl">ORDER LIST</h1>
             <div class="input-group">

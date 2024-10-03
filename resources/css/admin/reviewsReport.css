@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+@page {
+  size: A4;
+  margin: 2cm; 
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-image: url('../../images/bg3.jpg');
+ background-repeat: no-repeat; 
+ background-attachment: fixed;
+ background-size: cover;
+}
+
+
+.container {
+margin: 0 auto;
+padding: 30px;
+background-color: #fff;
+box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+border-radius: 10px;
+}
+
+h2 {
+color: #4b5320; /* Dark Green */
+text-align: center;
+font-size: 24px;
+margin-bottom: 20px;
+}
+
+h3 {
+border-bottom: 2px solid #4b5320;
+padding-bottom: 5px;
+}
+
+.total-ratings, .ratings-chart, .top-products, .most-reviewed-products {
+margin-bottom: 30px;
+}
+
+.total-ratings {
+  background-color: #e3f2fd;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+border: 1px solid #ddd;
+margin-top: 15px;
+}
+
+th, td {
+border: 1px solid #ddd;
+padding: 12px;
+text-align: left;
+}
+
+th {
+background-color: #4b5320;
+color: #fff;
+}
+
+td {
+background-color: #f9f9f9;
+}
+
+canvas {
+max-width: 600px;
+margin: 20px auto;
+}
+
+.report-footer {
+text-align: center;
+font-size: 12px;
+margin-top: 40px;
+color: #888;
+}
+
+.page-ittle{
+ margin-bottom : 50px;
+}
+

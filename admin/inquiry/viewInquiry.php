@@ -26,6 +26,25 @@ if (isset($_GET['id'])) {
         }
         $stmt->close();  
     }
+
+
+    // Query to get replies associated with the inquiry
+    $repliesQuery = "SELECT * FROM ticket_replies WHERE ticketID = ? ORDER BY created_at ASC";
+
+    $replies = [];
+    if ($repliesStmt = $conn->prepare($repliesQuery)) {
+        $repliesStmt->bind_param("i", $ticketID);
+        $repliesStmt->execute();
+        $repliesResult = $repliesStmt->get_result();
+
+        if ($repliesResult->num_rows > 0) {
+            while ($row = $repliesResult->fetch_assoc()) {
+                $replies[] = $row;
+            }
+        }
+        $repliesStmt->close();
+    }
+
 } else {
 
     header("Location: inquiries.php");
@@ -50,71 +69,13 @@ $conn->close();
 </head>
 <body class="font-sans text-gray-900 antialiased">
 
-      <header class="bg-[#543310] h-20 z-50">
-    <nav class="flex justify-between items-center w-[95%] mx-auto">
-        <div class="flex items-center gap-[1vw]">
-            <img class="w-16" src="../../resources/images/Logo.png" alt="Logo">
-            <h1 class="text-xl text-white font-sans"><b>WOODLAK</b></h1>
-            <p class="text-xl text-white font-sans">Admin</p>
-        </div>
-        <div class="lg:static absolute bg-[#543310] lg:min-h-fit min-h-[39vh] left-0 top-[9%] lg:w-auto w-full flex items-center px-5 justify-center lg:justify-start text-center lg:text-right xl:contents hidden lg:flex" id="content">
-            <ul class="flex lg:flex-row flex-col lg:gap-[4vw] gap-8">
-                <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="../admin">Dashboard</a>
-                </li>
-                <li>
-                    <a class="text-white  hover:text-[#D0B8A8]" href="">Products</a>
-                </li>
-                <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="../orders/view_orders_Admin/OrderList.php">Orders</a>
-                </li>
-                <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="../admin/inquiry">Inquiries</a>
-                </li>
-                <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="../payment_process/admin_banktrans_check/admin_panel.php">Bank Transfers</a>
-                </li>
-                <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="../UserProfile/RegisteredUsers.php">Users</a>
-                </li>
-            </ul>
-        </div>
-       
-     
-        <div class="flex items-center gap-3">
-            <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]">Logout</button> 
-            <button onclick="responsive()"><i class="bi bi-list text-4xl lg:hidden text-white"></i></button>
-        </div>
-       
-    </nav>
-</header>
-
-<?php
-
-if (isset($_GET['success'])) {
-    echo '
-        <div class="bg-green-500 text-white p-4 rounded-md mb-4 m-auto my-10 sm:max-w-4xl">
-            <span class="font-bold cursor-pointer float-right text-xl leading-none" onclick="this.parentElement.style.display=\'none\';">&times;</span>
-            ' . htmlspecialchars($_GET['success']) . '
-        </div>';
-}
-
-
-if (isset($_GET['error'])) {
-    echo '
-        <div class="bg-red-500 text-white p-4 rounded-md mb-4 m-auto my-10 sm:max-w-4xl">
-            <span class="font-bold cursor-pointer float-right text-xl leading-none" onclick="this.parentElement.style.display=\'none\';">&times;</span>
-            ' . htmlspecialchars($_GET['error']) . '
-        </div>';
-}
-?>
+    <?php include "../../includes/adminNavbar.php" ?> 
 
     <div class="flex items-center justify-center min-h-screen my-20">
         
         <div class="w-full max-w-4xl bg-translucent shadow-md rounded-lg overflow-hidden">
            
-            <div class="tkt-header px-6 py-4 relative  ">
-                
+            <div class="tkt-header px-6 py-4 relative">
                 <a href="inquiries.php" 
                    class="absolute top-4 left-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md text-white hover:scale-105 focus:outline-none">
                    <img src="../../resources/images/inquiry/arrow.png" alt="Back" class="w-6 h-6 mr-2">
@@ -137,13 +98,25 @@ if (isset($_GET['error'])) {
                         <p><strong>Phone:</strong> <?php echo htmlspecialchars($inquiry['phone']); ?></p>
                     </div>
                     <div>
-                        <p><strong>Created At:</strong> <?php echo htmlspecialchars($inquiry['created_at']); ?></p>
-                        <p><strong>Updated At:</strong> <?php echo htmlspecialchars($inquiry['updated_at']); ?></p>
+                        <p><strong>Created Date:</strong> 
+                           <?php 
+                           $created_at = new DateTime($inquiry['created_at']);
+                           $inquiryCreatedDate = $created_at->format('F j, Y, g:i A');
+                           echo $inquiryCreatedDate; 
+                           ?>
+                        </p>
+                        <p><strong>Updated On:</strong> 
+                          <?php 
+                            $updated_at = new DateTime($inquiry['updated_at']);
+                            $inquiryUpdatedDate = $updated_at->format('F j, Y, g:i A');
+                             echo $inquiryUpdatedDate; 
+                          ?>
+                          </p>
                     </div>
                 </div>
                
                 <!-- Subject and Message -->
-                <div class="mb-6 p-4 bg-transparent border border-gray-400 rounded-lg shadow-sm">
+                <div class="mb-6 p-4 bg-transparent border border-green-600 backdrop-blur-md bg-blur-sm rounded-lg shadow-sm">
                     <div class="mb-6 text-center">
                         <h3 class="text-xl font-semibold"><?php echo htmlspecialchars($inquiry['subject']); ?></h3>
                     </div>
@@ -160,16 +133,39 @@ if (isset($_GET['error'])) {
                     </span>
                 </div>
 
+          <!-- Replies section -->
+<div class="mt-6 bg-transparent">
+    <h3 class="text-xl font-semibold mb-4 bg-transparent">Old Replies</h3>
+    <?php if (count($replies) > 0): ?>
+        <ul class="space-y-4">
+            <?php foreach ($replies as $reply): ?>
+                <?php
+                $date = new DateTime($reply['created_at']);
+                $formattedDate = $date->format('F j, Y, g:i A');
+                ?>
+                <li class=" border border-green-600 backdrop-blur-md p-4 rounded-lg shadow-sm  bg-[rgba(240,248,255,0.1)] mt-4 p-3 rounded-lg border-l-4 border-l-[#38b2ac] border-solid">
+                    <div class="mb-2 text-[#74512D] font-semibold">
+                        replied on: <?php echo $formattedDate; ?>:
+                    </div>
+                    <p class="text-black"><?php echo htmlspecialchars($reply['replyText']); ?></p>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p class="text-gray-600">No replies sent for this inquiry.</p>
+    <?php endif; ?>
+</div>
+
+
              
                 <div class="mt-6">
-                    <h3 class="text-xl font-semibold mb-4">Reply to Inquiry</h3>
+                    <h3 class="text-xl font-semibold mb-4">Send a Reply</h3>
                     <form method="POST" action="replyInquiry.php">
                         <input type="hidden" name="ticketID" value="<?php echo $inquiry['ticketID']; ?>">
                         <div class="mb-4">
-                            <label for="reply" class="block text-gray-700">Your Reply</label>
-                            <textarea name="reply" id="reply" rows="4" class="block w-full mt-1  border-b-2 border-green-500 text-gray-700 bg-transparent shadow-sm focus:bg-trancelucent focus:ring-green-500" required><?php echo isset($_POST['reply']) ? htmlspecialchars($_POST['reply']) : ''; ?></textarea>
+                            <textarea name="reply" id="reply" rows="4" class="block .placeholder-black::placeholder w-full mt-1  border-b-2 border-green-600 text-gray-700 bg-[rgba(240,248,255,0.6)] shadow-sm focus:bg-trancelucent focus:ring-green-500 rounded-lg" placeholder="Your Reply" required><?php echo isset($_POST['reply']) ? htmlspecialchars($_POST['reply']) : ''; ?></textarea>
                         </div>
-                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 focus:outline-none focus:border-indigo-700 focus:ring ring-indigo-300">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600  border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 focus:outline-none focus:border-indigo-700 focus:ring ring-indigo-300">
                             Send Reply
                         </button>
                     </form>

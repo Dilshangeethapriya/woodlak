@@ -37,7 +37,7 @@ $conn->close();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,9 +50,10 @@ $conn->close();
 
    
 </head>
-<body>
+<body  >
+    <?php include "../../includes/adminNavbar.php" ?> 
     <main class="container" style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div class="shadow-lg rounded-lg overflow-hidden">
+        <div class="mt-32 shadow-lg rounded-lg overflow-hidden">
             <div class="tkt-header px-6 py-4 relative">
                 <a href="inquiries.php" 
                    class="absolute top-4 left-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md text-white hover:scale-105 focus:outline-none">
