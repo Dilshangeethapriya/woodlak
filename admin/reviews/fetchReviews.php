@@ -84,7 +84,7 @@ if ($reviews && $reviews->num_rows > 0) {
             <div class="flex items-center">
                 <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white"> &#11088; <?php echo $review['rating']; ?></p>
             </div>
-            <p class="text-white"><?php echo htmlspecialchars($review['reviewText']); ?></p>
+            <p class="text-white"><?php echo htmlspecialchars(html_entity_decode($review['reviewText'])); ?></p>
             <p><small class="text-gray-400"><?php echo $review['createdAt']; ?></small></p>
 
             

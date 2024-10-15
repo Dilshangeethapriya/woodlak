@@ -82,19 +82,20 @@ while ($review = $reviews->fetch_assoc()) {
             &#11088;
             <p class="ms-2 text-sm font-bold text-white"><?php echo $review['rating']; ?></p>
         </div>
-        <p class="text-white"><?php echo htmlspecialchars($review['reviewText']); ?></p>
+        <p class="text-white"><?php echo htmlspecialchars(html_entity_decode($review['reviewText'])); ?></p>
         <p><small class="text-gray-400"><?php echo $review['createdAt']; ?></small></p>
 
         <!-- If it's the user's review and is less than 14 days old, allow edit and delete -->
         <?php if ($isUserReview && $isEditable): ?>
             <div class="mt-4">
                 <button onclick="toggleVisibility('editReview_<?php echo $reviewID; ?>')" class="text-[#C4A484] hover:underline mr-1">Edit</button>
-                <form action="deleteReview.php" method="POST" class="inline">
+                <form action="deleteReview.php" method="POST" class="inline" onsubmit="return confirmDelete();">
                     <input type="hidden" name="reviewID" value="<?php echo $reviewID; ?>">
                     <input type="hidden" name="productID" value="<?php echo $productID; ?>">
                     <button type="submit" class="text-red-500 hover:underline">Delete</button>
                 </form>
             </div>
+            
 
             <!-- Edit form -->
             <div id="editReview_<?php echo $reviewID; ?>" style="display:none;" class="mt-3">

@@ -134,7 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 
     <hr class="my-12 h-0.5 border-t-0 bg-[#C4A484]" />
 
-    <!-- Display the latest 10 reviews -->
+   
+    
     <h2 class="text-[#C4A484] text-2xl my-5">Customer Reviews</h2>
     
     <?php if ($reviews->num_rows > 0): ?>
@@ -149,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
                 <div class="flex items-center">
                     <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white"> &#11088; <?php echo $review['rating']; ?></p>
                 </div>
-                <p class="text-white"><?php echo htmlspecialchars($review['reviewText']); ?></p>
+                <p class="text-white"><?php echo htmlspecialchars(html_entity_decode($review['reviewText'])); ?></p>
                 <p><small class="text-gray-400"><?php echo $review['createdAt']; ?></small></p>
 
                 <?php if ($isUserReview && $isEditable): ?>
@@ -157,11 +158,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
             <!-- Edit and Delete buttons -->
             <div class="mt-4">
                 <button onclick="toggleVisibility('editReview_<?php echo $reviewID; ?>')" class="text-[#C4A484] border border-[#C4A484] p-1 rounded-md mr-3">Edit</button>
-                <form action="../reviews/deleteReview.php" method="POST" class="inline">
-                    <input type="hidden" name="reviewID" value="<?php echo $reviewID; ?>">
-                    <input type="hidden" name="productID" value="<?php echo $productID; ?>">
-                    <button type="submit" class="text-red-500 border border-red-500 p-1 rounded-md ">Delete</button>
-                </form>
+                <form action="../reviews/deleteReview.php" method="POST" class="inline delete-form">
+                  <input type="hidden" name="reviewID" value="<?php echo $reviewID; ?>">
+                  <input type="hidden" name="productID" value="<?php echo $productID; ?>">
+                <button type="button" class="text-red-500 border border-red-500 p-1 rounded-md delete-btn">Delete</button>
+            </form>
+
+            <div id="deleteModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden" style="display: none;">
+                <div class="bg-[#1f2937] p-8 rounded-lg shadow-lg w-96 text-center border-2 border-[#C4A484]">
+                    <h3 class="text-2xl font-semibold text-[#C4A484] mb-4">Confirm Deletion</h3>
+                    <p class="text-gray-300 mb-6">Are you sure you want to delete this review? This action cannot be undone.</p>
+                    <div class="flex justify-center space-x-4">
+                       <button id="confirmDeleteBtn" class="bg-[#9b734b] hover:bg-[#785937] text-white px-4 py-2 rounded-md shadow-md transition duration-200 ease-in-out">Yes, Delete</button>
+                       <button id="cancelDeleteBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md shadow-md transition duration-200 ease-in-out">Cancel</button>
+               </div>
+           </div>
+</div>
             </div>
 
             <!-- Edit form, hidden by default -->
@@ -240,13 +252,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     <?php endif;
     if($reviews->num_rows >=10) : ?>
         <div class="text-center">
-        <a href="../reviews/allReviews.php?PRODUCTC=<?php echo $productID; ?>" class="text-[#C4A484] text-lg hover:underline">View All Reviews &#10093;&#10093; </a>
+        <a href="../reviews/allReviews.php?PRODUCTC=<?php echo $productID; ?>" class="text-[#C4A484] text-lg hover:underline">See more reviews &#10093;&#10093; </a>
     </div>
 
     <?php endif; ?>
     
 
 </div>
+
 
 <script>
     function toggleVisibility(id) {
@@ -257,6 +270,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
             element.style.display = 'none';
         }
     }
+
+
+       // delete confirmation-----------
+
+       var deleteForm = null; // Store reference to the form that is to be submitted
+
+// Function to show the custom confirmation modal
+function showDeleteModal(form) {
+    deleteForm = form; // Store the form reference
+    document.getElementById('deleteModal').style.display = 'flex'; // Show the modal
+}
+
+// Function to hide the custom confirmation modal
+function hideDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none'; // Hide the modal
+}
+
+// Attach delete confirmation to all delete buttons
+document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        var form = this.closest('.delete-form'); // Get the parent form of the clicked button
+        showDeleteModal(form); // Show the modal and pass the form
+    });
+});
+
+// Confirm delete action
+document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+    if (deleteForm) {
+        deleteForm.submit(); // Submit the form if confirmed
+    }
+    hideDeleteModal(); // Hide the modal
+});
+
+// Cancel delete action
+document.getElementById('cancelDeleteBtn').addEventListener('click', function() {
+    hideDeleteModal(); // Hide the modal if cancelled
+});    
 </script>
 
 <?php

@@ -14,11 +14,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $query->get_result();
 
     if ($result->num_rows > 0) {
+        // First, delete the review
         $stmt = $conn->prepare("DELETE FROM review WHERE reviewID = ?");
         $stmt->bind_param('i', $reviewID);
+        
         if ($stmt->execute()) {
-            header("Location: ../product/view_product.php?PRODUCTC=$productID");
-            exit();
+            // Now, delete the related sentiment data from the review_sentiment table
+            $sentimentStmt = $conn->prepare("DELETE FROM review_sentiment WHERE reviewID = ?");
+            $sentimentStmt->bind_param('i', $reviewID);
+            
+            if ($sentimentStmt->execute()) {
+                // Redirect back to the product page
+                $newUrl = $_SERVER['HTTP_REFERER'] ?? "../product/view_product.php?PRODUCTC=$productID";
+                header("Location: $newUrl");
+                exit();
+            } else {
+                echo "Error deleting sentiment data: " . $conn->error;
+            }
         } else {
             echo "Error deleting review: " . $conn->error;
         }
@@ -27,3 +39,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+

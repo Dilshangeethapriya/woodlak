@@ -203,55 +203,107 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
            
         </div>
     </div>
+    <div id="deleteModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden" style="display: none;">
+                 <div class="bg-[#1f2937] p-8 rounded-lg shadow-lg w-96 text-center border-2 border-[#C4A484]">
+                       <h3 class="text-2xl font-semibold text-[#C4A484] mb-4">Confirm Deletion</h3>
+                       <p class="text-gray-300 mb-6">Are you sure you want to delete this review? This action cannot be undone.</p>
+                       <div class="flex justify-center space-x-4">
+                            <button id="confirmDeleteBtn" class="bg-[#9b734b] hover:bg-[#785937] text-white px-4 py-2 rounded-md shadow-md transition duration-200 ease-in-out">Yes, Delete</button>
+                            <button id="cancelDeleteBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md shadow-md transition duration-200 ease-in-out">Cancel</button>
+                     </div>
+                 </div>
+      </div>
+
     <?php include '../includes/footer.php' ?>
-    <script>
-       $(document).ready(function() {
-
-         // Fetch reviews with pagination and filters
-         window.fetchReviews = function(page = 1) {
-             var productID = $('#productID').val();
-             var stars = $('#stars').val();
-             var sortReview = $('#sortReview').val();
-         
-             $.ajax({
-                 url: 'fetchReviews.php',
-                 method: 'POST',
-                 data: { 
-                     productID: productID, 
-                     stars: stars, 
-                     sortReview: sortReview,
-                     page: page // Pass the page number
-                 },
-                 success: function(response) {
-                     $('#reviewsContainer').html(response); // Update the reviews section with the response data
-                 },
-                 error: function(jqXHR, textStatus, errorThrown) {
-                     console.log('Error in Ajax request:', textStatus, errorThrown);
-                 }
-             });
-         }
-         
-         // Trigger the fetch when the stars or sorting option changes
-         $('#stars, #sortReview').change(function() {
-             fetchReviews(1); // Fetch page 1 after any filter change
-         });
-         
-         // Trigger initial load of reviews when the page loads
-         fetchReviews();
-         });
-
-
-
-         function toggleVisibility(id) {
-        var element = document.getElementById(id);
-        if (element.style.display === 'none') {
-            element.style.display = 'block';
-        } else {
-            element.style.display = 'none';
-        }
-    }
     
+    <script>
+$(document).ready(function() {
+   
+
+    // Fetch reviews dynamically as you did before
+    window.fetchReviews = function(page = 1) {
+        var productID = $('#productID').val();
+        var stars = $('#stars').val();
+        var sortReview = $('#sortReview').val();
+
+        $.ajax({
+            url: 'fetchReviews.php',
+            method: 'POST',
+            data: { 
+                productID: productID, 
+                stars: stars, 
+                sortReview: sortReview,
+                page: page // Pass the page number
+            },
+            success: function(response) {
+                $('#reviewsContainer').html(response); // Update the reviews section with the response data
+
+                // Re-attach delete confirmation modal after dynamically loading content
+                attachDeleteConfirmation();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('Error in Ajax request:', textStatus, errorThrown);
+            }
+        });
+    };
+
+    // Fetch reviews when filters change or the page loads
+    $('#stars, #sortReview').change(function() {
+        fetchReviews(1); // Reload reviews on filter change
+    });
+
+    fetchReviews(); // Initial load
+
+
+    // delete confirmation-----------
+
+    var deleteForm = null; // To store the form reference for delete
+
+// Function to show the custom confirmation modal
+function showDeleteModal(form) {
+    deleteForm = form; // Store the form to submit later if confirmed
+    document.getElementById('deleteModal').style.display = 'flex';
+}
+
+// Function to hide the custom confirmation modal
+function hideDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+// Attach delete confirmation modal to forms
+function attachDeleteConfirmation() {
+    $('form[onsubmit]').off('submit'); // Remove any previous handler
+    $('form[onsubmit]').on('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        showDeleteModal(this); // Show modal and store the form reference
+    });
+}
+
+// To show the modal
+document.getElementById('deleteModal').style.display = 'flex';
+
+// To hide the modal
+document.getElementById('deleteModal').style.display = 'none';
+
+// Confirm delete action
+$('#confirmDeleteBtn').click(function() {
+    if (deleteForm) {
+        deleteForm.submit(); // Submit the form if confirmed
+    }
+    hideDeleteModal(); // Hide the modal
+});
+
+// Cancel delete action
+$('#cancelDeleteBtn').click(function() {
+    hideDeleteModal(); // Just hide the modal if canceled
+});
+
+// Initially attach the confirmation modal
+attachDeleteConfirmation();
+});
 </script>
+
+
 
 </body>
 </html>
