@@ -1,5 +1,28 @@
 <?php
 include '../config/dbconnect.php'; 
+include '../includes/phpInsight-master/autoload.php'; // Include the sentiment analysis library
+
+use PHPInsight\Sentiment; // Use the PHPInsight sentiment analysis library
+
+$productID = intval($_REQUEST["PRODUCTC"]);
+$userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
+// Fetch reviews and prioritize the logged-in user's reviews
+if ($userID) {
+    $reviewsQuery = $conn->prepare("
+        SELECT * FROM review 
+        WHERE productID = ? 
+        ORDER BY (customerID = ?) DESC, createdAt DESC
+        LIMIT 10
+    ");
+    $reviewsQuery->bind_param('ii', $productID, $userID);
+} else {
+    // If no user is logged in, fetch reviews normally
+    $reviewsQuery = $conn->prepare("SELECT * FROM review WHERE productID = ? ORDER BY createdAt DESC LIMIT 10");
+    $reviewsQuery->bind_param('i', $productID);
+}
+$reviewsQuery->execute();
+$reviews = $reviewsQuery->get_result();
 
 // Handle review submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
@@ -13,11 +36,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
     $customerName = htmlspecialchars($customerName);
     $reviewText = htmlspecialchars($reviewText);
 
-    // Prepare and execute the insert statement
+    // Prepare and execute the insert statement for the review
     $stmt = $conn->prepare("INSERT INTO review (productID, customerID, customerName, rating, reviewText) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param('iisis', $productID, $customerID, $customerName, $rating, $reviewText);
     
     if ($stmt->execute()) {
+        // Get the ID of the newly inserted review
+        $reviewID = $stmt->insert_id;
+
+        // Run sentiment analysis on the submitted review
+        $sentiment = new Sentiment();
+        $scores = $sentiment->score($reviewText);  // Get sentiment scores (positive, negative, neutral)
+        $category = $sentiment->categorise($reviewText); // Get the sentiment category
+        
+        // Insert sentiment analysis result into the review_sentiment table
+        $sentimentStmt = $conn->prepare("
+            INSERT INTO review_sentiment (reviewID, positive_score, negative_score, neutral_score, sentiment_category, last_analyzed)
+            VALUES (?, ?, ?, ?, ?, NOW())
+        ");
+        $sentimentStmt->bind_param('iddds', $reviewID, $scores['pos'], $scores['neg'], $scores['neu'], $category);
+        $sentimentStmt->execute();
+
         // Redirect to the same product page after submission
         header("Location: view_product.php?PRODUCTC=$productID");
         exit();
@@ -30,10 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     $reviewID = intval($_POST['reviewID']);
     $replyText = htmlspecialchars($_POST['replyText']); // Sanitize reply text
+    $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : $_POST['userName'];
+    $userName = htmlspecialchars($userName);
 
     // Prepare and execute the insert statement
-    $stmt = $conn->prepare("INSERT INTO reviewreply (reviewID, replyText) VALUES (?, ?)");
-    $stmt->bind_param('is', $reviewID, $replyText);
+    $stmt = $conn->prepare("INSERT INTO reviewreply (reviewID, userName, replyText) VALUES (?, ?, ?)");
+    $stmt->bind_param('iss', $reviewID, $userName, $replyText);
 
     if ($stmt->execute()) {
         $productID = intval($_REQUEST["PRODUCTC"]);
@@ -43,27 +84,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
         echo "Error submitting reply: " . $conn->error;
     }
 }
-
-// Code to fetch product details, reviews, and render HTML
-$productID = intval($_REQUEST["PRODUCTC"]); 
-
-// Fetch the latest 10 reviews
-$reviewsQuery = $conn->prepare("SELECT * FROM review WHERE productID = ? ORDER BY createdAt DESC LIMIT 10");
-$reviewsQuery->bind_param('i', $productID);
-$reviewsQuery->execute();
-$reviews = $reviewsQuery->get_result();
-
-if ($reviews === false) {
-    echo "Error in fetching reviews: " . $conn->error;
-    exit();
-}
-
 ?>
 
 <!-- HTML and review display goes here -->
 
 <div class="review-section my-36 max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(220, 255, 220, 0.8);">
-    <h2 class="text-[#C4A484] text-4xl mb-4 text-center">Product Reviews</h2>
+    <h2 class="text-[#C4A484] text-4xl mb-8 text-center">Customer Reviews</h2>
 
     <?php include "ratingCounts.php" ?>
 
@@ -79,7 +105,7 @@ if ($reviews === false) {
                     <input type="text" name="customerName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" required>
                 </div>
             <?php else: ?>
-                <p class="text-sm text-gray-700">Reviewing as: <span class="font-bold"><?php echo $_SESSION['user_name']; ?></span></p>
+                <p class="text-sm text-gray-100">Reviewing as: <span class="font-bold"><?php echo $_SESSION['user_name']; ?></span></p>
             <?php endif; ?>
 
             <div>
@@ -113,6 +139,11 @@ if ($reviews === false) {
     
     <?php if ($reviews->num_rows > 0): ?>
         <?php while ($review = $reviews->fetch_assoc()): ?>
+            <?php
+              $reviewID = $review['reviewID'];
+              $isUserReview = isset($userID) && $userID == $review['customerID'];  // Check if this is the logged-in user's review
+              $isEditable = (strtotime($review['createdAt']) >= strtotime('-14 days')); // Check if the review is less than 14 days old
+            ?>
             <div class="review bg-[#1f2937] p-4 rounded-lg mb-4">
                 <h4 class="text-[#C4A484] text-lg"><b><?php echo htmlspecialchars($review['customerName']); ?></b></h4>
                 <div class="flex items-center">
@@ -120,6 +151,47 @@ if ($reviews === false) {
                 </div>
                 <p class="text-white"><?php echo htmlspecialchars($review['reviewText']); ?></p>
                 <p><small class="text-gray-400"><?php echo $review['createdAt']; ?></small></p>
+
+                <?php if ($isUserReview && $isEditable): ?>
+
+            <!-- Edit and Delete buttons -->
+            <div class="mt-4">
+                <button onclick="toggleVisibility('editReview_<?php echo $reviewID; ?>')" class="text-[#C4A484] border border-[#C4A484] p-1 rounded-md mr-3">Edit</button>
+                <form action="../reviews/deleteReview.php" method="POST" class="inline">
+                    <input type="hidden" name="reviewID" value="<?php echo $reviewID; ?>">
+                    <input type="hidden" name="productID" value="<?php echo $productID; ?>">
+                    <button type="submit" class="text-red-500 border border-red-500 p-1 rounded-md ">Delete</button>
+                </form>
+            </div>
+
+            <!-- Edit form, hidden by default -->
+            <div id="editReview_<?php echo $reviewID; ?>" style="display:none;" class="mt-3">
+                <form action="../reviews/editReview.php" method="POST">
+                    <input type="hidden" name="reviewID" value="<?php echo $reviewID; ?>">
+                    <input type="hidden" name="productID" value="<?php echo $productID; ?>">
+                    <div class="mb-3">
+                        <label for="editReviewText" class="block text-sm font-medium text-white mb-1 font-semibold">Edit Review</label>
+                        <textarea name="reviewText" rows="4" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" required><?php echo htmlspecialchars($review['reviewText']); ?></textarea>
+                    </div>
+
+                    <!-- Review Rating -->
+                    <div class="mb-3">
+                        <label for="editRating" class="block text-sm font-medium text-white">Edit Rating:</label>
+                        <select name="rating" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" required>
+                            <option value="5" <?php if ($review['rating'] == 5) echo 'selected'; ?>>5 - Excellent</option>
+                            <option value="4" <?php if ($review['rating'] == 4) echo 'selected'; ?>>4 - Good</option>
+                            <option value="3" <?php if ($review['rating'] == 3) echo 'selected'; ?>>3 - Average</option>
+                            <option value="2" <?php if ($review['rating'] == 2) echo 'selected'; ?>>2 - Poor</option>
+                            <option value="1" <?php if ($review['rating'] == 1) echo 'selected'; ?>>1 - Terrible</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" name="submit_edit" class="bg-[#78350f] hover:bg-[#5a2b09] text-white font-semibold rounded-md px-4 py-2 transition duration-150 ease-in-out">
+                        Save Changes
+                    </button>
+                </form>
+            </div>
+        <?php endif; ?>
 
                 <!-- Button to toggle replies -->
                 <button onclick="toggleVisibility('replies_<?php echo $review['reviewID']; ?>')" class="bg-transparent hover:text-white hover:underline text-[#C4A484] rounded px-3 py-1 mt-2">Show/Hide Replies</button>
@@ -133,7 +205,7 @@ if ($reviews === false) {
                     if ($replies->num_rows > 0) {
                         while ($reply = $replies->fetch_assoc()) {
                             echo "<div class='reply bg-[#111827] p-3 rounded-lg mt-2'>
-                                    <p class='text-white'><b>Reply:</b> " . htmlspecialchars($reply['replyText']) . "</p>
+                                    <p class='text-white'><b>". (isset($reply['userName']) ? htmlspecialchars($reply['userName']) : "Anonymous User") .":</b> " . htmlspecialchars($reply['replyText']) . "</p>
                                   </div>";
                         }
                     } else {
@@ -143,16 +215,23 @@ if ($reviews === false) {
 
                     <!-- Reply form -->
                     <form action="" method="POST" class="mt-3">
-                        <input type="hidden" name="reviewID" value="<?php echo $review['reviewID']; ?>">
-                        <div>
-                            <textarea name="replyText" rows="2" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Write a reply..." required></textarea>
-                        </div>
-                        <div class="text-left mt-2">
-                            <button type="submit" name="submit_reply" class="bg-[#78350f] hover:bg-[#5a2b09] text-white font-semibold rounded-md px-4 py-2 transition duration-150 ease-in-out">
-                                Reply
-                            </button>
-                        </div>
-                    </form>
+                          <input type="hidden" name="reviewID" value="<?php echo $review['reviewID']; ?>">
+                          <?php if (!isset($_SESSION['user_name'])): ?>
+                                  <div>
+                                      <input type="text" name="userName" class="mt-1 block w-full px-3 py-2 mb-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Name" required>
+                                  </div>
+                              <?php else: ?>
+                                  <p class="text-sm text-gray-100 mb-3">Replying as: <span class="font-bold"><?php echo $_SESSION['user_name']; ?></span></p>
+                              <?php endif; ?>
+                          <div>
+                              <textarea name="replyText" rows="2" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Write a reply..." required></textarea>
+                          </div>
+                          <div class="text-left mt-2">
+                              <button type="submit" name="submit_reply" class="bg-[#78350f] hover:bg-[#5a2b09] text-white font-semibold rounded-md px-4 py-2 transition duration-150 ease-in-out">
+                                  Reply
+                              </button>
+                          </div>
+                 </form>
                 </div>
             </div>
         <?php endwhile; ?>

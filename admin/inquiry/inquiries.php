@@ -52,14 +52,11 @@ session_start();
                     <div class="flex flex-col w-full lg:w-auto">
                         <input class="px-3 py-2 rounded-lg border w-full lg:w-72" 
                             type="text" 
-                            placeholder="Enter Customer's Name" 
+                            placeholder="Search Customer's Name" 
                             name="searchInquiry" 
                             id="searchInquiry">
                     </div>
                     
-                    <button class="bg-gray-700 px-5 py-2 rounded-lg text-white hover:bg-gray-800 w-full lg:w-auto" type="button" id="searchButton">
-                        Search
-                    </button>
 
                     <div class="flex flex-col lg:flex-row gap-4 items-center w-full lg:w-auto">
                         <div class="flex flex-row items-center gap-2 w-full lg:w-auto">
@@ -103,14 +100,11 @@ session_start();
                     <div class="flex flex-col w-full lg:w-auto">
                         <input class="px-3 py-2 rounded-lg border w-full lg:w-72" 
                             type="text" 
-                            placeholder="Enter Customer's Name" 
+                            placeholder="Search Customer's Name" 
                             name="searchCallback" 
                             id="searchCallback">
                     </div>
                     
-                    <button class="bg-gray-700 px-5 py-2 rounded-lg text-white hover:bg-gray-800 w-full lg:w-auto" type="button" id="callbackSearchButton">
-                        Search
-                    </button>
             
                     <div class="flex flex-col lg:flex-row gap-4 items-center w-full lg:w-auto">
                         <div class="flex flex-row items-center gap-2 w-full lg:w-auto">
@@ -124,7 +118,7 @@ session_start();
                         </div>
                     </div>
                     <div class="flex flex-row items-center gap-6 lg:gap-2 w-full lg:w-auto">
-                    <label for="sortCallback" class="font-semibold whitespace-nowrap">Sort By:</label>  
+                    <label for="callbackStatusFilter" class="font-semibold whitespace-nowrap">Filter :</label>  
                     <select name="callbackStatusFilter" id="callbackStatusFilter" class="px-3 py-2 rounded-lg border w-full lg:w-auto" onchange="submitCallbackForm()">
                         <option value=""> All </option>
                         <option value="Pending">Pending</option>
@@ -143,9 +137,7 @@ session_start();
                <div>Status</div>
              </div>
            
-             <div id="callbackResults" class="scrollable-list">
-                 <!-- Callbacks will be loaded here via AJAX -->
-             </div>
+             <div id="callbackResults" class="scrollable-list"></div>
       </div>
              <div class="mx-auto mb-20 flex justify-center">
                    <a class="text-lg text-black font-bold hover:underline bg-transparent border border-gray-700 rounded-md px-2 py-1 " href="inquiryReport.php" title="View detailed inquiry analytics reports">
@@ -156,19 +148,28 @@ session_start();
 
     <script>
         $(document).ready(function() {
-            // Function to handle AJAX request for inquiries
+            // Debounce(delay function)
+            function debounce(func, delay) {
+                let timeout;
+                return function(...args) {
+                    const context = this;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(context, args), delay);
+                };
+            }
+
             function fetchInquiries() {
                 $.ajax({
                     url: 'fetchInquiries.php',
                     type: 'POST',
                     data: $('#inquiryForm').serialize(),
+                    
                     success: function(response) {
                         $('#inquiryResults').html(response);
                     }
                 });
             }
 
-            // Function to handle AJAX request for callbacks
             function fetchCallbacks() {
                 $.ajax({
                     url: 'fetchCallbacks.php',
@@ -180,29 +181,16 @@ session_start();
                 });
             }
 
-            // Trigger AJAX on search, sort, or filter change for inquiries
-            $('#searchButton').click(function() {
-                fetchInquiries();
-            });
+            
+            $('#searchInquiry').on('input', debounce(fetchInquiries, 300));
+            $('#searchCallback').on('input', debounce(fetchCallbacks, 300));
 
-            $('#sortInquiry, #statusFilter').change(function() {
-                fetchInquiries();
-            });
+            
+            $('#sortInquiry, #statusFilter').change(fetchInquiries);
 
-            // Trigger AJAX on search or sort change for callbacks
-            $('#callbackSearchButton').click(function() {
-                fetchCallbacks();
-            });
 
-            $('#sortCallback').change(function() {
-                fetchCallbacks();
-            });
+            $('#sortCallback, #callbackStatusFilter').change(fetchCallbacks);
 
-            $('#callbackStatusFilter').change(function() {
-                fetchCallbacks();
-            });
-
-            // Initial load of inquiries and callbacks
             fetchInquiries();
             fetchCallbacks();
         });

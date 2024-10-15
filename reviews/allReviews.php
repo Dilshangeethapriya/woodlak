@@ -1,15 +1,93 @@
+
 <?php
+session_start();
 include '../config/dbconnect.php'; 
+include '../includes/phpInsight-master/autoload.php'; // Include sentiment analysis library
+
+use PHPInsight\Sentiment; // Use PHPInsight for sentiment analysis
 
 // Get the product ID
-$productID = intval($_REQUEST["PRODUCTC"]); 
+$productID = intval($_REQUEST["PRODUCTC"]);
 
 // Fetch all reviews for this product
 $reviewsQuery = $conn->prepare("SELECT * FROM review WHERE productID = ? ORDER BY createdAt DESC");
 $reviewsQuery->bind_param('i', $productID);
 $reviewsQuery->execute();
 $reviews = $reviewsQuery->get_result();
+
+$productQuery = "SELECT * FROM product WHERE productID = " . $conn->real_escape_string($productID);
+$productData = $conn->query($productQuery);
+
+if ($productData->num_rows > 0) {
+    $product = $productData->fetch_assoc();
+    $productName = $product['productName'];
+    $productImage = '../resources/' . $product['image'];
+} else {
+    echo "Product not found.";
+}
+
+// Handle review submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
+    $productID = intval($_REQUEST["PRODUCTC"]);
+    $customerID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+    $customerName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : $_POST['customerName'];
+    $rating = $_POST['rating'];
+    $reviewText = $_POST['reviewText'];
+
+    // Sanitize input
+    $customerName = htmlspecialchars($customerName);
+    $reviewText = htmlspecialchars($reviewText);
+
+    // Prepare and execute the insert statement
+    $stmt = $conn->prepare("INSERT INTO review (productID, customerID, customerName, rating, reviewText) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param('iisis', $productID, $customerID, $customerName, $rating, $reviewText);
+    
+    if ($stmt->execute()) {
+        // Get the ID of the newly inserted review
+        $reviewID = $stmt->insert_id;
+
+        // Run sentiment analysis on the submitted review
+        $sentiment = new Sentiment();
+        $scores = $sentiment->score($reviewText);  // Get sentiment scores (positive, negative, neutral)
+        $category = $sentiment->categorise($reviewText); // Get the sentiment category
+        
+        // Insert sentiment analysis result into the review_sentiment table
+        $sentimentStmt = $conn->prepare("
+            INSERT INTO review_sentiment (reviewID, positive_score, negative_score, neutral_score, sentiment_category, last_analyzed)
+            VALUES (?, ?, ?, ?, ?, NOW())
+        ");
+        $sentimentStmt->bind_param('iddds', $reviewID, $scores['pos'], $scores['neg'], $scores['neu'], $category);
+        $sentimentStmt->execute();
+
+        // Redirect to the same product page after submission
+        header("Location: allReviews.php?PRODUCTC=$productID");
+        exit();
+    } else {
+        echo "Error submitting review: " . $conn->error;
+    }
+}
+
+// Handle reply submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
+    $reviewID = intval($_POST['reviewID']);
+    $replyText = htmlspecialchars($_POST['replyText']); // Sanitize reply text
+    $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : $_POST['userName'];
+    $userName = htmlspecialchars($userName);
+
+    // Prepare and execute the insert statement
+    $stmt = $conn->prepare("INSERT INTO reviewreply (reviewID, userName, replyText) VALUES (?, ?, ?)");
+    $stmt->bind_param('iss', $reviewID, $userName, $replyText);
+
+    if ($stmt->execute()) {
+        $productID = intval($_REQUEST["PRODUCTC"]);
+        header("Location: allReviews.php?PRODUCTC=$productID");
+        exit();
+    } else {
+        echo "Error submitting reply: " . $conn->error;
+    }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,8 +98,9 @@ $reviews = $reviewsQuery->get_result();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> 
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="../resources/css/ratingCounts.css">
         <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../resources/css/ratingCounts.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body class="bg-gray-100" style=" background-image: url('../resources/images/bg2.png');background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
 
@@ -29,28 +108,150 @@ $reviews = $reviewsQuery->get_result();
 
     <!-- Main Content -->
     <div class="container mx-auto my-10">
-        <?php include 'ratingCounts.php' ?>
-        <div class="review-section max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(220, 255, 220, 0.7);">
-            <h2 class="text-[#C4A484] text-4xl mb-4 text-center">All Product Reviews</h2>
+        <div class="review-section max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(255, 255, 255, 0.8);">
+             <h2 class="text-[#9b734b] text-4xl mb-8 text-center">Customer Reviews</h2>
+          <div class="ratings-summary my-1 0 bg-[#1f2937] p-8 rounded-lg shadow-lg">
+             <div class="flex items-center space-x-6">
+                 <!-- Product Image -->
+                 <img src="<?php echo $productImage ?>" alt="<?php echo $productName ?>" class="w-40 h-40 object-cover rounded-lg border-2 border-[#C4A484] shadow-md">
 
-            <!-- Display all reviews -->
-            <?php while ($review = $reviews->fetch_assoc()): ?>
-                <div class="review bg-[#1f2937] p-4 rounded-lg mb-4">
-                    <h4 class="text-[#C4A484] text-lg"><b><?php echo htmlspecialchars($review['customerName']); ?></b> 
-                    <div class="flex items-center">
-                        <svg class="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                        </svg>
-                        <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white"><?php echo $review['rating']; ?></p>
+                  <!-- Product Name -->
+                 <div>
+                     <h3 class="text-2xl font-bold text-[#C4A484] mb-2"><?php echo $productName ?></h3>
+                     <p class="text-sm text-gray-400">See all the reviews and ratings for this product below</p>
+                 </div>
+              </div>
+
+              <?php include 'ratingCounts.php' ?>
+                 <!-- Button to toggle the review form -->
+    <button onclick="toggleVisibility('reviewForm')" class="bg-[#78350f] hover:bg-[#5a2b09] text-white rounded px-4 py-2 mb-4">Leave a Review</button>
+    
+    <!-- Review form, hidden by default -->
+           <div id="reviewForm" style="display:none;" class="mx-auto bg-[#1f2937] p-6 rounded-lg shadow-lg">
+             <form action="" method="POST" class="space-y-4">
+                <?php if (!isset($_SESSION['user_name'])): ?>
+                    <div>
+                        <label for="customerName" class="block text-white text-sm font-medium">Name:</label>
+                        <input type="text" name="customerName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" required>
                     </div>
-                    </h4>
-                    <p class="text-black"><?php echo htmlspecialchars($review['reviewText']); ?></p>
-                    <p><small class="text-gray-500"><?php echo $review['createdAt']; ?></small></p>
-                    <hr class="my-4">
+                <?php else: ?>
+                    <p class="text-sm text-gray-100">Reviewing as: <span class="font-bold"><?php echo $_SESSION['user_name']; ?></span></p>
+                <?php endif; ?>
+    
+                <div>
+                    <label for="rating" class="block text-sm font-medium text-white">Rating:</label>
+                    <select name="rating" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" required>
+                        <option value="5">5 - Excellent</option>
+                        <option value="4">4 - Good</option>
+                        <option value="3">3 - Average</option>
+                        <option value="2">2 - Poor</option>
+                        <option value="1">1 - Terrible</option>
+                    </select>
                 </div>
-            <?php endwhile; ?>
+    
+                <div>
+                    <label for="reviewText" class="block text-sm font-medium text-white">Review:</label>
+                    <textarea name="reviewText" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" required></textarea>
+                </div>
+    
+                <div class="text-left">
+                    <button type="submit" name="submit_review" class="bg-[#78350f] hover:bg-[#5a2b09] text-white font-semibold rounded-md px-4 py-2 transition duration-150 ease-in-out">
+                        Submit Review
+                    </button>
+                </div>
+              </form>
+    </div>
+             <hr> 
+
+              <div class="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-6 bg-[#1f2937] p-8 rounded-md">
+                    <!-- Hidden input field for productID -->
+                 <input type="hidden" id="productID" value="<?php echo $productID; ?>">
+                   <!-- Rating Filter -->
+                   <div class="flex flex-col items-center w-full lg:w-auto">
+                       <label for="stars" class="block text-lg font-semibold text-[#C4A484] mb-2 w-full">Filter by Stars:</label>
+                       <select name="stars" id="stars" class="mt-2 p-2 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-green-600">
+                           <option value="">All</option>
+                           <option value="5">5 Stars</option>
+                           <option value="4">4 Stars</option>
+                           <option value="3">3 Stars</option>
+                           <option value="2">2 Stars</option>
+                           <option value="1">1 Star</option>
+                       </select>
+                   </div>
+               
+                   <!-- Sorting Options -->
+                   <div class="flex flex-col items-center w-full lg:w-auto">
+                       <label for="sortReview" class="block text-lg font-semibold text-[#C4A484] mb-2 w-full">Sort by:</label>
+                       <select name="sortReview" id="sortReview" class="mt-2 p-2 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-green-600">
+                           <option value="date_desc">Most recent</option> 
+                           <option value="rating_desc">Top Reviews</option> 
+                       </select>
+                   </div>
+               </div>
+               
+         </div>
+
+          <!-- Include the ratingCounts.php to display the rating summary -->
+         
+          
+                
+               <!-- Container for dynamically updating reviews -->
+               <div id="reviewsContainer">
+                   <!-- Reviews will be dynamically loaded here -->
+               </div>
+               
+           
         </div>
     </div>
     <?php include '../includes/footer.php' ?>
+    <script>
+       $(document).ready(function() {
+
+         // Fetch reviews with pagination and filters
+         window.fetchReviews = function(page = 1) {
+             var productID = $('#productID').val();
+             var stars = $('#stars').val();
+             var sortReview = $('#sortReview').val();
+         
+             $.ajax({
+                 url: 'fetchReviews.php',
+                 method: 'POST',
+                 data: { 
+                     productID: productID, 
+                     stars: stars, 
+                     sortReview: sortReview,
+                     page: page // Pass the page number
+                 },
+                 success: function(response) {
+                     $('#reviewsContainer').html(response); // Update the reviews section with the response data
+                 },
+                 error: function(jqXHR, textStatus, errorThrown) {
+                     console.log('Error in Ajax request:', textStatus, errorThrown);
+                 }
+             });
+         }
+         
+         // Trigger the fetch when the stars or sorting option changes
+         $('#stars, #sortReview').change(function() {
+             fetchReviews(1); // Fetch page 1 after any filter change
+         });
+         
+         // Trigger initial load of reviews when the page loads
+         fetchReviews();
+         });
+
+
+
+         function toggleVisibility(id) {
+        var element = document.getElementById(id);
+        if (element.style.display === 'none') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+    
+</script>
+
 </body>
 </html>

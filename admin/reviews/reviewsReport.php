@@ -124,7 +124,7 @@ if (!$productID) {
 <header class="bg-[#543310] h-20 w-full z-50 fixed top-0 flex items-center">
     <div class="flex justify-between items-center w-[95%] mx-auto h-full">
         <!-- Back Button -->
-        <a href="../dashboard.php" 
+        <a href="reviews.php" 
            class="flex items-center px-4 py-2 border border-transparent rounded-md text-white hover:scale-105 focus:outline-none transition-transform duration-200">
            <img src="<?= $base_url ?>/resources/images/inquiry/arrow.png" alt="Back" class="w-6 h-6 mr-2">
         </a>

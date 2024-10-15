@@ -47,21 +47,23 @@ if ($totalRatings > 0) {
 ?>
 
 <?php if ($totalRatings > 0): ?>
-    <h2 class="text-[#C4A484] text-2xl my-5">Ratings Summary</h2>
-    <div class="ratings-summary my-10 bg-[#1f2937] p-10 rounded-lg mb-4">
-        <div class="average-rating mb-10">
-            <span class="text-xl mb-5 text-[#C4A484]"> &#11088; <?php echo round($averageRating, 1); ?> out of 5</span>
-            <p class="text-white"><?php echo $totalRatings; ?> total ratings</p>
+    
+    <div class="ratings-summary my-5 bg-[#1f2937] p-10 rounded-lg mb-4">
+        <h2 class="text-white text-2xl font-bold text-center mx-auto mb-5">Ratings Summary</h2>
+        <div class="text-center mb-6">
+            <span class="text-2xl font-bold text-[#C4A484]"><?php echo round($averageRating, 1); ?> / 5</span>
+            <div class="text-sm text-gray-400"><?php echo $totalRatings; ?> total ratings</div>
         </div>
-
-        <?php foreach ($ratingCounts as $stars => $count): ?>
-            <div class="rating-row text-white">
-                <div class="rating-text"><?php echo $stars; ?> star</div>
-                <div class="rating-bar">
-                    <div class="rating-fill" style="width: <?php echo round($ratingPercentages[$stars], 1); ?>%;"></div>
+        
+    
+            <?php foreach ($ratingCounts as $stars => $count): ?>
+                <div class="rating-row text-white">
+                    <div class="rating-text"><?php echo $stars; ?> star</div>
+                    <div class="rating-bar">
+                        <div class="rating-fill" style="width: <?php echo round($ratingPercentages[$stars], 1); ?>%;"></div>
+                    </div>
+                    <div class="rating-percentage"><?php echo round($ratingPercentages[$stars], 1); ?>%</div>
                 </div>
-                <div class="rating-percentage"><?php echo round($ratingPercentages[$stars], 1); ?>%</div>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
     </div>
 <?php endif; ?>
