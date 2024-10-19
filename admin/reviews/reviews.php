@@ -5,6 +5,32 @@ include '../../config/dbconnect.php';
 $productsQuery = "SELECT productID, productName FROM product ORDER BY productName ASC";
 $productsResult = $conn->query($productsQuery);
 
+// Fetch the most positive review
+$mostPositiveQuery = $conn->prepare("
+    SELECT rs.*, r.reviewText, r.customerName, r.rating 
+    FROM review_sentiment rs
+    JOIN review r ON rs.reviewID = r.reviewID
+    WHERE rs.positive_score = (
+        SELECT MAX(positive_score) FROM review_sentiment
+    )
+    LIMIT 1
+");
+$mostPositiveQuery->execute();
+$mostPositiveReview = $mostPositiveQuery->get_result()->fetch_assoc();
+
+// Fetch the most negative review
+$mostNegativeQuery = $conn->prepare("
+    SELECT rs.*, r.reviewText, r.customerName, r.rating 
+    FROM review_sentiment rs
+    JOIN review r ON rs.reviewID = r.reviewID
+    WHERE rs.negative_score = (
+        SELECT MAX(negative_score) FROM review_sentiment
+    )
+    LIMIT 1
+");
+$mostNegativeQuery->execute();
+$mostNegativeReview = $mostNegativeQuery->get_result()->fetch_assoc();
+
 // Handle reply submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     $reviewID = intval($_POST['reviewID']);
@@ -41,10 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 
 <div class="review-section mt-10 mb-36 max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(255, 255, 255, 0.8);">
     <h2 class="text-[#9b734b] text-4xl mb-6 text-center"> Product Reviews</h2>
+
     
     <a class="text-lg text-[#9b734b] font-bold hover:underline bg-transparent border border-[#9b734b] rounded-md px-2 py-1 mt-6" href="reviewsReport.php" title="View detailed product review analytics reports">
         <i class="fa fa-chart-bar mr-2"></i> Product Review Analytics Reports
     </a>
+
+       
     <!-- Product and Rating Filter Form -->
     <form id="filterForm" class="mb-6 mt-20 p-6 rounded-lg shadow-md w-full mx-auto bg-[#111827]">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -85,9 +114,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     </div>
 </form>
 
-
-
      <div id="ratingSummary"></div>
+
+      <!-- Display most positive review -->
+    <div id="mostPositiveReviewSection" >
+        <!-- This will be dynamically updated by JavaScript -->
+    </div>
+
+    <!-- Display most negative review -->
+    <div id="mostNegativeReviewSection" >
+        <!-- This will be dynamically updated by JavaScript -->
+    </div>
+
     <div id="reviewsSection"></div>
 </div>
 <!-- <script src="../../resources/JS/ratingSummery.js"></script> -->
@@ -159,6 +197,33 @@ $(document).ready(function() {
           
            
         });
+
+         // Fetch most positive and negative reviews
+    function fetchTopReviews(productID = '') {
+        $.ajax({
+            url: 'fetchTopReviews.php',
+            method: 'POST',
+            data: { productID: productID },
+            success: function(response) {
+                const { mostPositive, mostNegative } = JSON.parse(response);
+                $('#mostPositiveReviewSection').html(mostPositive);
+                $('#mostNegativeReviewSection').html(mostNegative);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error fetching top reviews:', textStatus, errorThrown);
+            }
+        });
+    }
+
+    // Trigger the fetch for reviews and rating summary
+    $('#productID').change(function() {
+        const productID = $(this).val();
+        fetchTopReviews(productID); // Fetch most positive and most negative reviews for the selected product
+        fetchReviews(1); // Fetch main reviews
+    });
+
+    // Initially load top reviews for all products
+    fetchTopReviews();
 
         function toggleVisibility(id) {
                 var element = document.getElementById(id);

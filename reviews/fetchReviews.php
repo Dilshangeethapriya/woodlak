@@ -144,7 +144,7 @@ while ($review = $reviews->fetch_assoc()) {
             ?>
 
             <!-- Reply form -->
-            <form action="submitReply.php" method="POST" class="mt-3">
+            <form action="" method="POST" class="mt-3">
                 <input type="hidden" name="reviewID" value="<?php echo $review['reviewID']; ?>">
                 <?php if (!isset($_SESSION['user_name'])): ?>
                     <div>

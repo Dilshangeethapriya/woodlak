@@ -99,7 +99,7 @@ if ($reviews && $reviews->num_rows > 0) {
 
                 if ($replies && $replies->num_rows > 0) {
                     while ($reply = $replies->fetch_assoc()) {
-                        echo "<div class='reply bg-[#111827] p-3 rounded-lg mt-2'>
+                        echo "<div class='reply bg-[#1f2937] p-3 rounded-lg mt-2'>
                                 <p class='text-white'><b>". (isset($reply['userName']) ? htmlspecialchars($reply['userName']) : "Anonymous User") .":</b> " . htmlspecialchars($reply['replyText']) . "</p>
                               </div>";
                     }
