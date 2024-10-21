@@ -16,6 +16,11 @@ if ($result && mysqli_num_rows($result) > 0) {
         $MyProductPrice = $row['price'];
         $MyDescription = $row['description'];
         $MyProductID =  $row['productID'];
+        $stock_limit = 15;
+        $MyStockLevel=$row['stockLevel'];
+        $spinImageUrl =  $row['spinImageUrl'];
+
+         
     }
 } else {
     $MyProductName = "No Product Found...";
@@ -35,20 +40,28 @@ mysqli_close($conn);
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com"></script>
-        
+
+        <script src="https://scripts.sirv.com/sirv.js"></script>
+
     </head>
     <body>
         
-      <?php include '../includes/navbar.php'; ?>
+        <?php include '../includes/navbar.php'; ?>
+
+        <?echo $spinImageUrl ?>
        
-        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 ">
+     <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 ">
 
         <div class="left_side">
             <?php
-            echo "<img src=". $MyProductImage." alt=". $MyProductName." class='display mt-4' style='margin-left:15%;'>";
+                 
+                if($spinImageUrl == ''){
+                    echo "<img src=". $MyProductImage." alt=". $MyProductName." class='display mt-4' style='margin-left:15%;'>";
+                }
+                else{
+                    echo '<div class="Sirv display mt-4" style="margin-left:15%; margin-top:50px; background-color:white"  data-src="'.$spinImageUrl.'"></div>';
+                }
             ?>
-
-   
         </div>
 
         <div class="right_side">
@@ -72,20 +85,33 @@ mysqli_close($conn);
                 echo '<input type="hidden" name="productID" value="' . $MyCode . '">';
                 echo '<input type="hidden" name="productName" value="' .$MyProductName . '">';
                 echo '<input type="hidden" name="price" value="' . $MyProductPrice .'">'; 
-                echo '<button type="submit" class="bg-[#78350f] hover:bg-[#5a2b09] text-white rounded-full px-10 py-2 text-l border-2 border-[#78350f] mx-auto mb-4 flex items-center">Add to Cart</button>';
+                if ($MyStockLevel <= $stock_limit) {
+                    echo '<button type="submit" class="bg-[#954535] text-white rounded-full px-10 py-3 text-l border-2 border-black mx-auto mb-4 flex items-center" disabled><b>Out of Stock</b>';
+                } else {
+                    echo '<button type="submit" class="bg-[#78350f] hover:bg-[#5a2b09] text-white rounded-full px-10 py-2 text-l border-2 border-[#78350f] mx-auto mb-4 flex items-center">Add to Cart</button>';
+                }
                 echo '</form>';
                 ?>
             </div>
         </div> 
-        </div>
-       
-         <!-- Review section -->
-         <?php include '../reviews/reviews.php' ; ?> 
 
+      </div>
+
+         
+       <?php include '../reviews/reviews.php' ; ?>
+     
+      
 
         <a href="shopping_cart.php" class="shoppingCart bg-[#78350f] hover:bg-white text-white hover:text-[#78350f] fixed bottom-3 right-5  p-3 rounded-full shadow-lg">
-        <i class="bi bi-cart4 text-4xl"></i>
+        <i class="bi bi-cart4 text-2xl"></i>
         </a>
+       
+         <!-- Review section -->
+          
+          
+          
+          
+
         <script>
       function responsive() {
         var x = document.getElementById("content");

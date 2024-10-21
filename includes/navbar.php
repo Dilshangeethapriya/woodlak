@@ -34,13 +34,13 @@ $base_url = "http://localhost/woodlak";
         ?>
         <div class="flex items-center gap-3">
             <span class="mr-4 text-lg"><?php echo $user_name; ?></span>
-            <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]" onclick="location.href='<?= $base_url ?>/Userprofile/profile.php'">Profile</button> 
+            <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]" onclick="location.href='<?= $base_url ?>/Userprofile/Customer/profile.php'">Profile</button> 
             <button onclick="responsive()"><i class="bi bi-list text-4xl lg:hidden text-white"></i></button>
         </div>
         <?php } else { ?>
         <div class="flex items-center gap-3">
-            <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]" onclick="location.href='<?= $base_url ?>/Userprofile/register.php'">Register</button>
-            <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]" onclick="location.href='<?= $base_url ?>/Userprofile/login.php'">Login</button>
+            <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]" onclick="location.href='<?= $base_url ?>/Userprofile/Customer/register.php'">Register</button>
+            <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]" onclick="location.href='<?= $base_url ?>/Userprofile/Customer/login.php'">Login</button>
             <button onclick="responsive()"><i class="bi bi-list text-4xl lg:hidden text-white"></i></button>
         </div>
         <?php } ?>

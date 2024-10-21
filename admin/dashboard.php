@@ -151,6 +151,8 @@ $conn->close();
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-14">
            <!-- Total Products Tile -->
+          
+           <a href="../product/product_detail.php">
            <div class="infoTile bg-gradient-to-r from-green-600 to-green-400 p-6 rounded-lg shadow-lg text-white flex items-center">
                <i class="fa-solid fa-bag-shopping text-4xl mr-4"></i>
                <div>
@@ -158,8 +160,10 @@ $conn->close();
                    <p class="text-lg font-semibold">Total Products</p>
                </div>
            </div>
-       
+           </a>
+             
            <!-- Total Reviews Tile -->
+           <a href="reviews/reviews.php">
            <div class="infoTile bg-gradient-to-r from-blue-600 to-blue-400 p-6 rounded-lg shadow-lg text-white flex items-center">
                <i class="fa-solid fa-star text-4xl mr-4"></i>
                <div>
@@ -167,7 +171,8 @@ $conn->close();
                    <p class="text-lg font-semibold">Total Reviews</p>
                </div>
            </div>
-       
+           </a>
+          
            <!-- Total Customers Tile -->
            <div class="infoTile bg-gradient-to-r from-yellow-500 to-yellow-400 p-6 rounded-lg shadow-lg text-white flex items-center">
                <i class="fa-solid fa-users text-4xl mr-4"></i>

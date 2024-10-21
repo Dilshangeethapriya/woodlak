@@ -54,7 +54,7 @@ $conn->close();
                 <p>Comb Purchased: <?php echo htmlspecialchars($customer['combPurchased']); ?></p>
             </div>
             <div class="input-box">
-                <p>Amount of combs: <?php echo htmlspecialchars($customer['quantity']); ?></p>
+                <p>Amount of combs: <?php echo htmlspecialchars($customer['combAmount']); ?></p>
             </div>
         </form>
     </div>

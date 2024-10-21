@@ -50,7 +50,7 @@ $_SESSION['paymentMethod'] = "Cash On Delivery";
                 <span class="text-gray-700 font-medium">Cash on Delivery</span>
             </div>
 
-            <a href="koko.php" class="flex items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition">
+            <a href="koko/koko.php" class="flex items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition">
                 <img src="pictures/koko.png" alt="Koko (BNPL)" class="w-12 h-12 object-contain mr-4">
                 <span class="text-gray-700 font-medium">Koko (Buy Now Pay Later!)</span>
             </a>

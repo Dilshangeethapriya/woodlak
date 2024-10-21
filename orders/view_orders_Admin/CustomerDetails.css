@@ -33,7 +33,7 @@ body{
 	margin: 10px;
 }
 .wrapper:first-child {
-    margin-right: 10px; 
+    margin-right: 10px; /* Adjust this value to control the space between the boxes */
 }
 
 .wrapper h1{

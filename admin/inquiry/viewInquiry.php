@@ -163,7 +163,7 @@ $conn->close();
                     <form method="POST" action="replyInquiry.php">
                         <input type="hidden" name="ticketID" value="<?php echo $inquiry['ticketID']; ?>">
                         <div class="mb-4">
-                            <textarea name="reply" id="reply" rows="4" class="block .placeholder-black::placeholder w-full mt-1  border-b-2 border-green-600 text-gray-700 bg-[rgba(240,248,255,0.6)] shadow-sm focus:bg-trancelucent focus:ring-green-500 rounded-lg" placeholder="Your Reply" required><?php echo isset($_POST['reply']) ? htmlspecialchars($_POST['reply']) : ''; ?></textarea>
+                            <textarea name="reply" id="reply" rows="4" class="block .placeholder-black::placeholder w-full mt-1  border border-green-600 text-gray-700 bg-[rgba(240,248,255,0.6)] shadow-sm focus:bg-trancelucent focus:ring-green-500 rounded-lg p-2" placeholder="Your Reply" required><?php echo isset($_POST['reply']) ? htmlspecialchars($_POST['reply']) : ''; ?></textarea>
                         </div>
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600  border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 focus:outline-none focus:border-indigo-700 focus:ring ring-indigo-300">
                             Send Reply

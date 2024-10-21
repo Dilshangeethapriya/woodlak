@@ -20,9 +20,10 @@
 body {
     min-height: 100vh;
     background:url(back.avif) center / cover ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-
 
 main.table {
     width: 90vw;
@@ -77,11 +78,11 @@ main.table {
     transition: .2s;
 }
 
-/* .table__header .input-group:hover {
+.table__header .input-group:hover {
     width: 45%;
     background-color: #fff8;
     box-shadow: 0 .1rem .4rem #0002;
-} */
+}
 
 .table__header .input-group img {
     width: 1.2rem;
@@ -253,6 +254,99 @@ thead th.active,tbody td.active {
     border-radius: 50%;
     transition: .2s ease-in-out;
 }
+.pending__file .pending__file-btn {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background: #fff6 url(pending.jpg) center / 80% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+  
+}
+
+.delivered__file .delivered__file-btn {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background: #fff6 url(deliver.png) center / 110% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+  
+}
+.completed__file .completed__file-btn {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background: #fff6 url(completed.png) center / 110% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+    
+}
+
+.all__file .all__file-btn {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background: #fff6 url(all_list1.png) center / 120% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+  
+}
+
+.chart__file .chart__file-btn {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background: #fff6 url(charts.png) center / 90% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+  
+}
+
+
+
+.decliend__file .decliend__file-btn {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background: #fff6 url(de.png) center / 110% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+}
+.pending__file .pending__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+.completed__file .completed__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+.delivered__file .delivered__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+
+.decliend__file .decliend__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+.all__file .all__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+.chart__file .chart__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
 
 .export__file .export__file-btn:hover { 
     background-color: #fff;
@@ -337,6 +431,8 @@ thead th.active,tbody td.active {
         font-size: 0.9rem; /* Smaller font size for smaller screens */
     }
 }
+
+
 
 @media (max-width: 768px) {
     td:not(:first-of-type) {

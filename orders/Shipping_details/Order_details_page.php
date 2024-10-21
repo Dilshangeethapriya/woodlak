@@ -1,3 +1,37 @@
+
+<?php
+session_start();
+
+// Check if the user is logged in
+if (isset($_SESSION['user_id'])) {
+    // Connect to the database
+    $conn = mysqli_connect("localhost", "root", "", "woodlak", "3306");
+
+    // Get user ID or email from session (assuming user_id is stored in session)
+    $user_id = $_SESSION['user_id'];
+
+    // Fetch customer details from the 'customer' table
+    $query = "SELECT name, email, contact, houseNo, streetName, city, postalCode FROM customer WHERE customerID = '$user_id'";
+    $result = mysqli_query($conn, $query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        // Extract customer details
+        $name = $row['name'];
+        $email = $row['email'];
+        $contact = $row['contact'];
+        $houseNo = $row['houseNo'];
+        $streetName = $row['streetName'];
+        $city = $row['city'];
+        $postalCode = $row['postalCode'];
+    }
+} else {
+    // If the user is not logged in, set variables to empty
+    $name = $email = $contact = $houseNo = $streetName = $city = $postalCode = "";
+}
+?>
+
+
 <!doctype html>
 <html>
 <head>
@@ -22,20 +56,20 @@
 
             <div class="card-content">
                 <form method="POST" action="process_shipping.php">
-                    <div class="form-row">
-                        <input type="text" name="name" placeholder="Name" id="name" required>
-                        <input type="text" name="phone-Num" placeholder="Phone Number" id="phone-Num" required>
+                <div class="form-row">
+                        <input type="text" name="name" placeholder="Name" id="name" value="<?php echo $name; ?>" required>
+                        <input type="text" name="phone-Num" placeholder="Phone Number" id="phone-Num" value="<?php echo $contact; ?>" required>
                     </div>
                     <div class="form-row">
-                        <input type="text" name="Address-one" placeholder="House No" id="Address-one">
-                        <input type="text" name="Address-Two" placeholder="Street Name" id="Address-Two" required>
+                        <input type="text" name="Address-one" placeholder="House No" id="Address-one" value="<?php echo $houseNo; ?>">
+                        <input type="text" name="Address-Two" placeholder="Street Name" id="Address-Two" value="<?php echo $streetName; ?>" required>
                     </div>
                     <div class="form-row">
-                        <input type="text" name="Address-three" placeholder="City" id="Address-three" required>
-                        <input type="text" name="Address-four" placeholder="Postal Code" id="Address-four" required>
+                        <input type="text" name="Address-three" placeholder="City" id="Address-three" value="<?php echo $city; ?>" required>
+                        <input type="text" name="Address-four" placeholder="Postal Code" id="Address-four" value="<?php echo $postalCode; ?>" required>
                     </div>
                     <div class="form-row">
-                        <input type="email" name="Email" placeholder="Email" id="Email" required>
+                        <input type="email" name="Email" placeholder="Email" id="Email" value="<?php echo $email; ?>"  required >
                     </div>
                     <div class="form-row">
                         <input type="submit" value="SUBMIT!" onclick="return validateAll();">

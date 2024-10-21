@@ -33,7 +33,7 @@ $base_url = "http://localhost/woodlak";
                     <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/payment_process/admin_banktrans_check/admin_panel.php">Bank Transfers</a>
                 </li>
                 <li>
-                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/UserProfile/RegisteredUsers.php">Users</a>
+                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/login/RegisteredUsers.php">Users</a>
                 </li>
             </ul>
         </div>

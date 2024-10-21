@@ -1,4 +1,10 @@
 <?php
+
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 session_start();
 
 
@@ -88,14 +94,132 @@ if (isset($orderID)) {
     $receiptMessage = "<p>Error processing the order. Please try again later.</p>";
 }
 
+
+
+if (isset($_SESSION['email'])) {
+    $customerEmail = $_SESSION['email'];  // Fetch the email from the session
+} else {
+    echo "No email found in session!";
+    exit;
+}
+
+$invoiceDetails = "
+    <h4>Invoice Details:</h4>
+    <table style='width: 100%; border-collapse: collapse;'>
+        <tr>
+            <th style='border: 1px solid #ddd; padding: 8px;'>Description</th>
+            <th style='border: 1px solid #ddd; padding: 8px;'>Details</th>
+        </tr>
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>Receipt Number:</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>". htmlspecialchars($receiptNumber) ."</td>
+        </tr>
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>Order ID:</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>". htmlspecialchars($orderID) ."</td>
+        </tr>
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>Customer Name:</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>". htmlspecialchars($_SESSION['name']) ."</td>
+        </tr>
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>Phone Number:</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>". htmlspecialchars($_SESSION['phoneNumber']) ."</td>
+        </tr>
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>Address:</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>". htmlspecialchars($_SESSION['addressOne']) .", ". htmlspecialchars($_SESSION['addressTwo']) .", ". htmlspecialchars($_SESSION['addressThree']) .", ". htmlspecialchars($_SESSION['addressFour']) ."</td>
+        </tr>
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>Email:</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>". htmlspecialchars($_SESSION['email']) ."</td>
+        </tr>
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>Payment Method:</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>". htmlspecialchars($_SESSION['paymentMethod']) ."</td>
+        </tr>
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>Total Amount:</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>$". htmlspecialchars($_SESSION['totalPrice']) ."</td>
+        </tr>
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>Quantity:</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>". htmlspecialchars($_SESSION['totalQuantity']) ."</td>
+        </tr>
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>Combs Purchased:</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>". htmlspecialchars($combPurchased) ."</td>
+        </tr>
+    </table>
+";
+
+
+$logoPath = 'Logo.png';
+
+$mail = new PHPMailer(true);
+
+try {
+    // Server settings
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'microcryptosoft2022@gmail.com';  // Your Gmail address
+    $mail->Password = 'mmewnrevrbgzeqcp';              // Your Gmail app-specific password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;   // Use SSL
+    $mail->Port = 465;
+
+    // Sender and recipient
+    $mail->setFrom('microcryptosoft2022@gmail.com', 'Woodlak');
+    $mail->addAddress($customerEmail);  // Customer's email from the session
+
+    // Add logo as an embedded image
+    $mail->AddEmbeddedImage($logoPath, 'woodlak_logo');
+
+    // Email content
+    $mail->isHTML(true);  // Set email format to HTML
+    $mail->Subject = 'Your Payment Invoice';
+    
+    // HTML content of the email, including the logo and invoice details
+    $mail->Body = "
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; }
+            .invoice-box { max-width: 800px; margin: auto; padding: 20px; border: 1px solid #eee; }
+            .logo { text-align: center; }
+        </style>
+    </head>
+    <body>
+        <div class='invoice-box'>
+            <div class='logo'>
+                <img src='cid:woodlak_logo' alt='Woodlak Logo' style='width: 100px; height: auto;'>
+            </div>
+            <h2>Thank you for your payment!</h2>
+            <p>Dear customer,</p>
+            <p>We have received your payment successfully. Below are your invoice details:</p>
+            <div>{$invoiceDetails}</div>
+            <br>
+            <p>Best regards,</p>
+            <p>Woodlak Team</p>
+        </div>
+    </body>
+    </html>
+";
+
+    
+    $mail->AltBody = 'WOODLAK PURCHASE INVOICE';
+
+    $mail->send();
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+
 session_destroy();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <br>
-    <br>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -107,7 +231,7 @@ session_destroy();
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 20;
             background-color: #f4f4f4;
         }
         .receipt-container {
@@ -171,7 +295,7 @@ session_destroy();
 
 <div class="receipt-container">
     <div class="receipt-header">
-        <img src="pictures/logo.png" alt="Company Logo">
+       <center> <img src="pictures/logo.png" alt="Company Logo"> </center>
         <h1>Official Payment Receipt</h1>
     </div>
 
