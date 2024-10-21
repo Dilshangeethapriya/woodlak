@@ -43,6 +43,7 @@ if (isset($_SESSION['message'])) {
     </style>
 </head>
 <body class="Admin">
+    <?php include "../../includes/adminNavbar.php" ?>
     <h1 class="Users">Registered Users</h1>
     <style>
     .Users{

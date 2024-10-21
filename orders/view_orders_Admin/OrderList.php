@@ -8,6 +8,7 @@
     <title>ORDER LIST</title>
     <link rel="stylesheet" type="text/css" href="style3.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script> <!-- Include html2pdf library -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
 
         #customers_table {

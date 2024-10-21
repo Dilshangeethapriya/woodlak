@@ -118,5 +118,8 @@ if (isset($_POST['submit'])) {
             <p>Already have an account? <a href="login.php">Login Now</a></p>
         </form>
     </div>
+   
+    
+    <?php include "../../includes/footer.php" ?>
 </body>
 </html>

@@ -19,8 +19,6 @@ if ($result && mysqli_num_rows($result) > 0) {
         $stock_limit = 15;
         $MyStockLevel=$row['stockLevel'];
         $spinImageUrl =  $row['spinImageUrl'];
-
-         
     }
 } else {
     $MyProductName = "No Product Found...";
@@ -107,17 +105,6 @@ mysqli_close($conn);
         </a>
        
          <!-- Review section -->
-          
-          
-          
-          
-
-        <script>
-      function responsive() {
-        var x = document.getElementById("content");
-        x.classList.toggle("hidden");
-    }
-
-        </script>
+        <?php include "../includes/footer.php"; ?> 
     </body>
 </html>
