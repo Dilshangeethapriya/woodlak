@@ -12,7 +12,7 @@ session_start();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="findComb.css">
+    <link rel="stylesheet" href="../resources/css/findComb.css">
 
     <style>
             body{
@@ -62,7 +62,7 @@ session_start();
 
         <!--Find Comb Form-->
 
-        <div id="popup" class="popup">
+        <div id="popup" class="popup z-50">
         <div class="popup-content" style="background-color: #EADDCA; height: 650px;">
             <span class="close" id="closePopup" onclick="closeFindForm()">&times;</span>
             <h2 class="text-2xl">Reveal My Comb</h2>
@@ -70,19 +70,19 @@ session_start();
             <div  class="flex-container">
                 <div class="button-div" id="curly">
                     <a href="view_product.php?PRODUCTC= + 1003">
-                    <img src="websiteImages/Curly_quiz.png" alt="Curly Hair">
+                    <img src="../resources/images/Curly_quiz.png" alt="Curly Hair">
                     <h3><b>Curly</b></h3>
                     </a>
                 </div>
                 <div class="button-div" id="thick">
                     <a href="view_product.php?PRODUCTC= + 1002">
-                    <img src="websiteImages\Thick_quiz.png">
+                    <img src="../resources/images/Thick_quiz.png">
                     <h3><b>Thick</b></h3>
                     </a>
                 </div>
                 <div class="button-div" id="straight">
                     <a href="view_product.php?PRODUCTC= + 1001">
-                    <img src="websiteImages\Straight_quiz.png">
+                    <img src="../resources/images/Straight_quiz.png">
                     <h3><b>Straight</b></h3>
                     </a>
                 </div>
@@ -133,7 +133,7 @@ session_start();
                 while ($row = mysqli_fetch_assoc($result)) {
                     $stock_limit = 15;
                     echo '<div class="product bg-[#FFF8E8] p-6 rounded-lg shadow-2xl " style="height: 500px">';
-                    echo '<a href="view_product.php?PRODUCTC=' . $row['productID'] . '"><img src="../resources/'.$row['image'].'" alt="' . $row['productName'] . '" class="darker showhide w-full h-[55%] object-cover mb-4 rounded-lg"><p class="text-center hide">More Info</p></a>';
+                    echo '<a href="view_product.php?PRODUCTC=' . $row['productID'] . '"><img src="../'.$row['image'].'" alt="' . $row['productName'] . '" class="darker showhide w-full h-[55%] object-cover mb-4 rounded-lg"><p class="text-center hide">More Info</p></a>';
                     echo '<a href="view_product.php?PRODUCTC=' . $row['productID'] . '"><h2 class="text-3xl font-bold mb-2 text-center hover:text-[#5a2b09]">' . $row['productName'] . '</h2></a>';
                     echo '<p class="price text-2xl mb-6 text-center">Rs.' . $row['price'] . '</p>';
                     echo '<form method="POST" action="add_to_cart.php">';
@@ -142,7 +142,7 @@ session_start();
                     echo '<input type="hidden" name="price" value="' . $row['price'] . '">';
 
                     if ($row['stockLevel'] <= $stock_limit) {
-                        echo '<button type="submit" class="bg-[#EADDCA] text-black rounded-full px-10 py-3 text-l border-2 border-black mx-auto mb-4 flex items-center" disabled>';
+                        echo '<button type="submit" class="bg-[#78350f] hover:bg-[#5a2b09] text-white rounded-full px-10 py-3 text-l border-2 border-[#78350f] mx-auto mb-4 flex items-center disabled" disabled>';
                         echo '<b>Out of Stock</b>';
                     } else {
                         echo '<button type="submit" class="bg-[#78350f] hover:bg-[#5a2b09] text-white rounded-full px-10 py-3 text-l border-2 border-[#78350f] mx-auto mb-4 flex items-center">';
@@ -162,15 +162,6 @@ session_start();
         <a href="shopping_cart.php" class="shoppingCart bg-[#78350f] hover:bg-white text-white hover:text-[#78350f] fixed bottom-3 right-5  p-3 rounded-full shadow-lg">
         <i class="bi bi-cart4 text-2xl"></i>
         </a>
-
-   
-
-        <script>
-            function responsive() {
-                var x = document.getElementById("content");
-                x.classList.toggle("hidden");
-            } 
-                </script>
     </body>
     <script>
             function openFindForm() {

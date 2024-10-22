@@ -21,7 +21,7 @@ $base_url = "http://localhost/woodlak";
                     <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/dashboard.php">Dashboard</a>
                 </li>
                 <li>
-                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/product/product_detail.php">Products</a>
+                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/products/product_detail.php">Products</a>
                 </li>
                 <li>
                     <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/orders/view_orders_Admin/OrderList.php">Orders</a>

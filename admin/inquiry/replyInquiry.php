@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include('../../config/dbconnect.php');
 
 
@@ -27,22 +27,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($stmt = $conn->prepare($sql)) {
      
         $stmt->bind_param("is", $ticketID, $replyText);
-
         if ($stmt->execute()) {
-         
             if (sendReplyEmailToCustomer($ticketID, $replyText)) {
-                $success = 'Reply sent successfully !';
-                header('Location: viewInquiry.php?id=' . $ticketID . '&success=' . urlencode($success));
+                $_SESSION['success'] = 'Reply sent successfully!';
             } else {
-                $error = 'Reply sent, but failed to send email notification.';
-                header('Location: viewInquiry.php?id=' . $ticketID . '&error=' . urlencode($error));
+                $_SESSION['error'] = 'Reply sent, but failed to send email notification.';
             }
-            exit();
         } else {
-            $error = 'Failed to send reply.';
-            header('Location: viewInquiry.php?id=' . $ticketID . '&error=' . urlencode($error));
-            exit();
+            $_SESSION['error'] = 'Failed to send reply.';
         }
+        
+        header('Location: viewInquiry.php?id=' . $ticketID);
+        exit();
 
         $stmt->close();
     } else {

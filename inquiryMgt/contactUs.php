@@ -92,32 +92,42 @@ $conn->close();
 
     <div class="bg bg-transparent text-white p-10 mb-20">
         <h2 class="text-center text-3xl font-semibold mt-32 mb-10">GET IN TOUCH  <? echo "$customerName" ?></h2>
-        <div class="flex justify-around text-center">
-           
-            <div class="flex flex-col items-center">
-                <div class="text-teal-800 p-4 rounded-full mb-5">
-                    <img class="w-14" src="../resources/images/inquiry/circle.png" alt="address">
-                </div>
-                <h3 class="text-lg font-semibold mb-2">ADDRESS</h3>
-                <p>Piliyandala, Sri Lanka, 10300</p>
+        <div class="container mx-auto px-4 py-8">
+    <div class="flex flex-wrap justify-center gap-6">
+        <!-- Address Card -->
+        <div class="flex flex-col items-center bg-white rounded-lg shadow-md p-6 w-full sm:w-64">
+            <div class="mb-4">
+                <img src="../resources/images/inquiry/circle.png" alt="address" class="w-12 h-12 object-contain">
             </div>
-
-            <div class="flex flex-col items-center">
-                <div class="text-teal-800 p-4 mb-5">
-                    <img class="w-14" src="../resources/images/inquiry/phone-call.png" alt="phone">
-                </div>
-                <h3 class="text-lg font-semibold mb-2">PHONE</h3>
-                <p>077 379 3553</p>
-            </div>
-
-            <div class="flex flex-col items-center">
-                <div class="text-teal-800 p-4 mb-5">
-                    <img class="w-14" src="../resources/images/inquiry/email.png" alt="email">
-                </div>
-                <h3 class="text-lg font-semibold mb-2">EMAIL</h3>
-                <p>tsamoj@gmail.com</p>
-            </div>
+            <h3 class="uppercase font-bold text-sm mb-2">ADDRESS</h3>
+            <p class="text-gray-600 text-sm text-center">
+                Piliyandala, Sri Lanka, 10300
+            </p>
         </div>
+
+        <!-- Phone Card -->
+        <div class="flex flex-col items-center bg-white rounded-lg shadow-md p-6 w-full sm:w-64">
+            <div class="mb-4">
+                <img src="../resources/images/inquiry/phone-call.png" alt="phone" class="w-12 h-12 object-contain">
+            </div>
+            <h3 class="uppercase font-bold text-sm mb-2">PHONE</h3>
+            <p class="text-gray-600 text-sm text-center">
+                077 379 3553
+            </p>
+        </div>
+
+        <!-- Email Card -->
+        <div class="flex flex-col items-center bg-white rounded-lg shadow-md p-6 w-full sm:w-64">
+            <div class="mb-4">
+                <img src="../resources/images/inquiry/email.png" alt="email" class="w-12 h-12 object-contain">
+            </div>
+            <h3 class="uppercase font-bold text-sm mb-2">EMAIL</h3>
+            <p class="text-gray-600 text-sm text-center">
+                tsamoj@gmail.com
+            </p>
+        </div>
+    </div>
+</div>
     </div>
 
     <div class="flex flex-col p-5 bg-transparent rounded-lg max-w-6xl mx-auto">

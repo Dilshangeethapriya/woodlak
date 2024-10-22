@@ -109,7 +109,7 @@ $conn->close();
                     </button>
                 </form>
 
-                <form method="POST" action="deleteCallback.php" class="flex-shrink-0">
+                <form method="POST" action="deleteCallback.php" class="flex-shrink-0" onsubmit="return confirmDelete();">
                     <input type="hidden" name="id" value="<?php echo $callback['id']; ?>">
                     <button type="submit" 
                             class="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest focus:outline-none focus:border-red-700 focus:ring ring-red-300
@@ -121,5 +121,10 @@ $conn->close();
             </div>
         </div>
     </main>
+    <script>
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this callback request? This action cannot be undone.");
+    }
+</script>
 </body>
 </html>

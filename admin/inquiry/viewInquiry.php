@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include('../../config/dbconnect.php');
 
 
@@ -84,7 +84,25 @@ $conn->close();
             </div>
 
             <div class="p-6">
+
+            <!-- success and error msg -->
+            <?php if (isset($_SESSION['success'])): ?>
+                    <div class="bg-green-500 text-white p-4 rounded-md mb-4">
+                        <span class="font-bold cursor-pointer float-right text-xl leading-none" onclick="this.parentElement.style.display='none';">&times;</span>
+                        <?php echo $_SESSION['success']; ?>
+                    </div>
+                    <?php unset($_SESSION['success']); // Unset the message after displaying it ?>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="bg-red-500 text-white p-4 rounded-md mb-4">
+                        <span class="font-bold cursor-pointer float-right text-xl leading-none" onclick="this.parentElement.style.display='none';">&times;</span>
+                        <?php echo $_SESSION['error']; ?>
+                    </div>
+                    <?php unset($_SESSION['error']); // Unset the message after displaying it ?>
+                <?php endif; ?>
               
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
                         <p><strong>Name:</strong> <?php echo htmlspecialchars($inquiry['name']); ?></p>
@@ -190,7 +208,7 @@ $conn->close();
 
                     <?php if ($inquiry['ticketStatus'] == 'Closed'): ?>
                     <div class="inline-flex w-1/3">
-                        <form method="POST" action="deleteInquiry.php"  class="w-full">
+                        <form method="POST" action="deleteInquiry.php"  class="w-full" onsubmit="return confirmDelete();">
                             <input type="hidden" name="ticketID" value="<?php echo $inquiry['ticketID']; ?>">
                             <button type="submit" class=" mt-auto w-2/3 px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:ring ring-red-300">
                                 Delete Inquiry
@@ -202,6 +220,10 @@ $conn->close();
             </div>
         </div>
     </div>
-    <script src="../../resources/JS/navbar.js"></script>
+    <script>
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this inquiry? This action cannot be undone.");
+    }
+</script>
 </body>
 </html>

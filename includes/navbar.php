@@ -9,7 +9,7 @@ $base_url = "http://localhost/woodlak";
             <img class="w-16" src="<?php echo $base_url; ?>/resources/images/Logo.png" alt="Logo">
             <h1 class="text-xl text-white font-sans"><b>WOODLAK</b></h1>
         </div>
-        <div class="lg:static absolute bg-[#543310] lg:min-h-fit min-h-[39vh] left-0 top-[9%] lg:w-auto w-full flex items-center px-5 justify-center lg:justify-start text-center lg:text-right xl:contents hidden lg:flex z-50" id="content">
+        <div class="lg:static absolute bg-[#543310] lg:min-h-fit min-h-[39vh] left-0 top-[9%] lg:w-auto w-full flex items-center px-5 justify-center lg:justify-start text-center lg:text-right xl:contents hidden lg:flex z-40" id="content">
         <ul class="flex lg:flex-row flex-col lg:gap-[4vw] gap-8">
                 <li>
                     <a class="text-white hover:text-[#D0B8A8]" href="<?php echo $base_url; ?>/index.php">Home</a>

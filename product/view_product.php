@@ -33,7 +33,7 @@ mysqli_close($conn);
         <title><?php echo $MyProductName; ?></title>
         <meta charset="utf-8">
 		<meta name="veiwport" content="width=device-width,intial-scale=1.0">
-        <link rel="stylesheet" href="productViewNew.css">
+        <link rel="stylesheet" href="../resources/css/productViewNew.css">
         <link rel="stylesheet" href="../resources/css/ratingCounts.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
@@ -84,7 +84,7 @@ mysqli_close($conn);
                 echo '<input type="hidden" name="productName" value="' .$MyProductName . '">';
                 echo '<input type="hidden" name="price" value="' . $MyProductPrice .'">'; 
                 if ($MyStockLevel <= $stock_limit) {
-                    echo '<button type="submit" class="bg-[#954535] text-white rounded-full px-10 py-3 text-l border-2 border-black mx-auto mb-4 flex items-center" disabled><b>Out of Stock</b>';
+                    echo '<button type="submit" class="bg-[#78350f] hover:bg-[#5a2b09] text-white rounded-full px-10 py-2 text-l border-2 border-[#78350f] mx-auto mb-4 flex items-center disabled" disabled><b>Out of Stock</b>';
                 } else {
                     echo '<button type="submit" class="bg-[#78350f] hover:bg-[#5a2b09] text-white rounded-full px-10 py-2 text-l border-2 border-[#78350f] mx-auto mb-4 flex items-center">Add to Cart</button>';
                 }

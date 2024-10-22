@@ -101,11 +101,9 @@
 
             </div>
 <div class="flex items-center gap-3">
-<li><a class="text-white hover:text-[#D0B8A8]" href="index.php">LogOut</a></li>
+<li><a class="text-white hover:text-[#D0B8A8]" href="logout.php">LogOut</a></li>
     </div>
    
-           
-
         </nav>
     </header>
 

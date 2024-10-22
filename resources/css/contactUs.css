@@ -7,7 +7,7 @@
 }
 
 body {
-    background-image: url('../images/bg2.png');
+    background-image: url('../images/bg1.png');
     background-repeat: no-repeat;
     background-attachment: fixed;
      background-size: cover; 
@@ -15,7 +15,7 @@ body {
 
 
 .bg-translucent {
-    background-color: rgba(220, 255, 220, 0.8); 
+    background-color: rgba(255, 255, 255, 0.5); 
 }
 
 .tabs{
@@ -23,13 +23,13 @@ body {
 }
 
 .tab-button {
-background-color: rgba(255, 255, 255, 0.4); 
+background-color: rgba(255, 255, 255, 0.5); 
 border-radius: 0.75rem 0.75rem 0 0; /* Optional: rounded corners */
 border-bottom-width: 2px;
 
 }
 .tab-button.active {
-background-color: rgba(230, 255, 230, 0.8);  /* Background color for active tab */
+background-color: rgba(200, 255, 200, 0.5);  /* Background color for active tab */
 z-index: 1; /* Ensure the active tab is on top */
 }
 
@@ -69,7 +69,7 @@ input::placeholder {
   }
 
   .reply-container {
-    background-color: rgba(240, 248, 255, 0.7); 
+    background-color: rgba(255, 255, 255, 0.7); 
     border-left: 4px solid #43A047; 
     padding: 0.75rem;
     margin-top: 1rem;

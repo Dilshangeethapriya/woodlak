@@ -18,16 +18,19 @@ $installments = number_format($totalprice / 3, 2);
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f4ede8;
+            background: url("../../resources/images/bg1.png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover; 
         }
         .button-fade {
             transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-        .hidden {
+        .otp-hidden {
             opacity: 0;
             visibility: hidden;
         }
-        .visible {
+        .otp-visible {
             opacity: 1;
             visibility: visible;
         }
@@ -35,7 +38,7 @@ $installments = number_format($totalprice / 3, 2);
 </head>
 <body>
 
-<?php include '../includes/navbar.php'; ?>
+<?php include '../../includes/navbar.php'; ?>
 
 <div class="flex items-center justify-center min-h-screen p-4">
     <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
@@ -79,7 +82,7 @@ $installments = number_format($totalprice / 3, 2);
         </div>
 
         <!-- OTP (Password) Section (Initially hidden) -->
-        <div id="passwordSection" class="mt-4 hidden">
+        <div id="passwordSection" class="mt-4 otp-hidden">
             <p class="text-gray-600 text-center">Enter the OTP sent to your phone</p>
             <input type="text" id="otp" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none" placeholder="Enter your OTP">
         </div>
@@ -87,7 +90,7 @@ $installments = number_format($totalprice / 3, 2);
         <!-- Buttons -->
         <div class="mt-6">
             <button id="continueButton" class="w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">CONTINUE</button>
-            <button id="verifyButton" class="w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition button-fade hidden">VERIFY</button>
+            <button id="verifyButton" class="w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition button-fade otp-hidden">VERIFY</button>
         </div>
 
         <div class="mt-4 text-center text-gray-500 text-sm">
@@ -123,7 +126,7 @@ document.getElementById('date60').textContent = formatDate(date60);
 document.getElementById('continueButton').addEventListener('click', function () {
     const mobileNumber = document.getElementById('mobileNumber').value;
 
-    if (mobileNumber && document.getElementById('passwordSection').classList.contains('hidden')) {
+    if (mobileNumber && document.getElementById('passwordSection').classList.contains('otp-hidden')) {
         // Disable continue button to prevent multiple SMS sends
         this.disabled = true;
 
@@ -135,11 +138,11 @@ document.getElementById('continueButton').addEventListener('click', function () 
         xhr.onload = function () {
             if (xhr.status === 200) {
                 // Show the OTP input field and verify button with transition
-                document.getElementById('passwordSection').classList.remove('hidden');
-                document.getElementById('continueButton').classList.add('hidden');
+                document.getElementById('passwordSection').classList.remove('otp-hidden');
+                document.getElementById('continueButton').classList.add('otp-hidden');
                 const verifyButton = document.getElementById('verifyButton');
-                verifyButton.classList.remove('hidden');
-                verifyButton.classList.add('visible');
+                verifyButton.classList.remove('otp-hidden');
+                verifyButton.classList.add('otp-visible');
             } else {
                 alert("Failed to send OTP. Please try again.");
                 // Re-enable the continue button in case of failure
