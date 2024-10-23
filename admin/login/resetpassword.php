@@ -2,11 +2,6 @@
 include 'config.php';
 session_start();
 
-//if(!isset($_SESSION["email"]) || empty($_SESSION["email"])){
-   // header("Location: adminLogin.php");
-   // exit();
-//}
-
 if (!isset($_SESSION['user_id'])) {
     header('Location: adminLogin.php');
     exit;

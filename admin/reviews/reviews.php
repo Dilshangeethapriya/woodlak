@@ -1,5 +1,12 @@
 <?php
 include '../../config/dbconnect.php';
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
+    header('Location: http://localhost/woodlak/admin/login/adminLogin.php');
+    exit;
+}
 
 // Fetch all products to populate the dropdown menu
 $productsQuery = "SELECT productID, productName FROM product ORDER BY productName ASC";

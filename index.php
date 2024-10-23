@@ -17,7 +17,7 @@ session_start();
     <body>
     <?php include 'includes/navbar.php'; ?>
 
-<section class="feature-section text-center mt-40 mx-4">
+<section class="feature-section text-center mt-20 mx-4">
     <h2 class="text-4xl font-semibold header-title mb-5">Why Choose Our Neem Combs?</h2>
     <div class="flex flex-col md:flex-row justify-center gap-8">
         

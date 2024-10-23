@@ -2,10 +2,11 @@
     include 'config.php';
     session_start();
 
-    //if(!isset($_SESSION["email"]) || empty($_SESSION["email"])){
-   // header("Location: adminLogin.php");
-   // exit();
-//}
+    if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
+        header('Location: adminLogin.php');
+        exit;
+    }
     
     if (isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id'];

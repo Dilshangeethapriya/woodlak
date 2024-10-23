@@ -1,10 +1,12 @@
 <?php
+session_start();
 include 'config.php';
 
-//if(!isset($_SESSION["email"]) || empty($_SESSION["email"])){
-   // header("Location: adminLogin.php");
-   // exit();
-//}
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
+    header('Location: adminLogin.php');
+    exit;
+}
 
 
 if (isset($_SESSION['message'])) {

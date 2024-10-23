@@ -1,6 +1,14 @@
 <?php
 include '../../config/dbconnect.php';
 
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
+    header('Location: http://localhost/woodlak/admin/login/adminLogin.php');
+    exit;
+}
+
 // Define reviews per page and get current page number
 $reviewsPerPage = 10;
 $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;

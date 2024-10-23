@@ -1,6 +1,14 @@
 <?php
 // Include the database connection
 include '../../config/dbconnect.php';
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
+    header('Location: http://localhost/woodlak/admin/login/adminLogin.php');
+    exit;
+}
+
 $base_url = "http://localhost/woodlak"; 
 
 // Get selected productID from GET request (if any)

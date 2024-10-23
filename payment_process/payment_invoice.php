@@ -78,6 +78,36 @@ try {
         $stmt->execute();
     }
 
+    //To Mange Stocks
+
+    if(isset($_SESSION['stockDetails'])){
+        foreach ($_SESSION['stockDetails'] as $product) {
+            $productID = $product['productID'];
+            $productName = $product['productName'];
+            $quantity = $product['quantity'];
+
+            //insert into the log_stockOut Table
+
+            $stockOutSql = "INSERT INTO log_stockOut (date, productID, productName, qty) VALUES (NOW(), :productID, :productName, :qty)";
+
+            $stmt = $conn->prepare($stockOutSql);
+            $stmt->bindParam(':productID', $productID);
+            $stmt->bindParam(':productName', $productName);
+            $stmt->bindParam(':qty', $quantity);
+            $stmt->execute();
+//Update the current stock
+
+            $updateStockSql = "UPDATE product SET stockLevel = stockLevel - :quantity WHERE productID = :productID";
+
+            $updateStmt = $conn->prepare($updateStockSql);
+            $updateStmt->bindParam(':quantity', $quantity);
+            $updateStmt->bindParam(':productID', $productID);
+            $updateStmt->execute();
+        }
+    }else{
+        echo "No products in the session.";
+    }
+
     $conn = null;
 } catch(PDOException $e) {
     echo "Database Error: " . $e->getMessage();

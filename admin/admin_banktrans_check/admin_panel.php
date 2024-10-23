@@ -1,4 +1,13 @@
 <?php
+
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
+    header('Location: http://localhost/woodlak/admin/login/adminLogin.php');
+    exit;
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -171,7 +180,7 @@ $result = $conn->query($sql);
                 <td><?php echo $row["accountNumber"]; ?></td>
                 <td><?php echo $row["accountHolder"]; ?></td>
                 <td><?php echo $row["transactionID"]; ?></td>
-                <td><a href="../uploads/<?php echo $row["receiptFile"]; ?>" target="_blank">View File</a></td>
+                <td><a href="../../payment_process/uploads/<?php echo $row["receiptFile"]; ?>" target="_blank">View File</a></td>
                 <td><?php echo $row["OrderID"]; ?></td>
                 <td><?php echo $row["checkStatus"]; ?></td>
                 <td>

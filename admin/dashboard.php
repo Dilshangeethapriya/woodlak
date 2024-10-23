@@ -1,7 +1,14 @@
 <?php
+session_start(); 
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
+    header('Location: login/adminLogin.php');
+    exit;
+}
+
 
 include '../config/dbconnect.php';
-
 
 
 $productCountQuery = "SELECT COUNT(*) AS total FROM product";
@@ -143,7 +150,8 @@ if ($stockinResult->num_rows > 0) {
     }
 }
 
-// Fetch stockout data for the current month
+
+// Stocks chart
 $stockoutQuery = "
     SELECT 
         productId, 
@@ -158,6 +166,7 @@ $stockoutQuery = "
 ";
 $stockoutResult = $conn->query($stockoutQuery);
 
+
 $stockoutData = [];
 if ($stockoutResult->num_rows > 0) {
     while ($row = $stockoutResult->fetch_assoc()) {
@@ -165,32 +174,57 @@ if ($stockoutResult->num_rows > 0) {
     }
 }
 
-// Combine the stockin and stockout data by productId
+
+$currentStockQuery = "
+    SELECT 
+        productID, 
+        productName,
+        stockLevel 
+    FROM 
+        product
+";
+$currentStockResult = $conn->query($currentStockQuery);
+
+$currentStockData = [];
+$productNames = [];
+if ($currentStockResult->num_rows > 0) {
+    while ($row = $currentStockResult->fetch_assoc()) {
+        $currentStockData[$row['productID']] = $row['stockLevel'];
+        $productNames[$row['productID']] = $row['productName']; 
+    }
+}
+
+
 $stockData = [];
 foreach ($stockinData as $stockin) {
-    $stockData[$stockin['productId']] = [
+    $productId = $stockin['productId'];
+    $stockData[$productId] = [
+        'productName' => isset($productNames[$productId]) ? $productNames[$productId] : 'Unknown',
         'total_stockin' => $stockin['total_stockin'],
-        'total_stockout' => 0 // Default to 0, in case no stockout data
+        'total_stockout' => 0, // Default to 0 in case no stockout data
+        'current_stock' => isset($currentStockData[$productId]) ? $currentStockData[$productId] : 0
     ];
 }
 
 foreach ($stockoutData as $stockout) {
-    if (isset($stockData[$stockout['productId']])) {
-        $stockData[$stockout['productId']]['total_stockout'] = $stockout['total_stockout'];
+    $productId = $stockout['productId'];
+    if (isset($stockData[$productId])) {
+        $stockData[$productId]['total_stockout'] = $stockout['total_stockout'];
     } else {
-        $stockData[$stockout['productId']] = [
+        $stockData[$productId] = [
+            'productName' => isset($productNames[$productId]) ? $productNames[$productId] : 'Unknown',
             'total_stockin' => 0,
-            'total_stockout' => $stockout['total_stockout']
+            'total_stockout' => $stockout['total_stockout'],
+            'current_stock' => isset($currentStockData[$productId]) ? $currentStockData[$productId] : 0
         ];
     }
 }
 
-// Prepare the data for chart rendering
-$productIds = array_keys($stockData);
+
+$productNamesArray = array_column($stockData, 'productName');
 $stockins = array_column($stockData, 'total_stockin');
 $stockouts = array_column($stockData, 'total_stockout');
-
-
+$currentStocks = array_column($stockData, 'current_stock');
 
 
 $conn->close();
@@ -286,7 +320,7 @@ $conn->close();
            </a>
 </div>
         
-        <div class="grid grid-cols-1  gap-6 w-full mt-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 w-full mt-6">
              
           <div class="p-6 rounded-lg shadow-lg bg-white">
                 <h3 class="text-2xl font-semibold mb-3">Order Statistics</h3>
@@ -294,7 +328,7 @@ $conn->close();
             </div>
 
             <div class="p-6 rounded-lg shadow-lg bg-white">
-                <h3 class="text-2xl font-semibold mb-3">Order Statistics</h3>
+                <h3 class="text-2xl font-semibold mb-3">Stocks</h3>
                 <canvas id="stockChart"></canvas>
             </div>
         </div>
@@ -419,32 +453,40 @@ const monthString = months.map(dateString => {
             }
     });
 
-    // Prepare the data from PHP
-const productIds = <?php echo json_encode($productIds); ?>;
+const productNames = <?php echo json_encode($productNamesArray); ?>;
 const stockins = <?php echo json_encode($stockins); ?>;
 const stockouts = <?php echo json_encode($stockouts); ?>;
+const currentStocks = <?php echo json_encode($currentStocks); ?>;
 
-// Create the stock chart
+// Stocks
 const ctx = document.getElementById('stockChart').getContext('2d');
 const stockChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: productIds,
+        labels: productNames, 
         datasets: [
             {
+                label: 'Current Stock',
+                backgroundColor: 'rgba(45, 97, 255, 1)',
+                borderColor: 'rgba(45, 97, 255, 1)',
+                borderWidth: 1,
+                data: currentStocks
+            },
+            {
                 label: 'Stock In',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(76, 214, 176, 1)',
+                borderColor: 'rgba(76, 214, 176, 1)',
                 borderWidth: 1,
                 data: stockins
             },
             {
                 label: 'Stock Out',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 94, 87, 1)',
+                borderColor: 'rgba(255, 94, 87, 1)',
                 borderWidth: 1,
                 data: stockouts
             }
+           
         ]
     },
     options: {

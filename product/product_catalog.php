@@ -16,7 +16,11 @@ session_start();
 
     <style>
             body{
-                background:#c19a6b;
+                background: url('../resources/images/bg1.png');
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+                font-family: sans-serif;
             }
             img.darker {
                 transition: all 0.2s ease-in-out;
@@ -55,7 +59,7 @@ session_start();
     <body>
     <?php include  '../includes/navbar.php'; ?>
     <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="flex: 1; text-align: center; margin: 0; font-size:50px; margin-left:20px" class="text-[#543310]"><b>The Natural Choice for Healthier Hair</b></h1>
+            <h1 style="flex: 1; text-align: center; margin: 0; font-size:50px; margin-left:20px; margin-top:40px; margin-bottom:20px" class="text-[#543310]"><b>The Natural Choice for Healthier Hair</b></h1>
             <button class="add_new bg-[#74512D;] hover:bg-[#543310]" onclick="openFindForm()">Find Your Comb</button>
         </div>
 
@@ -131,7 +135,7 @@ session_start();
             if ($result && mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     $stock_limit = 15;
-                    echo '<div class="product bg-[#FFF8E8] p-6 rounded-lg shadow-2xl " style="height: 500px">';
+                    echo '<div class="product bg-[#FFF8E8] p-6 rounded-lg shadow-2xl " style="height: 550px">';
                     echo '<a href="view_product.php?PRODUCTC=' . $row['productID'] . '"><img src="../'.$row['image'].'" alt="' . $row['productName'] . '" class="darker showhide w-full h-[55%] object-cover mb-4 rounded-lg"><p class="text-center hide">More Info</p></a>';
                     echo '<a href="view_product.php?PRODUCTC=' . $row['productID'] . '"><h2 class="text-3xl font-bold mb-2 text-center hover:text-[#5a2b09]">' . $row['productName'] . '</h2></a>';
                     echo '<p class="price text-2xl mb-6 text-center">Rs.' . $row['price'] . '</p>';

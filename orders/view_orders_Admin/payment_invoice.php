@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
+    header('Location: http://localhost/woodlak/admin/login/adminLogin.php');
+    exit;
+}
+
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);

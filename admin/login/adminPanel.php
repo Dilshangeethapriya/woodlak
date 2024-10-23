@@ -1,23 +1,14 @@
 <?php
+session_start();
 include 'config.php';  
 
-//if(!isset($_SESSION["email"]) || empty($_SESSION["email"])){
-   // header("Location: adminLogin.php");
-   // exit();
-//}
-
-if(isset($_SESSION['message'])){
-    $message = $_SESSION['message'];
-    $message_type = $_SESSION['message_type'];
-
-    echo '<div class="alert alert-' . ($message_type == 'success' ? 'success' : 'danger') . ' alert-dismissible fade show" role="alert">';
-    echo $message;
-    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-    echo '</div>';
-
-    unset($_SESSION['message']);
-    unset($_SESSION['message_type']);
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
+    header('Location: adminLogin.php');
+    exit;
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,6 +48,21 @@ if(isset($_SESSION['message'])){
 </script>
 
  <?php include "includes/adminNavbar.php" ?> 
+
+ <?php 
+   if(isset($_SESSION['message'])){
+    $message = $_SESSION['message'];
+    $message_type = $_SESSION['message_type'];
+
+    echo '<div class="alert alert-' . ($message_type == 'success' ? 'success' : 'danger') . ' alert-dismissible fade show" role="alert">';
+    echo $message;
+    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    echo '</div>';
+
+    unset($_SESSION['message']);
+    unset($_SESSION['message_type']);
+}
+ ?>
 
 <<h1 class="text-center" style="font-size:30px"><b>Admin Panel</b></h1>
   <style>

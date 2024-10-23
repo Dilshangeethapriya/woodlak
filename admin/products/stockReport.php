@@ -1,6 +1,14 @@
 <?php
 include 'dbcon.php';
 
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
+    header('Location: http://localhost/woodlak/admin/login/adminLogin.php');
+    exit;
+}
+
 $type = isset($_GET['type']) ? $_GET['type'] : 'balance';
 $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
 $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
@@ -31,7 +39,7 @@ if($fetchSql != ''){
 <!DOCTYPE html>
 <html>
 <head>
-        <title>Stock In and Stock Out Management</title>
+        <title>Stock Management</title>
         <meta charset="utf-8">
 		<meta name="veiwport" content="width=device-width,intial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -50,7 +58,7 @@ if($fetchSql != ''){
         <?php include "../../includes/adminNavbar.php" ?>  
 
         <div style="padding: 10px;">
-        <h1 class="text-center" style="font-size:50px"><b>Stock In and Stock Out Management</b></h1>
+        <h1 class="text-center" style="font-size:50px"><b>Stock Management</b></h1>
         
         <div class="row" style="margin-top:20px;">
             <form action="stockReport.php">
