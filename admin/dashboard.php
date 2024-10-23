@@ -48,6 +48,7 @@ $callbackCountResult = $conn->query($callbackCountQuery)->fetch_assoc()['total']
 
 
 // quiries for the charts
+
 $inquiriesResult = $conn->query($inquiriesQuery);
 $callbacksResult = $conn->query($callbacksQuery);
 $ordersResult = $conn->query($ordersQuery);
@@ -120,7 +121,74 @@ while ($row = $result->fetch_assoc()) {
     }
 }
 
+// Fetch stockin data for the current month
+$stockinQuery = "
+    SELECT 
+        productId, 
+        SUM(qty) AS total_stockin 
+    FROM 
+        log_stockin 
+    WHERE 
+        MONTH(date) = MONTH(CURRENT_DATE()) 
+        AND YEAR(date) = YEAR(CURRENT_DATE())
+    GROUP BY 
+        productId
+";
+$stockinResult = $conn->query($stockinQuery);
 
+$stockinData = [];
+if ($stockinResult->num_rows > 0) {
+    while ($row = $stockinResult->fetch_assoc()) {
+        $stockinData[] = $row;
+    }
+}
+
+// Fetch stockout data for the current month
+$stockoutQuery = "
+    SELECT 
+        productId, 
+        SUM(qty) AS total_stockout 
+    FROM 
+        log_stockout 
+    WHERE 
+        MONTH(date) = MONTH(CURRENT_DATE()) 
+        AND YEAR(date) = YEAR(CURRENT_DATE())
+    GROUP BY 
+        productId
+";
+$stockoutResult = $conn->query($stockoutQuery);
+
+$stockoutData = [];
+if ($stockoutResult->num_rows > 0) {
+    while ($row = $stockoutResult->fetch_assoc()) {
+        $stockoutData[] = $row;
+    }
+}
+
+// Combine the stockin and stockout data by productId
+$stockData = [];
+foreach ($stockinData as $stockin) {
+    $stockData[$stockin['productId']] = [
+        'total_stockin' => $stockin['total_stockin'],
+        'total_stockout' => 0 // Default to 0, in case no stockout data
+    ];
+}
+
+foreach ($stockoutData as $stockout) {
+    if (isset($stockData[$stockout['productId']])) {
+        $stockData[$stockout['productId']]['total_stockout'] = $stockout['total_stockout'];
+    } else {
+        $stockData[$stockout['productId']] = [
+            'total_stockin' => 0,
+            'total_stockout' => $stockout['total_stockout']
+        ];
+    }
+}
+
+// Prepare the data for chart rendering
+$productIds = array_keys($stockData);
+$stockins = array_column($stockData, 'total_stockin');
+$stockouts = array_column($stockData, 'total_stockout');
 
 
 
@@ -174,6 +242,7 @@ $conn->close();
            </a>
           
            <!-- Total Customers Tile -->
+           <a href="login/RegisteredUsers.php">
            <div class="infoTile bg-gradient-to-r from-yellow-500 to-yellow-400 p-6 rounded-lg shadow-lg text-white flex items-center">
                <i class="fa-solid fa-users text-4xl mr-4"></i>
                <div>
@@ -181,8 +250,10 @@ $conn->close();
                    <p class="text-lg font-semibold">Total Customers</p>
                </div>
            </div>
+           </a>
        
            <!-- Total Orders Tile -->
+           <a href="../orders/View_orders_Admin/OrderList.php">
            <div class="infoTile bg-gradient-to-r from-purple-600 to-purple-400 p-6 rounded-lg shadow-lg text-white flex items-center">
                <i class="fa-solid fa-box text-4xl mr-4"></i>
                <div>
@@ -190,8 +261,10 @@ $conn->close();
                    <p class="text-lg font-semibold">Total Orders</p>
                </div>
            </div>
+           </a>
        
            <!-- Total Inquiries Tile -->
+           <a href="inquiry/inquiries.php">
            <div class="infoTile bg-gradient-to-r from-orange-600 to-orange-400 p-6 rounded-lg shadow-lg text-white flex items-center">
                <i class="fa-solid fa-envelope text-4xl mr-4"></i>
                <div>
@@ -199,24 +272,34 @@ $conn->close();
                    <p class="text-lg font-semibold">Total Inquiries</p>
                </div>
            </div>
+           </a>
        
            <!-- Total Callback Requests Tile -->
+           <a href="inquiry/inquiries.php">
            <div class="infoTile bg-gradient-to-r from-red-600 to-red-400 p-6 rounded-lg shadow-lg text-white flex items-center">
                <i class="fa-solid fa-phone text-4xl mr-4"></i>
                <div>
                    <h3 class="text-3xl font-bold mb-1"><?php echo $callbackCountResult; ?></h3>
                    <p class="text-lg font-semibold">Total Callbacks</p>
                </div>
-    </div>
+          </div>
+           </a>
 </div>
         
-                 <div class="grid grid-cols-1  gap-6 w-full mt-20">
-            
-        <div class="p-6 rounded-lg shadow-lg bg-white">
+        <div class="grid grid-cols-1  gap-6 w-full mt-20">
+             
+          <div class="p-6 rounded-lg shadow-lg bg-white">
                 <h3 class="text-2xl font-semibold mb-3">Order Statistics</h3>
                 <canvas id="orderChart"></canvas>
             </div>
+
+            <div class="p-6 rounded-lg shadow-lg bg-white">
+                <h3 class="text-2xl font-semibold mb-3">Order Statistics</h3>
+                <canvas id="stockChart"></canvas>
+            </div>
         </div>
+
+
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 w-full mt-6">
          
@@ -335,6 +418,44 @@ const monthString = months.map(dateString => {
                 }
             }
     });
+
+    // Prepare the data from PHP
+const productIds = <?php echo json_encode($productIds); ?>;
+const stockins = <?php echo json_encode($stockins); ?>;
+const stockouts = <?php echo json_encode($stockouts); ?>;
+
+// Create the stock chart
+const ctx = document.getElementById('stockChart').getContext('2d');
+const stockChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: productIds,
+        datasets: [
+            {
+                label: 'Stock In',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                data: stockins
+            },
+            {
+                label: 'Stock Out',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                data: stockouts
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
 </script>
 
 </body>

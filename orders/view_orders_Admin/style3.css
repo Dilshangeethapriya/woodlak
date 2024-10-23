@@ -1,4 +1,6 @@
 
+
+
 * {
     margin: 0;
     padding: 0;
@@ -18,15 +20,14 @@
 body {
     min-height: 100vh;
     background:url(back.avif) center / cover ;
-    justify-content: center;
-    align-items: center;
 }
 
 main.table {
     width: 90vw;
     height: 90vh;
     background-color: rgba(211, 202, 202, 0.699);
-
+    max-width: 1200px;
+    margin: 40px auto;
     backdrop-filter: blur(7px);
     box-shadow: 0 .4rem .8rem #0005;
     border-radius: .8rem;
@@ -427,6 +428,58 @@ thead th.active,tbody td.active {
     table {
         font-size: 0.9rem; /* Smaller font size for smaller screens */
     }
+}
+
+/* Styles for the dropdown container */
+.chart__file {
+    position: relative;
+    display: inline-block;
+}
+
+/* Styles for the button that triggers the dropdown */
+.chart__file-btn {
+    background-color: #3498db; /* Button background color */
+    color: white;              /* Text color */
+    padding: 10px 20px;        /* Button padding */
+    font-size: 16px;           /* Font size */
+    border: none;              /* Remove border */
+    cursor: pointer;           /* Pointer cursor on hover */
+    border-radius: 4px;        /* Rounded corners */
+}
+
+/* Dropdown content (hidden by default) */
+.chart__dropdown-content {
+    display: none;             /* Hidden initially */
+    position: absolute;        /* Positioned relative to the dropdown */
+    background-color: #f9f9f9; /* Background color */
+    min-width: 160px;          /* Minimum width */
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2); /* Shadow effect */
+    z-index: 1;                /* Ensure it is above other elements */
+    border-radius: 4px;        /* Rounded corners */
+}
+
+/* Links inside the dropdown */
+.chart__dropdown-content a {
+    color: black;              /* Link text color */
+    padding: 12px 16px;        /* Padding inside the links */
+    text-decoration: none;     /* Remove underline */
+    display: block;            /* Make links full width */
+    border-bottom: 1px solid #ddd; /* Separate links */
+}
+
+/* Add hover effect for links */
+.chart__dropdown-content a:hover {
+    background-color: #f1f1f1; /* Background color on hover */
+}
+
+/* Show the dropdown on hover or when clicked */
+.chart__file:hover .chart__dropdown-content {
+    display: block;            /* Display the dropdown */
+}
+
+/* Optional: Add hover effect for the button */
+.chart__file:hover .chart__file-btn {
+    background-color: #2980b9; /* Darken button on hover */
 }
 
 

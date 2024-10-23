@@ -3,7 +3,7 @@ $base_url = "http://localhost/woodlak";
 ?>
 
 <footer class="bg-[#543310] text-white mt-10">
-    <div class="container mx-auto py-6 px-4 flex flex-col md:flex-row justify-between items-center">
+    <div class=" mx-auto py-6 px-4 flex flex-col md:flex-row justify-between items-center">
         
         <div class="flex justify-center md:justify-start mb-4 md:mb-0">
             <a href="https://web.facebook.com/woodlak123" class="text-white mx-2 hover:text-gray-400">

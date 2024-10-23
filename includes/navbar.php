@@ -24,7 +24,7 @@ $base_url = "http://localhost/woodlak";
                     <a class="text-white hover:text-[#D0B8A8]" href="<?php echo $base_url; ?>/product/product_catalog.php">Products</a>
                 </li>
                 <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="#">Orders</a>
+                    <a class="text-white hover:text-[#D0B8A8]" href="<?= $base_url; ?>/orders/Tracking_page/Order_tracking.php">Orders</a>
                 </li>
             </ul>
         </div>
@@ -33,7 +33,7 @@ $base_url = "http://localhost/woodlak";
             $user_name = $_SESSION['user_name'];
         ?>
         <div class="flex items-center gap-3">
-            <span class="mr-4 text-lg"><?php echo $user_name; ?></span>
+            <span class="mr-4 text-lg text-white font-bold"><?php echo $user_name; ?></span>
             <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]" onclick="location.href='<?= $base_url ?>/Userprofile/Customer/profile.php'">Profile</button> 
             <button onclick="responsive()"><i class="bi bi-list text-4xl lg:hidden text-white"></i></button>
         </div>

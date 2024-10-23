@@ -30,7 +30,7 @@ $base_url = "http://localhost/woodlak";
                     <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/inquiry/inquiries.php">Inquiries</a>
                 </li>
                 <li>
-                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/payment_process/admin_banktrans_check/admin_panel.php">Bank Transfers</a>
+                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/admin_banktrans_check/admin_panel.php">Bank Transfers</a>
                 </li>
                 <li>
                     <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/login/RegisteredUsers.php">Users</a>
@@ -40,8 +40,8 @@ $base_url = "http://localhost/woodlak";
 
        
         <div class="flex items-center gap-4">
-            <button class="bg-[#8D653A] text-white px-4 py-2 rounded-full hover:bg-[#D0B8A8] hover:text-[#543310] transition duration-300 shadow-lg">
-                Logout
+            <button class="bg-[#8D653A] text-white px-4 py-2 rounded-full hover:bg-[#D0B8A8] hover:text-[#543310] transition duration-300 shadow-lg" onclick="location='../admin/login/adminProfile1.php'">
+                Profile
             </button> 
             <button onclick="responsive()" class="lg:hidden">
                 <i class="bi bi-list text-4xl text-white"></i>

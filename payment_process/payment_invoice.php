@@ -35,9 +35,10 @@ try {
     }
 
   
-    $stmt = $conn->prepare("INSERT INTO Orders (total, paymentMethod, orderStatus, name, phoneNumber, houseNo, streetName, city, postalCode, email, combPurchased, quantity) 
-                            VALUES (:total, :paymentMethod, :orderStatus, :name, :phoneNumber, :houseNo, :streetName, :city, :postalCode, :email, :combPurchased, :quantity)");
-    
+    $stmt = $conn->prepare("INSERT INTO Orders (customerID, total, paymentMethod, orderStatus, name, phoneNumber, houseNo, streetName, city, postalCode, email, combPurchased, quantity) 
+    VALUES (:customerID, :total, :paymentMethod, :orderStatus, :name, :phoneNumber, :houseNo, :streetName, :city, :postalCode, :email, :combPurchased, :quantity)");
+
+    $stmt->bindParam(':customerID', $_SESSION['user_id']);
     $stmt->bindParam(':total', $totalAmount);
     $stmt->bindParam(':paymentMethod', $_SESSION['paymentMethod']);
     $stmt->bindParam(':orderStatus', $orderStatus);

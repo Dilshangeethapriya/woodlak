@@ -1,0 +1,357 @@
+/* General styles */
+
+ 
+  .bg{
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+   background: url('bodybg-modified.jpeg') center / cover no-repeat;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1000px;
+    padding: 20px;
+    background-color:gainsboro;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .page-title {
+    text-align: center;
+    font-size: 32px;
+    color: #030303;
+    margin-bottom: 30px;
+  }
+  
+  /* Table styles */
+  .table-container {
+    overflow-x: auto;
+    background: transparent;
+  }
+  
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    table-layout: auto;
+  
+  }
+  
+  .orders-table thead {
+    background-color: #82c484;
+    color: rgb(0, 0, 0);
+    position: sticky; /* Keep headers sticky */
+  top: 0;
+  z-index: 1;
+  }
+  
+  .orders-table th, 
+  .orders-table td{
+    padding: 10px 15px;
+    text-align: left;
+   
+  }
+  
+  .orders-table th {
+    font-size: 18px;
+  }
+  
+  .orders-table td {
+    font-size: 16px;
+    border: 1px solid #ddd;
+  }
+  
+  .orders-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  .orders-table tbody tr td {
+    white-space: nowrap; /* Ensure content doesn't overflow */
+  }
+  /* Status styles */
+  .status {
+    font-weight: bold;
+    text-align: center;
+    padding: 8px 15px;
+    
+  }
+  .pending__file .pending__file-btn {
+    display: inline-block;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #fff6 url(pending.jpg) center / 80% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+  
+}
+.delivered__file .delivered__file-btn {
+    display: inline-block;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #fff6 url(deliver.png) center / 110% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+  
+}
+.completed__file .completed__file-btn {
+    display: inline-block;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #fff6 url(completed.png) center / 110% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+    
+}
+
+
+
+
+.decliend__file .decliend__file-btn {
+    display: inline-block;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #fff6 url(de.png) center / 110% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+}
+.pending__file .pending__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+.completed__file .completed__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+.delivered__file .delivered__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+
+.decliend__file .decliend__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+.order-status {
+    display: flex;
+    justify-content: space-between; /* Positions items at opposite ends */
+    align-items: center; /* Centers items vertically */
+    margin-bottom: 3px;
+     /* Adds space below the title */
+}
+.page-title {
+    flex-grow: 1; /* Allows the title to take available space */
+    text-align: center; /* Centers the title text */
+}
+.status-icons {
+    display: flex;
+    gap: 25px; /* Space between icons */
+}
+.pending__file-btn,
+.completed__file-btn,
+.delivered__file-btn,
+.declined__file-btn {
+    cursor: pointer; /* Change cursor to pointer for better UX */
+}
+
+/*.delete-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+}*/
+
+.delete-btn i {
+  color: #e3342f;
+  font-size: 1.2rem;
+}
+
+.delete-btn:hover i {
+  color: #cc1f1a;
+}
+.delete-btn {
+  position: absolute; /* Position the button absolutely within the cell */
+  top: 0; /* Align to the top */
+  right: 0; /* Align to the right */
+  background: none; /* No background */
+  border: none; /* No border */
+  cursor: pointer; /* Pointer cursor on hover */
+  color: red; /* Change color as desired */
+  font-size: 1.2em; /* Adjust size */
+  z-index: 10; /* Ensure it appears above other content */
+}
+
+.delete-btn:hover {
+  color: darkred; /* Change color on hover */
+}
+
+td {
+  padding-top: 24px; /* Add padding to the top of the cell to avoid overlap */
+  padding-right: 24px; /* Optional: Add padding to the right for better spacing */
+}
+
+.order-confirmation {
+  text-align: center; /* Center the content */
+  margin: 20px; /* Add some margin around the div */
+  padding: 10px; /* Add padding inside the div */
+  background-color: #f0f0f0; /* Light background color */
+  border: 1px solid #ccc; /* Border around the div */
+  border-radius: 5px; /* Rounded corners */
+}
+
+.confirm-link {
+  font-size: 18px; /* Font size for the link */
+  color: #fff; /* White text color */
+  background-color: #48aa4b; /* Bootstrap primary color (blue) */
+  padding: 10px 20px; /* Padding around the link */
+  text-decoration: none; /* Remove underline */
+  border-radius: 5px; /* Rounded corners for the link */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.confirm-link:hover {
+  background-color: #146317; /* Darker blue on hover */
+}
+
+/* Modal Styles */
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 0.6); /* Black background with opacity */
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-content {
+  position: relative; 
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: #020202;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1010;
+}
+
+.confirm-order-btn, .cancel-btn {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-order-btn {
+  background-color: #48aa4b;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-order-btn:hover {
+  background-color: #146317;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background-color: #999;
+}
+
+/* Pop-up Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it stays on top */
+}
+
+/* Pop-up Content */
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 300px;
+}
+
+.popup-content h3 {
+  margin-bottom: 20px;
+}
+
+.popup-content button {
+  padding: 10px 20px;
+  margin: 5px;
+  background-color: #48aa4b;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.popup-content button:hover {
+  background-color: #146317;
+}
+
+.popup-content button#confirm-no {
+  background-color: #e3342f;
+}
+
+.popup-content button#confirm-no:hover {
+  background-color: #cc1f1a;
+}
+
+
+
+  
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 24px;
+    }
+    
+    .orders-table th, 
+    .orders-table td,.orders-table tr {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+  

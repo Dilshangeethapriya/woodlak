@@ -24,12 +24,52 @@
             text-align: left;
             border: 1px solid #ddd;
         }
+
+        .chart__file {
+            position: relative;
+            display: inline-block;
+        }
+
+        .chart__dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .chart__dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .chart__dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .chart__file:hover .chart__dropdown-content {
+            display: block;
+        }
+
+        .chart__dropdown-content {
+    display: block; /* Keep it visible by default */
+    opacity: 0; /* Start as invisible */
+    transition: opacity 0.3s ease; /* Transition for smooth appearance */
+}
+
+.chart__file:hover .chart__dropdown-content {
+    opacity: 1; /* Show on hover */
+}
+
     </style>
 </head>
 
 <body>
-<?php include "../../includes/adminNavbar.php" ?> 
 
+<?php include "../../includes/adminNavbar.php" ?>
     <main class="table" id="customers_table">
     
         <section class="table__header">
@@ -40,6 +80,16 @@
                 <img src="image.png" alt="search-icon">
                  </div>
                  <div id="google_translate_element"></div>
+
+                 <div class="chart__file">
+           
+                <a href="javascript:void(0);"  class="chart__file-btn"></a>
+                <div class="chart__dropdown-content">
+                    <a href="chart_list1.php">Distribution of payment methods</a>
+                     <a href="chart_list3.php">Order Status Over the Last 14 Days</a>
+                     <a href="chat_list2.php">Total Income Over the Last 14 Days </a>
+                </div>
+            </div>
             <div class="pending__file">
                 <label for="pending-file" class="pending__file-btn" ></label>
                 
@@ -61,10 +111,7 @@
                 
             </div>
 
-            <div class="chart__file">
-                <a href="chart_list.php" for="chart-file" class="chart__file-btn" ></a>
-                
-            </div>
+            
            
             <div class="export__file">
                 <label for="export-file" class="export__file-btn" title="Export File"></label>

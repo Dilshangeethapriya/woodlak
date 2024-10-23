@@ -50,7 +50,6 @@ session_start();
                 opacity: 0.5; 
             }
 
-
     </style>
 </head>
     <body>
@@ -124,7 +123,7 @@ session_start();
     </div>
 
 
-        <div class="catalog grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8">   
+        <div class="catalog grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8 max-w-screen-2xl m-auto">   
             <?php
             $sql = "SELECT productID, productName, price, image, stockLevel FROM product";
             $result = mysqli_query($conn, $sql);

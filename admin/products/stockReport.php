@@ -72,7 +72,7 @@ if($fetchSql != ''){
                 <input class="class='text-l bg-[#6f5843] hover:bg-[#5c4a38] text-white p-2 w-20 rounded'" type="submit" style="background-color:#78350f; border-radius: 5px;" value="View">
                 <?php if (!empty($type)) : ?>
 
-                <a href="export_pdf.php?type=<?php echo isset($type) ? $type : ''; ?>&start_date=<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>&end_date=<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>" class="button text-md bg-[#6f5843] hover:bg-[#5c4a38] text-white p-2 w-[10%] rounded" style="background-color:#C40C0C; float:right; margin-right: 35px;">Export to PDF &nbsp;<i class="bi bi-filetype-pdf text-l"></i></a>
+                <a href="export_pdf.php?type=<?php echo isset($type) ? $type : ''; ?>&start_date=<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>&end_date=<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>" class="button text-md bg-[#6f5843] hover:bg-[#5c4a38] text-white p-2 w-[100px] md:w-[150px] rounded" style="background-color:#C40C0C; float:right; margin-right: 35px;">Export to PDF &nbsp;<i class="bi bi-filetype-pdf text-l"></i></a>
                 <?php endif; ?>
             </form>
         </div>

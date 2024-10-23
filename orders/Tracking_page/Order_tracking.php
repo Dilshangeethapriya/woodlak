@@ -50,7 +50,7 @@
                     $orderId = mysqli_real_escape_string($conn, $_GET['orderId']);
                     
          
-         $query = "SELECT name, total, paymentMethod, orderStatus, combPurchased, combAmount, houseNo, streetName, city, postalCode 
+         $query = "SELECT name, total, paymentMethod, orderStatus, combPurchased, quantity, houseNo, streetName, city, postalCode 
           FROM orders WHERE orderID = '$orderId'";
 
                     $result = mysqli_query($conn, $query);
@@ -65,7 +65,7 @@
                         echo "<p><b>Payment Method:</b> " . $row['paymentMethod'] . "</p>";
                         echo "<p><b>Order Status:</b> " . $row['orderStatus'] . "</p>";
                         echo "<p><b>Comb Purchased:</b> " . $row['combPurchased'] . "</p>";
-                        echo "<p><b>Comb Amount:</b> " . $row['combAmount'] . "</p>";
+                        echo "<p><b>Comb Amount:</b> " . $row['quantity'] . "</p>";
                         
                        
                     } else {

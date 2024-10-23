@@ -1,3 +1,13 @@
+<?php
+                include 'config.php';
+                session_start();
+                $user_id = $_SESSION['user_id'];
+                $select = mysqli_query($conn, "SELECT * FROM `customer` WHERE customerID = '$user_id'") or die('Query failed');
+                if (mysqli_num_rows($select) > 0) {
+                    $fetch = mysqli_fetch_assoc($select);
+                }
+            ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,31 +21,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
         integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
-    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="../../resources/css/profile/profile2.css">
     <style>
         body {
             font-family: sans-serif;
         }
 
-        .eye-icon {
+        /*.eye-icon {
             position: absolute;
             margin-left: 65px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
             color: black;
-        }
+        }*/
 
         .input-roup {
             position: relative;
         }
 
         .profile {
+            z-index: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-top: 20px;
         }
 
         .profile img {
@@ -57,7 +67,6 @@
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-top: 20px;
         }
 
         .btn {
@@ -83,47 +92,16 @@
     </style>
 </head>
 <body>
-    <header class="bg-[#543310] h-20 relative">
-        <nav class="flex justify-between items-center w-[95%] mx-auto">
-            <div class="flex items-center gap-[1vw]">
-                <img class="w-16" src="Logo.png" alt="Logo">
-                <h1 class="text-xl text-white"><b>WOODLAK</b></h1>
-            </div>
-            <div class="lg:static absolute bg-[#543310] lg:min-h-fit min-h-[39vh] left-0 top-[9%] lg:w-auto w-full flex items-center px-5 justify-center lg:justify-start items-center lg:items-start text-center lg:text-right xl:contents" id="content">
-                <ul class="flex lg:flex-row flex-col lg:gap-[4vw] gap-8">
-                    <li><a class="text-white hover:text-[#D0B8A8]" href="../../">Home</a></li>
-                    <li><a class="text-white hover:text-[#D0B8A8]" href="../../inquiryMgt/ContactUs.php">Contact Us</a></li>
-                    <li><a class="text-white hover:text-[#D0B8A8]" href="#">About Us</a></li>
-                    <li><a class="text-white hover:text-[#D0B8A8]" href="">Products</a></li>
-                    <li><a class="text-white hover:text-[#D0B8A8]" href="#">Orders</a></li>
-                    
-                </ul>
-
-            </div>
-<div class="flex items-center gap-3">
-<li><a class="text-white hover:text-[#D0B8A8]" href="logout.php">LogOut</a></li>
-    </div>
-   
-        </nav>
-    </header>
-
+<?php include 'includes/navbar.php'; ?>
     <div class="profile">
         <form action="EditProfile.php" method="get">
-            <?php
-                include 'config.php';
-                session_start();
-                $user_id = $_SESSION['user_id'];
-                $select = mysqli_query($conn, "SELECT * FROM `customer` WHERE customerID = '$user_id'") or die('Query failed');
-                if (mysqli_num_rows($select) > 0) {
-                    $fetch = mysqli_fetch_assoc($select);
-                }
-            ?>
+        
 
             <?php
                 if ($fetch['image'] == '') {
-                    echo '<img src="images/avatar.png" alt="Profile Picture">';
+                    echo '<img src="../../resources/images/profile/avatar.png" alt="Profile Picture">';
                 } else {
-                    echo '<img src="uploaded_img/'.$fetch['image'].'" alt="Profile Picture">';
+                    echo '<img src="../../resources/images/profile/uploaded_img/'.$fetch['image'].'" alt="Profile Picture">';
                 }
             ?>
 
@@ -153,27 +131,30 @@
                     <input type="text" name="profile_gender" value="<?php echo htmlspecialchars($fetch['gender']); ?>" class="box" readonly>
                     <span>Password: </span>
                     <div class="input-roup">
-                        <input type="password" id="profile_password" name="profile_password" value="<?php echo htmlspecialchars($fetch['password']); ?>" class="box" readonly style="width:125px">
-                        <i class="fas fa-eye eye-icon" id="togglePassword" onclick="togglePassword()"></i>
+                    <input type="password" id="profile_password" name="profile_password" value="<?php echo $fetch ? htmlspecialchars($fetch['password']) : ''; ?>" class="box" readonly style="width: 125px" class="fas fa-eye eye-icon" id="togglePassword" onclick="togglePassword()">
                     </div>
                 </div>
             </div>
 
+            <div class="">
+    
+    <button type="button" class="btn" onclick="goToGame()">Enjoy Maze</button>
+    <button type="button" class="btn" onclick="logout()">Logout</button>
+</div>
 
             <div class="">
                 <button type="submit" name="editProfile" class="btn">Edit Profile</button>
                 
                 <button type="button" id="deleteAccountButton" class="btn" onclick="confirmDelete()">Delete Account</button>
-                <button type="button" class="btn">Order History</button>
+                <button type="button" class="btn" onclick="location='../../orders/order_history/orders1.php'">Order History</button>
             </div>
+            
 
            
 
            
 
-            <div class="">
-    <button type="button" id="match" class="btn" onclick="window.location.href='game.html'">Enjoy Maze</button>
-</div>
+
 
 <style>
     #match {
@@ -228,7 +209,18 @@
         document.getElementById("logoutButton").addEventListener("click", function() {
             window.location.href = "login.php";
         });
+        
+    function goToGame() {
+        window.location.href = 'game.html';  
+    }
+
+    function logout() {
+        window.location.href = 'logout.php';  
+    }
+
     </script>
-   
+    
+   <?php include "includes/footer.php" ?>
+   <script src="resources/JS/navbar.js"></script>
 </body>
 </html>

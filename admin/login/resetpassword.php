@@ -2,6 +2,11 @@
 include 'config.php';
 session_start();
 
+//if(!isset($_SESSION["email"]) || empty($_SESSION["email"])){
+   // header("Location: adminLogin.php");
+   // exit();
+//}
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: adminLogin.php');
     exit;
@@ -24,13 +29,19 @@ if (isset($_POST['submit_password'])) {
         
         if ($old_password === $row['password']) {
             
-            if ($new_password === $confirm_password) {
+            // Server-side validation for password strength
+            if (strlen($new_password) < 8 || !preg_match('/[!@#$%^&*]/', $new_password) || !preg_match('/[0-9]/', $new_password)) {
+                $message = 'New password must be at least 8 characters long, contain at least one special character, and one number!';
+            } elseif ($new_password === $confirm_password) {
                 
                 $update_query = "UPDATE `admin` SET password = '$new_password' WHERE adminID = '$admin_id'";
                 $update_result = mysqli_query($conn, $update_query);
                 
                 if ($update_result) {
                     $message = 'Password updated successfully!';
+                    // Redirect to adminLogin.php after a successful password update
+                    header('Location: adminLogin.php');
+                    exit;
                 } else {
                     $message = 'Error updating password. Please try again.';
                 }
@@ -52,7 +63,7 @@ if (isset($_POST['submit_password'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change Password</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../resources/css/profile/adminLogin1.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -96,11 +107,35 @@ if (isset($_POST['submit_password'])) {
             color: #721c24;
         }
     </style>
+
+    <!-- JavaScript for password validation -->
+    <script>
+        function validateForm() {
+            const newPassword = document.querySelector('input[name="new_password"]').value;
+            const confirmPassword = document.querySelector('input[name="confirm_password"]').value;
+            // Regex: At least 8 characters, one number, and one special character
+            const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+            // Check if new password meets criteria
+            if (!passwordPattern.test(newPassword)) {
+                alert("New password must be at least 8 characters long, contain at least one special character, and one number.");
+                return false;
+            }
+
+            // Check if new password matches confirm password
+            if (newPassword !== confirmPassword) {
+                alert("New password and confirm password do not match!");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
 
 <div class="form-container">
-    <form action="resetPassword.php" method="POST" class="change-password-form" onsubmit="return validateForm()">
+    <form action="resetPassword.php" method="POST" class="change-password-form" onsubmit="return validateForm();">
         
         <?php if ($message != ''): ?>
             <div class="message <?= strpos($message, 'successfully') !== false ? 'success' : 'danger' ?>">

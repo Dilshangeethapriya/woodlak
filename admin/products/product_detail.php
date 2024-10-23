@@ -141,9 +141,9 @@ if (isset($_GET['total'])) {
 
         <div>
             <h1 class="text-center" style="font-size:50px"><b>Products</b></h1>
-            <button class="add_new" onclick="openAddForm()" style="background-color:#78350f">+ Add New</button>
-            <button class="add_new" onclick="openStock()" style="background-color:#78350f">Stocks</button>
-            <button class="add_new" onclick="openReview()" style="background-color:#78350f">Reviews</button>
+            <button class="add_new md:w-[150px] " onclick="openAddForm()" style="background-color:#78350f">+ Add New</button>
+            <button class="add_new md:w-[150px] " onclick="openStock()" style="background-color:#78350f">Stocks</button>
+            <button class="add_new md:w-[150px] " onclick="openReview()" style="background-color:#78350f">Reviews</button>
         </div>
 
         <!--Add Form-->
@@ -156,15 +156,15 @@ if (isset($_GET['total'])) {
             </div>
             <div class="mb-2">
                 <label for="productName" class="form-label">Product Name</label>
-                <input type="text" class="form-control" id="productName" name="productName" required>
+                <input type="text" class="form-control" id="productName" name="productName" required minlength="3" maxlength="20">
             </div>
             <div class="mb-2">
-                <label for="stockLevel" class="form-label">Stock Level</label>
-                <input type="number" min=0 class="form-control" id="stockLevel" name="stockLevel" required>
+                <label for="stockLevel" class="form-label">Stock Level (Safety stock level is 15)</label>
+                <input type="number" min=30 class="form-control" id="stockLevel" name="stockLevel" required title="Minimum stock level is 30">
             </div>
             <div class="mb-2">
                 <label for="price" class="form-label">Price (Rs.)</label>
-                <input type="number" min=0 step="0.01" class="form-control" id="price" name="price" required>
+                <input type="number" min=1 step="0.01" class="form-control" id="price" name="price" required>
             </div>
             <div class="mb-2">
                 <label for="description" class="form-label">Description</label>
@@ -176,7 +176,7 @@ if (isset($_GET['total'])) {
             </div>
             <div class="mb-2">
                 <label for="image" class="form-label">Spin Image</label>
-                <input type="text" class="form-control" id="spinImageUrl" name="spinImageUrl">
+                <input type="url" class="form-control" id="spinImageUrl" name="spinImageUrl">
             </div>
                 <button type="submit" class="btn" style="background-color:#B99470" name="add">Add Product</button>
             </form>
@@ -196,11 +196,11 @@ if (isset($_GET['total'])) {
             </div>
             <div class="mb-2">
                 <label for="productName" class="form-label">Product Name</label>
-                <input type="text" class="form-control" id="updateName" name="updateName">
+                <input type="text" class="form-control" id="updateName" name="updateName" minlength="3" maxlength="20">
             </div>
             <div class="mb-2">
                 <label for="price" class="form-label">Price (Rs.)</label>
-                <input type="number" min=0 step="0.01" class="form-control" id="updatePrice" name="updatePrice" required>
+                <input type="number" min=0 step="0.01" class="form-control" id="updatePrice" name="updatePrice">
             </div>
             <div class="mb-2 flex justify-between items-center">
                 <label for="stockLevel" class="form-label">Stock Level</label>
@@ -208,7 +208,7 @@ if (isset($_GET['total'])) {
             </div>
             <div class="mb-2">
                 <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="updateDescription" name="updateDescription" rows="3" required minlength="10" maxlength="450"></textarea>
+                <textarea class="form-control" id="updateDescription" name="updateDescription" rows="3" minlength="10" maxlength="450"></textarea>
             </div>
             <div class="mb-2">
                 <div class="flex justify-between items-center">
@@ -220,7 +220,7 @@ if (isset($_GET['total'])) {
             </div>
             <div class="mb-2">
                 <label for="updateSpinImageUrl" class="form-label">Spin Image</label>
-                <input type="text" class="form-control" id="updateSpinImageUrl" name="updateSpinImageUrl">
+                <input type="url" class="form-control" id="updateSpinImageUrl" name="updateSpinImageUrl">
             </div>
                 <button type="submit" class="btn" style="background-color:#B99470" name="update">Update Product</button>
             </form>
@@ -241,7 +241,7 @@ if (isset($_GET['total'])) {
             </div>
             <div class="mb-2">
                 <label for="stockLevel" class="form-label">New Stock</label>
-                <input type="number" min=0 class="form-control" id="newStock" name="newStock" required>
+                <input type="number" min=15 class="form-control" id="newStock" name="newStock" required>
             </div>
             <div class="mb-2 flex justify-between items-center">
                 <label for="stockLevel" class="form-label">Total</label>
@@ -286,7 +286,7 @@ if (isset($_GET['total'])) {
                         } else {
                             echo "<td class='w-2'></td>";
                         }
-                        echo "<td class='w-2'><button class='text-l bg-[#6f5843] hover:bg-[#5c4a38] text-white p-2 w-[40%] rounded' onclick=\"openUpdateForm('{$row['productID']}','{$row['productName']}','{$row['price']}','{$row['description']}','../../{$row['image']}','{$row['spinImageUrl']}','{$row['stockLevel']}')\">Update</button>&nbsp;<button class='text-l bg-[#e50000] hover:bg-[#ff0000] text-white p-2 w-[40%] rounded' onclick=\"openDeleteForm('{$row['productID']}')\">Delete</button></td>";
+                        echo "<td class='w-2'><div class='flex flex-col md:flex-row justify-between'><button class='text-l bg-[#6f5843] hover:bg-[#5c4a38] text-white p-2 w-full md:w-[48%] rounded' onclick=\"openUpdateForm('{$row['productID']}','{$row['productName']}','{$row['price']}','{$row['description']}','../../{$row['image']}','{$row['spinImageUrl']}','{$row['stockLevel']}')\">Update</button>&nbsp;<button class='text-l bg-[#e50000] hover:bg-[#ff0000] text-white p-2 w-full md:w-[48%] rounded' onclick=\"openDeleteForm('{$row['productID']}')\">Delete</button></div></td>";
                         echo "</tr>";
                     }
                 }

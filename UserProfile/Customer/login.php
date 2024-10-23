@@ -12,7 +12,7 @@ if(isset($_POST['submit'])){
         $row = mysqli_fetch_assoc($select);
         $_SESSION['user_id'] = $row['customerID'];
         $_SESSION['user_name'] = $row['name']; 
-        header('Location: profile.php');
+        header('Location: ../../index.php');
         exit();
     }else{
         $message[] = ' Incorrect email or password ';
@@ -27,10 +27,10 @@ if(isset($_POST['submit'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../resources/css/profile/profile1.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="cart.css">
+    
     <style>
             body{
                 font-family: sans-serif;
@@ -47,19 +47,19 @@ if(isset($_POST['submit'])){
         <div class="lg:static absolute bg-[#543310] lg:min-h-fit min-h-[39vh] left-0 top-[9%] lg:w-auto w-full flex items-center px-5 justify-center lg:justify-start text-center lg:text-right xl:contents hidden lg:flex" id="content">
             <ul class="flex lg:flex-row flex-col lg:gap-[4vw] gap-8">
                 <li>
-                    <a class="text-white hover:text-[#D0B8A8] " href="../">Home</a>
+                    <a class="text-white hover:text-[#D0B8A8] " href="../../index.php">Home</a>
                 </li>
                 <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="../inquiry">Contact Us</a>
+                    <a class="text-white hover:text-[#D0B8A8]" href="../../inquirymgt/contactUs.php">Contact Us</a>
                 </li>
                 <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="#">About Us</a>
+                    <a class="text-white hover:text-[#D0B8A8]" href="../../aboutUs/About_Us.php">About Us</a>
                 </li>
                 <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="">Products</a>
+                    <a class="text-white hover:text-[#D0B8A8]" href="../../product/product_catalog.php">Products</a>
                 </li>
                 <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="#">Orders</a>
+                    <a class="text-white hover:text-[#D0B8A8]" href="../../orders">Orders</a>
                 </li>
             </ul>
         </div>
@@ -103,7 +103,10 @@ if(isset($_POST['submit'])){
             <button type="submit" name="submit" class="btn">Login Now</button>
             
             <p>Don't have an account? <a href="register.php">Register Now</a></p>
+            <p>Login as Admin     <a href="../../admin/login/adminLogin.php">Login Here</a></p>
         </form>
     </div>
+    <?php include "includes/footer.php" ?>
+    <script src="../../resources/JS/navbar.js"> </script>
 </body>
 </html>

@@ -1,6 +1,12 @@
 <?php
-include 'config.php';  
+
+include 'config.php';
 session_start(); 
+
+//if(!isset($_SESSION["email"]) || empty($_SESSION["email"])){
+    //header("Location: adminLogin.php");
+  //  exit();
+//}
 
 $name = $email = $password = $type = '';
 $message = '';
@@ -10,10 +16,18 @@ if (isset($_POST['submit'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $type = mysqli_real_escape_string($conn, $_POST['type']);  
-
-  
+    
+    
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['message'] = "Invalid email format!";
+        $_SESSION['message_type'] = 'danger'; 
+        header('Location: addAdmin.php');  
+        exit();
+    }
+
+    
+    if (strlen($password) < 8 || !preg_match('/[!@#$%^&*]/', $password) || !preg_match('/[0-9]/', $password)) {
+        $_SESSION['message'] = "Password must be at least 8 characters long, contain at least one special character, and one number!";
         $_SESSION['message_type'] = 'danger'; 
         header('Location: addAdmin.php');  
         exit();
@@ -28,19 +42,15 @@ if (isset($_POST['submit'])) {
         header('Location: addAdmin.php');  
         exit();
     } else {
-
+       
         $insert_query = "INSERT INTO admin (name, email, password, type) VALUES ('$name', '$email', '$password', '$type')";
-
+        
         if (mysqli_query($conn, $insert_query)) {
-            
             $adminID = mysqli_insert_id($conn);
-
             $_SESSION['user_id'] = $adminID;
-
             $_SESSION['message'] = "Admin added successfully!";
             $_SESSION['message_type'] = 'success'; 
-            
-            header('Location: adminLogin.php'); 
+            header('Location: adminPanel.php'); 
             exit();
         } else {
             $_SESSION['message'] = "Error: " . mysqli_error($conn);
@@ -52,18 +62,16 @@ if (isset($_POST['submit'])) {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Admin</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../resources/css/profile/adminLogin1.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="cart.css">
+    
     <style>
         body {
             font-family: sans-serif;
@@ -120,36 +128,26 @@ if (isset($_POST['submit'])) {
             <div class="message <?php echo $_SESSION['message_type']; ?>">
                 <?php echo $_SESSION['message']; ?>
             </div>
-            <?php 
-            unset($_SESSION['message']);  
-            unset($_SESSION['message_type']); 
-            ?>
+            <?php unset($_SESSION['message']); ?>
         <?php endif; ?>
         
         <div class="input-group">
-            <h4 class="name"> Name </h4>
-            <input type="text" name="text" value="<?php echo $name; ?>" required>
+            <input type="text" name="text" placeholder="Enter Admin Name" value="<?php echo $name; ?>" required>
         </div>
         <div class="input-group">
-            <h4 class="email"> Email Address </h4>
-            <input type="email" name="email" value="<?php echo $email; ?>" required>
+            <input type="email" name="email" placeholder="Enter Admin Email" value="<?php echo $email; ?>" required>
         </div>
         <div class="input-group">
-            <h4 class="password"> Password </h4>
-            <input type="password" name="password" required>
+            <input type="password" name="password" placeholder="Enter Admin Password" value="<?php echo $password; ?>" required>
         </div>
         <div class="input-group">
-            <h4 class="type"> Admin Type </h4>
             <select name="type" required>
-                <option value="Customer Management" <?php echo ($type == 'superadmin') ? 'selected' : ''; ?>>Customer Management</option>
-                <option value="Stock Balance" <?php echo ($type == 'admin') ? 'selected' : ''; ?>>Stock Balance</option>
-                <option value="Order Management" <?php echo ($type == 'moderator') ? 'selected' : ''; ?>>Order Management</option>
-                <option value="Payment Management" <?php echo ($type == 'admin') ? 'selected' : ''; ?>>Payment Management</option>
-                <option value="Reviews Handling" <?php echo ($type == 'admin') ? 'selected' : ''; ?>>Reviews Handling</option>
+                <option value="" disabled selected>Select Admin Type</option>
+                <option value="superadmin">Super Admin</option>
+                <option value="admin">Admin</option>
             </select>
         </div>
-        
-        <button type="submit" name="submit" class="btn">Add as a new Admin</button>
+        <button type="submit" name="submit" class="btn">Add Admin</button>
     </form>
 </div>
 

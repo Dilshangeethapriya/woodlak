@@ -31,7 +31,7 @@ if (isset($_POST['saveProfile'])) {
             $file_name = basename($_FILES['edit_image']['name']);
             $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
             $new_file_name = uniqid('', true) . '.' . $file_ext;
-            $upload_dir = 'uploaded_img/';
+            $upload_dir = '../../resources/images/profile/uploaded_img/';
             $upload_file = $upload_dir . $new_file_name;
 
             if (move_uploaded_file($file_tmp, $upload_file)) {
@@ -100,54 +100,11 @@ if (!empty($_POST['update_pw']) || !empty($_POST['new_pw']) || !empty($_POST['co
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
-    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="../../resources/css/profile/profile2.css">
     
 </head>
 <body>
-<header class="bg-[#543310] h-20 ">
-            <nav class="flex justify-between items-center w-[95%] mx-auto">
-                <div class="flex items-center gap-[1vw]">
-                    <img class="w-16" src="Logo.png" alt="Logo">
-                    <h1 class="text-xl text-white"><b>WOODLAK</b></h1>
-                </div>
-                <div class="lg:static absolute bg-[#543310] lg:min-h-fit min-h-[39vh] left-0 top-[9%] lg:w-auto w-full flex items-center px-5 justify-center lg:justify-start items-center lg:items-start text-center lg:text-right xl:contents" id="content" >
-                    <ul class="flex lg:flex-row flex-col  lg:gap-[4vw] gap-8">
-                        <li>
-                            <a class="text-white hover:text-[#D0B8A8] " href="../">Home</a>
-                        </li>
-                        <li>
-                            <a class="text-white hover:text-[#D0B8A8]" href="../inquiry">Contact Us</a>
-                        </li>
-                        <li>
-                            <a class="text-white hover:text-[#D0B8A8]" href="#">About Us</a>
-                        </li>
-                        <li>
-                            <a class="text-white hover:text-[#D0B8A8]" href="#">Products</a>
-                        </li>
-                        <li>
-                            <a class="text-white hover:text-[#D0B8A8]" href="#">Orders</a>
-                        </li>
-                    </ul>
-                </div>
-                <?php 
-        if(isset($_SESSION['user_name'])) {
-            $user_name = $_SESSION['user_name'];
-        ?>
-        <div class="flex items-center gap-3">
-    <span class="mr-4 text-lg"><?php echo $user_name; ?></span>
-    <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]" onclick="location.href='Profile.php'">Profile</button> 
-    <button onclick="responsive()"><i class="bi bi-list text-4xl lg:hidden text-white"></i></button>
-</div>
-
-        <?php } else { ?>
-        <div class="flex items-center gap-3">
-            <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]" onclick="location.href='/dashboard/woodlak/public/Userprofile/register.php'">Register</button>
-            <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8]" onclick="location.href='/dashboard/woodlak/public/Userprofile/login.php'">Login</button>
-            <button onclick="responsive()"><i class="bi bi-list text-4xl lg:hidden text-white"></i></button>
-        </div>
-        <?php } ?>
-    </nav>
-        </header>
+<?php include 'includes/navbar.php'; ?>
 <div class="profile">
     <?php
         $select = mysqli_query($conn, "SELECT * FROM `customer` WHERE customerID='$user_id'") or die('Query failed');
@@ -159,7 +116,7 @@ if (!empty($_POST['update_pw']) || !empty($_POST['new_pw']) || !empty($_POST['co
     <form action="EditProfile.php" method="post" enctype="multipart/form-data">
         <?php
             if (isset($fetch['image']) && $fetch['image'] != '') {
-                echo '<img src="uploaded_img/'.$fetch['image'].'" alt="Profile Picture">';
+                echo '<img src="../../resources/images/profile/uploaded_img/'.$fetch['image'].'" alt="Profile Picture">';
             } else {
                 echo '<img src="images/avatar.png" alt="Default Avatar">';
             }
@@ -216,6 +173,7 @@ if (!empty($_POST['update_pw']) || !empty($_POST['new_pw']) || !empty($_POST['co
         <button type="submit" name="saveProfile" class="btn">Save Profile</button><p></p>
     </form>
 </div>
+<?php include "includes/footer.php" ?>
 </body>
 </html>
 <script>

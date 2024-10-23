@@ -7,7 +7,7 @@ $base_url = "http://localhost/woodlak";
     <nav class="flex justify-between items-center w-[95%] mx-auto">
        
         <div class="flex items-center gap-[1vw]">
-            <img class="w-16 h-16 object-contain" src="<?php echo $base_url; ?>Logo.png" alt="Logo">
+            <img class="w-16 h-16 object-contain" src="<?php echo $base_url; ?>../resources/images/Logo.png" alt="Logo">
             <div>
                 <h1 class="text-2xl text-white font-bold tracking-wide">WOODLAK</h1>
                 <p class="text-sm text-[#D0B8A8]">Admin Panel</p>
@@ -18,7 +18,7 @@ $base_url = "http://localhost/woodlak";
         <div class="bg-[#543310] lg:static absolute left-0 lg:min-h-fit min-h-[40vh] top-[9%] lg:w-auto w-full flex items-center px-2 justify-center lg:justify-start xl:contents hidden lg:flex z-40" id="content">
             <ul class="flex lg:flex-row flex-col lg:gap-8 gap-6">
                 <li>
-                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/dashboard.php">Dashboard</a>
+                <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/dashboard.php">Dashboard</a>
                 </li>
                 <li>
                     <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/product/product_detail.php">Products</a>
@@ -33,17 +33,17 @@ $base_url = "http://localhost/woodlak";
                     <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/payment_process/admin_banktrans_check/admin_panel.php">Bank Transfers</a>
                 </li>
                 <li>
-                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/UserProfile/RegisteredUsers.php">Users</a>
+                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/login/RegisteredUsers.php">Users</a>
                 </li>
             </ul>
         </div>
 
        
         <div class="flex items-center gap-4">
-    <!-- Modified Logout button -->
-    <a href="adminDashboard.php">
+   
+    <a href="../../admin/login/adminProfile1.php">
         <button class="bg-[#8D653A] text-white px-4 py-2 rounded-full hover:bg-[#D0B8A8] hover:text-[#543310] transition duration-300 shadow-lg">
-            Logout
+            Profile
         </button>
     </a>
 
