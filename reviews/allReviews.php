@@ -21,7 +21,7 @@ $productData = $conn->query($productQuery);
 if ($productData->num_rows > 0) {
     $product = $productData->fetch_assoc();
     $productName = $product['productName'];
-    $productImage = '../resources/' . $product['image'];
+    $productImage = '../' . $product['image'];
 } else {
     echo "Product not found.";
 }
