@@ -61,27 +61,34 @@ if($fetchSql != ''){
         <h1 class="text-center" style="font-size:50px"><b>Stock Management</b></h1>
         
         <div class="row" style="margin-top:20px;">
-            <form action="stockReport.php">
-                <label for="type" style="font-size: 18px;font-weight: 700;">Report : </label>
-                <select name="type" id="type" style="width: 250px;padding: 10px;border: chocolate;border-radius: 5px;margin-left: 10px;" onchange="toggleDateRange()">
-                    <option value="balance" <?php echo (isset($type) && $type == 'balance') ? 'selected' : ''; ?>>Stock Balance</option>
-                    <option value="in" <?php echo (isset($type) && $type == 'in') ? 'selected' : ''; ?>>Stock In</option>
-                    <option value="out" <?php echo (isset($type) && $type == 'out') ? 'selected' : ''; ?>>Stock Out</option>
-                </select>
-
-                <div id="date-range" style="display: none; margin-left: 10px;">
+            <form class="w-full" action="stockReport.php" method="GET">
+            <div class="flex flex-wrap -mx-3 mb-2 ml-2">
+                <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
+                    <label for="type" style="font-size: 18px;font-weight: 700;">Report : </label>
+                    <select name="type" id="type" class="block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" onchange="toggleDateRange()">
+                        <option value="balance" <?php echo (isset($type) && $type == 'balance') ? 'selected' : ''; ?>>Stock Balance</option>
+                        <option value="in" <?php echo (isset($type) && $type == 'in') ? 'selected' : ''; ?>>Stock In</option>
+                        <option value="out" <?php echo (isset($type) && $type == 'out') ? 'selected' : ''; ?>>Stock Out</option>
+                    </select>
+                </div>
+                <div class="w-full md:w-1/4 px-3" id="start-date-range" style="display: none;">
                     <label for="start_date" style="font-size: 18px;font-weight: 700;">Start Date:</label>
-                    <input type="date" style="width: 250px;padding: 10px;border: chocolate;border-radius: 5px;margin-left: 10px;" name="start_date"  id="start_date" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
-
+                    <input type="date" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="start_date"  id="start_date" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
+                </div>
+                <div class="w-full md:w-1/4 px-3" id="end-date-range" style="display: none;">
                     <label for="end_date" style="font-size: 18px;font-weight: 700;margin-left: 10px;">End Date:</label>
-                    <input type="date" style="width: 250px;padding: 10px;border: chocolate;border-radius: 5px;margin-left: 10px;" name="end_date" id="end_date" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
+                    <input type="date" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="end_date" id="end_date" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
+                </div>
+                <div class="w-full md:w-1/12 px-3">
+                <button type="submit" class="text-white font-medium rounded-lg text-md w-full sm:w-auto px-5 py-2.5 text-center" style="margin-top: 25px;background-color:#78350f;height: 55px;">View</button>
                 </div>
 
-                <input class="class='text-l bg-[#6f5843] hover:bg-[#5c4a38] text-white p-2 w-20 rounded'" type="submit" style="background-color:#78350f; border-radius: 5px;" value="View">
-                <?php if (!empty($type)) : ?>
+                    <?php if (!empty($type)) : ?>
 
-                <a href="export_pdf.php?type=<?php echo isset($type) ? $type : ''; ?>&start_date=<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>&end_date=<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>" class="button text-md bg-[#6f5843] hover:bg-[#5c4a38] text-white p-2 w-[100px] md:w-[150px] rounded" style="background-color:#C40C0C; float:right; margin-right: 35px;">Export to PDF &nbsp;<i class="bi bi-filetype-pdf text-l"></i></a>
-                <?php endif; ?>
+                    <a href="export_pdf.php?type=<?php echo isset($type) ? $type : ''; ?>&start_date=<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>&end_date=<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>" class="text-white font-medium rounded-lg text-md w-full sm:w-auto sm:ml-5 px-4 py-2.5 text-center ml-0 sm:ml-[40px]" style="background-color:#C40C0C; height: 55px;margin-top: 25px; float: right;padding-top: 15px;">Export to PDF &nbsp;<i class="bi bi-filetype-pdf text-l"></i></a>
+                    <?php endif; ?>
+                </div>
+                </div>
             </form>
         </div>
         </div>
@@ -191,13 +198,15 @@ if($fetchSql != ''){
     <script>
         function toggleDateRange() {
             var type = document.getElementById("type").value;
-            var dateRange = document.getElementById("date-range");
+            var startDateRange = document.getElementById("start-date-range");
+            var endDateRange = document.getElementById("end-date-range");
 
-            
             if (type === 'in' || type === 'out') {
-                dateRange.style.display = 'inline-block';
+                startDateRange.style.display = 'inline-block';                
+                endDateRange.style.display = 'inline-block';
             } else {
-                dateRange.style.display = 'none';
+                startDateRange.style.display = 'none';
+                endDateRange.style.display = 'none';
             }
 
             setDefaultDates();
