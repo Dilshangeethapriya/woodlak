@@ -47,8 +47,6 @@ if (isset($_POST['submit'])) {
         $insert_query = "INSERT INTO admin (name, email, password, type) VALUES ('$name', '$email', '$password', '$type')";
         
         if (mysqli_query($conn, $insert_query)) {
-            $adminID = mysqli_insert_id($conn);
-            $_SESSION['user_id'] = $adminID;
             $_SESSION['message'] = "Admin added successfully!";
             $_SESSION['message_type'] = 'success'; 
             header('Location: adminPanel.php'); 
@@ -80,7 +78,7 @@ if (isset($_POST['submit'])) {
         .register-container {
             width: 100%;
             max-width: 500px;
-            margin: 50px auto;
+            margin: -20px auto;
         }
         .input-group {
             margin-bottom: 15px;

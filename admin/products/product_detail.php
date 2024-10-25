@@ -138,7 +138,10 @@ if (isset($_GET['total'])) {
         <link rel="stylesheet" href="addProduct.css">
         <style>
             body{
-                background:#c19a6b;
+                background-image: url('../../resources/images/bg2.png');
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover; 
             }
         </style>
     </head>
@@ -147,7 +150,7 @@ if (isset($_GET['total'])) {
         <?php include "../../includes/adminNavbar.php" ?> 
 
         <div>
-            <h1 class="text-center" style="font-size:50px"><b>Products</b></h1>
+            <h1 class="text-center mt-14" style="font-size:50px"><b>Products</b></h1>
             <button class="add_new md:w-[150px] " onclick="openAddForm()" style="background-color:#78350f">+ Add New</button>
             <button class="add_new md:w-[150px] " onclick="openStock()" style="background-color:#78350f">Stocks</button>
             <button class="add_new md:w-[150px] " onclick="openReview()" style="background-color:#78350f">Reviews</button>
@@ -267,14 +270,14 @@ if (isset($_GET['total'])) {
         <table class="table table-responsive table-hover table-striped" style="border-collapse: separate; border-spacing: 0; border: 2px solid #eaddca; border-radius: 12px; overflow: hidden;">
             <thead class="table-light" >
                 <tr>
-                <th scope="col" style="background-color: #eaddca;">Product ID</th>
-                <th scope="col" style="background-color: #eaddca;">Product Name</th>
-                <th scope="col" style="background-color: #eaddca;">Price</th>
-                <th scope="col" style="background-color: #eaddca;">Stock Level</th>
-                <th scope="col" style="background-color: #eaddca;">Description</th>
-                <th scope="col" style="background-color: #eaddca;">Image</th>
-                <th scope="col" style="background-color: #eaddca;">Spin Model</th>
-                <th scope="col" style="text-align:center; background-color:#eaddca;">Action</th>
+                <th scope="col" style="background-color: #dbc5a4;">Product ID</th>
+                <th scope="col" style="background-color: #dbc5a4;">Product Name</th>
+                <th scope="col" style="background-color: #dbc5a4;">Price</th>
+                <th scope="col" style="background-color: #dbc5a4;">Stock Level</th>
+                <th scope="col" style="background-color: #dbc5a4;">Description</th>
+                <th scope="col" style="background-color: #dbc5a4;">Image</th>
+                <th scope="col" style="background-color: #dbc5a4;">Spin Model</th>
+                <th scope="col" style="text-align:center; background-color:#dbc5a4;">Action</th>
                 </tr>
             </thead>
             <tbody>

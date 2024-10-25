@@ -6,10 +6,13 @@
     font-family: 'Poppins', sans-serif;
 }
 
+body{
+    background:url(../../resources/images/bg2.png) center / cover ;
+}
+
 /* Background for Terms and Conditions Section */
 .terms {
     min-height: 90vh;
-    background-color: #8d653b;
     display: flex;
     justify-content: center;
     align-items: center;

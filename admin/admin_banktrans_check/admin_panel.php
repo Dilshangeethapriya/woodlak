@@ -92,11 +92,14 @@ $result = $conn->query($sql);
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #A67B5B;
+            background-image: url('../../resources/images/bg2.png');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover; 
         }
         .bank-tarns-header {
             text-align: center;
-            color: #fff;
+            color: #543310;
             padding: 20px 0;
             animation: fadeInDown 1s ease-in-out;
         }
@@ -157,7 +160,7 @@ $result = $conn->query($sql);
 </head>
 <body>
     <?php include "../../includes/adminNavbar.php" ?>
-<h1 class="bank-tarns-header mt-32 text-4xl" data-aos="fade-in">Bank Transfers Management</h1>
+<h1 class="bank-tarns-header mt-10 text-4xl" data-aos="fade-in">Bank Transfers Management</h1>
 
 <table data-aos="fade-up">
     <tr>
@@ -185,9 +188,9 @@ $result = $conn->query($sql);
                 <td><?php echo $row["checkStatus"]; ?></td>
                 <td>
                     <?php if ($row["checkStatus"] !== 'Confirmed'): ?>
-                        <a href="admin_panel.php?id=<?php echo $row['transferID']; ?>&action=confirm" onclick="return confirm('Are you sure you want to confirm this transfer?');" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-700 transition ease-in-out duration-300">Confirm</a>
+                        <a href="admin_panel.php?id=<?php echo $row['transferID']; ?>&action=confirm" onclick="return confirm('Are you sure you want to confirm this transfer?');" class="bg-green-600  text-white px-4 py-2 rounded-full hover:bg-green-700 transition ease-in-out duration-300" >Confirm</a>
                         <br><br>
-                        <a href="admin_panel.php?id=<?php echo $row['transferID']; ?>&action=delete" onclick="return confirm('Are you sure you want to delete this transfer?');" class="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-700 transition ease-in-out duration-300">Delete</a>
+                        <a href="admin_panel.php?id=<?php echo $row['transferID']; ?>&action=delete" onclick="return confirm('Are you sure you want to delete this transfer?');" class="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition ease-in-out duration-300" > Delete </a>
                     <?php endif; ?>
                 </td>
             </tr>
@@ -198,9 +201,9 @@ $result = $conn->query($sql);
 </table>
 
 
-<form action="download_pdf.php" method="POST">
+<form action="download_pdf.php" method="POST" class="mb-10">
     <div class="flex justify-center mt-8">
-        <label for="paymentMethod" class="mr-4 text-white">Select Payment Method:</label>
+        <label for="paymentMethod" class="mr-4 text-[#543310]">Select Payment Method:</label>
         <select name="paymentMethod" id="paymentMethod" class="bg-white text-black px-4 py-2 rounded">
             <option value="Cash On Delivery">Cash On Delivery</option>
             <option value="Bank Transfer">Bank Transfer</option>

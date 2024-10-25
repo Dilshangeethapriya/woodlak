@@ -19,7 +19,7 @@
 
 body {
     min-height: 100vh;
-    background:url(back.avif) center / cover ;
+    background:url(../../resources/images/bg2.png) center / cover ;
 }
 
 main.table {

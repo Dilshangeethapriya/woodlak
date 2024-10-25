@@ -50,7 +50,10 @@ if($fetchSql != ''){
         <link rel="stylesheet" href="addProduct.css">
         <style>
             body{
-                background:#c19a6b;   
+                background-image: url('../../resources/images/bg2.png');
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;   
             }
         </style>
     </head>
@@ -58,13 +61,13 @@ if($fetchSql != ''){
         <?php include "../../includes/adminNavbar.php" ?>  
 
         <div style="padding: 10px;">
-        <h1 class="text-center" style="font-size:50px"><b>Stock Management</b></h1>
+        <h1 class="text-center mt-10" style="font-size:50px"><b>Stock Management</b></h1>
         
-        <div class="row" style="margin-top:20px;">
+        <div class="row" style="margin-top:40px;">
             <form class="w-full" action="stockReport.php" method="GET">
             <div class="flex flex-wrap -mx-3 mb-2 ml-2">
                 <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
-                    <label for="type" style="font-size: 18px;font-weight: 700;">Report : </label>
+                    <label for="type" style="font-size: 20px;font-weight: 700;">Report : </label>
                     <select name="type" id="type" class="block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" onchange="toggleDateRange()">
                         <option value="balance" <?php echo (isset($type) && $type == 'balance') ? 'selected' : ''; ?>>Stock Balance</option>
                         <option value="in" <?php echo (isset($type) && $type == 'in') ? 'selected' : ''; ?>>Stock In</option>
@@ -72,11 +75,11 @@ if($fetchSql != ''){
                     </select>
                 </div>
                 <div class="w-full md:w-1/4 px-3" id="start-date-range" style="display: none;">
-                    <label for="start_date" style="font-size: 18px;font-weight: 700;">Start Date:</label>
+                    <label for="start_date" style="font-size: 20px;font-weight: 700;">Start Date:</label>
                     <input type="date" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="start_date"  id="start_date" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
                 </div>
                 <div class="w-full md:w-1/4 px-3" id="end-date-range" style="display: none;">
-                    <label for="end_date" style="font-size: 18px;font-weight: 700;margin-left: 10px;">End Date:</label>
+                    <label for="end_date" style="font-size: 20px;font-weight: 700;margin-left: 10px;">End Date:</label>
                     <input type="date" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="end_date" id="end_date" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
                 </div>
                 <div class="w-full md:w-1/12 px-3">
@@ -100,9 +103,9 @@ if($fetchSql != ''){
                     if (isset($_GET['type']) && $_GET['type'] == 'balance'){
                         echo '<h3 style="font-size: xx-large;font-weight: 500;margin-bottom: 10px;">Stock Balance Report</h3>';
                         echo '<tr>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Product ID</th>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Name</th>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Balance</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Product ID</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Name</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Balance</th>';
                                 echo '</tr>';
 
                         if ($result && mysqli_num_rows($result) > 0) {
@@ -121,9 +124,9 @@ if($fetchSql != ''){
                     if(!isset($_GET['type'])){
                         echo '<h3 style="font-size: xx-large;font-weight: 500;margin-bottom: 10px;">Stock Balance Report</h3>';
                         echo '<tr>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Product ID</th>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Name</th>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Stock Balance</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Product ID</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Name</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Stock Balance</th>';
                                 echo '</tr>';
 
                         if ($result && mysqli_num_rows($result) > 0) {
@@ -141,10 +144,10 @@ if($fetchSql != ''){
                     if (isset($_GET['type']) && $_GET['type'] == 'in'){
                         echo '<h4 style="font-size: xx-large;font-weight: 500;margin-bottom: 10px;">Stock In Report</h4>';
                         echo '<tr>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Date</th>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Product ID</th>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Name</th>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Quantity</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Date</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Product ID</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Name</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Quantity</th>';
                                 echo '</tr>';
 
                         if ($result && mysqli_num_rows($result) > 0) {
@@ -164,10 +167,10 @@ if($fetchSql != ''){
                     if (isset($_GET['type']) && $_GET['type'] == 'out'){
                         echo '<h4 style="font-size: xx-large;font-weight: 500;margin-bottom: 10px;">Stock Out Report</h4>';
                         echo '<tr>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Date</th>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Product ID</th>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Name</th>';
-                                echo '<th scope="col" style="background-color: #eaddca;">Quantity</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Date</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Product ID</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Name</th>';
+                                echo '<th scope="col" style="background-color: #dbc5a4;">Quantity</th>';
                                 echo '</tr>';
 
                         if ($result && mysqli_num_rows($result) > 0) {

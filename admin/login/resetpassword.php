@@ -2,7 +2,8 @@
 include 'config.php';
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+  
     header('Location: adminLogin.php');
     exit;
 }
@@ -14,7 +15,7 @@ if (isset($_POST['submit_password'])) {
     $new_password = mysqli_real_escape_string($conn, $_POST['new_password']);
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
     
-    $admin_id = $_SESSION['user_id'];
+    $admin_id = $_SESSION['admin_id'];
 
     $query = "SELECT * FROM `admin` WHERE adminID = '$admin_id'";
     $result = mysqli_query($conn, $query) or die('Query failed');
@@ -129,7 +130,7 @@ if (isset($_POST['submit_password'])) {
 </head>
 <body>
 
-<div class="form-container">
+<div class="form-container mt-44">
     <form action="resetPassword.php" method="POST" class="change-password-form" onsubmit="return validateForm();">
         
         <?php if ($message != ''): ?>

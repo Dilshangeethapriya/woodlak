@@ -6,16 +6,17 @@
     font-family: 'Poppins', sans-serif;
 }
 
+body{
+    background: url('../../resources/images/bg4.png') center / cover no-repeat;
+}
 
 /* Background for Terms and Conditions Section */
 .terms {
     min-height: 100vh;
-    background: url('../../resources/images/bg4.png') center / cover no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
 
 main.background {
     width: 80vw;

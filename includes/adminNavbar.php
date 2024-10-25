@@ -50,5 +50,5 @@ $base_url = "http://localhost/woodlak";
     </nav>
 </header>
 
-<!-- JS for Responsive Menu -->
+
 <script src="<?php echo $base_url; ?>/resources/JS/navbar.js"></script>

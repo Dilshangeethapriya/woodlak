@@ -60,8 +60,11 @@ session_start();
     <?php include  '../includes/navbar.php'; ?>
     <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1 style="flex: 1; text-align: center; margin: 0; font-size:50px; margin-left:20px; margin-top:40px; margin-bottom:20px" class="text-[#543310]"><b>The Natural Choice for Healthier Hair</b></h1>
-            <button class="add_new bg-[#74512D;] hover:bg-[#543310]" onclick="openFindForm()">Find Your Comb</button>
         </div>
+        <div class="flex justify-center">
+        <button class="add_new bg-[#74512D;] hover:bg-[#543310] m-auto" onclick="openFindForm()">Find Your Comb</button>
+        </div>
+        
 
         <!--Find Comb Form-->
 

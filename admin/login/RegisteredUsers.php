@@ -48,7 +48,10 @@ if (isset($_SESSION['message'])) {
         }
 
         .btn-generate-report {
-            margin-bottom: 20px;
+            max-width: 200px;
+            float: right;
+            right: 0;
+            margin: 20px 10px;
         }
     </style>
 </head>
@@ -61,7 +64,7 @@ if (isset($_SESSION['message'])) {
 </script>
 
  <?php include "includes/adminNavbar.php" ?> 
-<h1 class="text-center" style="font-size:30px"><b>Registered Users</b></h1>
+<h1 class="text-center mt-8" style="font-size:30px"><b>Registered Users</b></h1>
     <style>
     .Users{
         color:brown;
@@ -140,9 +143,9 @@ if (isset($_SESSION['message'])) {
         </tbody>
     </table>
     
-    <form action="generate_report.php" method="POST">
+    <form action="generate_report.php" method="POST" >
     <button type="submit" name="generate_report" class="btn btn-primary btn-generate-report">Generate Report</button>
-</form>
+    </form>
 
 
     <script>

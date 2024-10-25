@@ -25,7 +25,7 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $totalAmount = isset($_SESSION['totalPrice']) ? $_SESSION['totalPrice'] : 0.00;
-    $orderStatus = "Completed";
+    $orderStatus = "pending";
     $combPurchased = isset($_SESSION['productSequence']) ? $_SESSION['productSequence'] : 'No products purchased';
     $quantity = isset($_SESSION['totalQuantity']) ? $_SESSION['totalQuantity'] : 0;
 

@@ -64,7 +64,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
  ?>
 
-<<h1 class="text-center" style="font-size:30px"><b>Admin Panel</b></h1>
+<h1 class="text-center mt-10" style="font-size:30px"><b>Admin Panel</b></h1>
   <style>
     .Users{
         color:black;

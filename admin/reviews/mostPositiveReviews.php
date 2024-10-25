@@ -108,7 +108,7 @@ function fetchReplies($conn, $reviewID) {
 <?php include '../../includes/adminNavbar.php' ?>
 
 <div class="review-section mt-10 mb-36 max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(255, 255, 255, 0.8);">
-    <h2 class="text-[#9b734b] text-4xl mb-6 text-center">Most Positive Reviews</h2>
+    <h2 class="text-[#78350f] text-4xl mb-6 text-center">Most Positive Reviews</h2>
 
     <div id="reviewsSection">
         <?php if ($mostPositiveReviews->num_rows > 0): ?>

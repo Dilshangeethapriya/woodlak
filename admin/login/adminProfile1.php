@@ -8,8 +8,8 @@
         exit;
     }
     
-    if (isset($_SESSION['user_id'])) {
-        $user_id = $_SESSION['user_id'];
+    if (isset($_SESSION['admin_id'])) {
+        $user_id = $_SESSION['admin_id'];
 
         $select = mysqli_query($conn, "SELECT * FROM `admin` WHERE adminID = '$user_id'") or die('Query failed');
 
@@ -58,11 +58,11 @@ $base_url = "http://localhost/woodlak";
         <div class="bg-[#543310] lg:static absolute left-0 lg:min-h-fit min-h-[40vh] top-[9%] lg:w-auto w-full flex items-center px-2 justify-center lg:justify-start xl:contents hidden lg:flex z-40" id="content">
             <ul class="flex lg:flex-row flex-col lg:gap-8 gap-6">
                 <li>
-                <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/adminProfile1.php">Dashboard</a>
+                <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/dashboard.php">Dashboard</a>
 
                 </li>
                 <li>
-                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/product/product_detail.php">Products</a>
+                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/products/product_detail.php">Products</a>
                 </li>
                 <li>
                     <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/orders/view_orders_Admin/OrderList.php">Orders</a>
@@ -71,7 +71,7 @@ $base_url = "http://localhost/woodlak";
                     <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/inquiry/inquiries.php">Inquiries</a>
                 </li>
                 <li>
-                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/payment_process/admin_banktrans_check/admin_panel.php">Bank Transfers</a>
+                    <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/admin_banktrans_check/admin_panel.php">Bank Transfers</a>
                 </li>
                 <li>
                     <a class="text-[#B0C186] hover:text-[#D0B8A8] transition duration-300 font-medium text-lg" href="<?php echo $base_url; ?>/admin/login/RegisteredUsers.php">Users</a>
@@ -115,7 +115,7 @@ $base_url = "http://localhost/woodlak";
                 <i ></i>
             </div>
         </div>
-        <p>Change password? <a href="resetpassword.php">Reset here</a></p>
+        <p>Change password? <a href="resetpassword.php" class="text-blue-900">Reset here</a></p>
     </form>
 </div>
 

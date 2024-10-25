@@ -73,10 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 <?php include '../../includes/adminNavbar.php' ?>
 
 <div class="review-section mt-10 mb-36 max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(255, 255, 255, 0.8);">
-    <h2 class="text-[#9b734b] text-4xl mb-6 text-center"> Product Reviews</h2>
+    <h2 class="text-[#78350f] text-4xl mb-6 text-center"> Product Reviews</h2>
 
     
-    <a class="text-lg text-[#9b734b] font-bold hover:underline bg-transparent border border-[#9b734b] rounded-md px-2 py-1 mt-6" href="reviewsReport.php" title="View detailed product review analytics reports">
+    <a class="text-lg text-[#78350f] font-bold hover:underline bg-transparent border border-[#9b734b] rounded-md px-2 py-1 mt-6" href="reviewsReport.php" title="View detailed product review analytics reports">
         <i class="fa fa-chart-bar mr-2"></i> Product Review Analytics Reports
     </a>
 
