@@ -59,7 +59,7 @@ if(isset($_POST['submit'])){
                     <a class="text-white hover:text-[#D0B8A8]" href="../../product/product_catalog.php">Products</a>
                 </li>
                 <li>
-                    <a class="text-white hover:text-[#D0B8A8]" href="../../orders">Orders</a>
+                    <a class="text-white hover:text-[#D0B8A8]" href="../../orders/Tracking_page/Order_tracking.php">Orders</a>
                 </li>
             </ul>
         </div>
@@ -82,7 +82,7 @@ if(isset($_POST['submit'])){
 </header>
     <div class="register-container">
         <form action="login.php" method="POST" class="register-form" enctype="multipart/form-data">
-            <h2>LOGIN</h2>
+            <h2 class="login-header">LOGIN</h2>
             <?php
 
             if(isset($message)){
@@ -100,7 +100,7 @@ if(isset($_POST['submit'])){
                 <input type="password" name="password" placeholder="Enter Password" required>
             </div>
             
-            <button type="submit" name="submit" class="btn">Login Now</button>
+            <button type="submit" name="submit" class="btn text-lg">Login Now</button>
             
             <p>Don't have an account? <a href="register.php">Register Now</a></p>
             <p>Login as Admin     <a href="../../admin/login/adminLogin.php">Login Here</a></p>

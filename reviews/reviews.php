@@ -88,8 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 
 <!-- HTML and review display goes here -->
 
-<div class="review-section my-36 max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(220, 255, 220, 0.8);">
-    <h2 class="text-[#C4A484] text-4xl mb-8 text-center">Customer Reviews</h2>
+<div class="review-section my-24  max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(220, 255, 220, 0.0);">
+    <h2 class="text-[#78350f] text-4xl mb-8 text-center">Customer Reviews</h2>
 
     <?php include "ratingCounts.php" ?>
 
@@ -132,11 +132,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
         </form>
     </div>
 
-    <hr class="my-12 h-0.5 border-t-0 bg-[#C4A484]" />
+    <hr class="my-12 h-0.5 border-t-0 bg-[#78350f]" />
 
    
     
-    <h2 class="text-[#C4A484] text-2xl my-5">Customer Reviews</h2>
+    <h2 class="text-[#78350f] text-2xl my-5">Customer Reviews</h2>
     
     <?php if ($reviews->num_rows > 0): ?>
         <?php while ($review = $reviews->fetch_assoc()): ?>
@@ -252,7 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     <?php endif;
     if($reviews->num_rows >=10) : ?>
         <div class="text-center">
-        <a href="../reviews/allReviews.php?PRODUCTC=<?php echo $productID; ?>" class="text-[#C4A484] text-lg hover:underline">See more reviews &#10093;&#10093; </a>
+        <a href="../reviews/allReviews.php?PRODUCTC=<?php echo $productID; ?>" class="text-[#78350f] text-lg hover:underline">See more reviews &#10093;&#10093; </a>
     </div>
 
     <?php endif; ?>

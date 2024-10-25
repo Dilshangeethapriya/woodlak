@@ -36,16 +36,22 @@ html::-webkit-scrollbar-track {
 
 .register-form {
     background: #8f7350;
-    padding: 20px;
+    padding: 3rem 2rem;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(233, 230, 230, 0.5);
-    width: 360px;
+    width: 400px;
+}
+
+.login-header {
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
 }
 
 .register-form h2 {
     margin-bottom: 20px;
     color: #000a04;
     text-align: center;
+    font-size: 2.1rem;
 }
 
 .input-group {
@@ -53,11 +59,11 @@ html::-webkit-scrollbar-track {
 }
 
 .input-group input {
-    width: 95%;
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 1.2rem;
 }
 
 .btn {
@@ -67,7 +73,7 @@ html::-webkit-scrollbar-track {
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 1.2rem;
     cursor: pointer;
 }
 

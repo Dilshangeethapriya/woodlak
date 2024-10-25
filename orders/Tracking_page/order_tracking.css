@@ -10,7 +10,7 @@
 /* Background for Terms and Conditions Section */
 .terms {
     min-height: 100vh;
-    background: url('background.jpeg') center / cover no-repeat;
+    background: url('../../resources/images/bg4.png') center / cover no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;

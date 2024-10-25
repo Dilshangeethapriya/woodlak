@@ -106,12 +106,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <style>
         .bg-neemwood {
-            background-color: #a67b5b;
+            background: url('../resources/images/bg4.png');
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+                font-family: sans-serif;
         }
     </style>
 </head>
 
-<body class="bg-neemwood p-2">
+<body class="bg-neemwood">
 
 <?php include "../includes/navbar.php"; ?>
 
@@ -158,6 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="submit" id="confirm-btn" class="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600" >CONFIRM</button>
         </form>
     </div>
+    <?php include "../includes/footer.php"; ?>
     <script>
                 function responsive() {
             var x = document.getElementById("content");

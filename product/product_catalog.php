@@ -16,7 +16,7 @@ session_start();
 
     <style>
             body{
-                background: url('../resources/images/bg1.png');
+                background: url('../resources/images/bg4.png');
                 background-repeat: no-repeat;
                 background-attachment: fixed;
                 background-size: cover;
@@ -165,6 +165,7 @@ session_start();
         <a href="shopping_cart.php" class="shoppingCart bg-[#78350f] hover:bg-white text-white hover:text-[#78350f] fixed bottom-3 right-5  p-3 rounded-full shadow-lg">
         <i class="bi bi-cart4 text-2xl"></i>
         </a>
+        <?php include "../includes/footer.php" ?>
     </body>
     <script>
             function openFindForm() {

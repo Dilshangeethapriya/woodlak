@@ -102,14 +102,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<body class="bg-gray-100" style=" background-image: url('../resources/images/bg2.png');background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
+<body class="bg-gray-100" style=" background-image: url('../resources/images/bg4.png');background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
 
     <?php include '../includes/navbar.php' ?>
 
     <!-- Main Content -->
     <div class="container mx-auto my-10">
-        <div class="review-section max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(255, 255, 255, 0.8);">
-             <h2 class="text-[#9b734b] text-4xl mb-8 text-center">Customer Reviews</h2>
+        <div class="review-section max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(225, 255, 225, 0.8);">
+             <h2 class="text-[#785b3a] text-4xl mb-8 text-center">Customer Reviews</h2>
           <div class="ratings-summary my-1 0 bg-[#1f2937] p-8 rounded-lg shadow-lg">
              <div class="flex items-center space-x-6">
                  <!-- Product Image -->

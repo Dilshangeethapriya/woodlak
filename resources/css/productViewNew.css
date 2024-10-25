@@ -3,7 +3,7 @@
   }
 
   body{
-    background-image: url('../images/bg1.png');
+    background-image: url('../images/bg4.png');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -12,8 +12,8 @@
 
 
 .left_side{
-    width: 350px;
-    height: 270px;
+    width: 400px;
+    height: 320px;
 	float:left;
 	padding: 15px;
 	background-color: #954535;
@@ -48,7 +48,7 @@
 }
 
 .heading{
-    width:400px;
+    width:480px;
     height: 55px;
 	padding: 15px;
 	background-color: #954535;
@@ -59,7 +59,7 @@
 }
 
 .description{
-    width:400px;
+    width:480px;
     height: auto;
 	padding: 15px;
 	background-color: #954535;
@@ -69,7 +69,7 @@
 }
 
 .cart{
-    width:400px;
+    width:480px;
     height: 140px;
 	padding: 15px;
 	background-color: #954535;

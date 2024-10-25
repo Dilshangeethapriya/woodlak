@@ -15,7 +15,11 @@ $_SESSION['paymentMethod'] = "Credit Card";
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         .bg-neemwood {
-            background-color: #a67b5b; /* Replace with your desired neem wood color */
+            background: url('../resources/images/bg4.png');
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+                font-family: sans-serif;
         }
 
         body {
@@ -23,77 +27,13 @@ $_SESSION['paymentMethod'] = "Credit Card";
             font-family: Arial, sans-serif;
         }
 
-        .bg-neemwood {
-            background-color: #a67b5b; /* Background color for the page */
-        }
 
-        /* Navbar styles */
-        header {
-            background-color: #543310;
-            height: 80px; /* Adjust as needed */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 95%;
-            max-width: 1200px;
-        }
-
-        .navbar-logo img {
-            height: 40px;
-        }
-
-        .navbar-nav {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .navbar-nav a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            transition: color 0.3s ease;
-        }
-
-        .navbar-nav a:hover {
-            color: #D0B8A8;
-        }
-
-        .navbar-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .navbar-buttons button {
-            background-color: #74512D;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .navbar-buttons button:hover {
-            background-color: #6A3E28;
-        }
 
         .payment-page {
-            background-color: #a67b5b;
             display: flex;
             justify-content: center;
             align-items: center;
             height: calc(100vh - 80px); /* Adjust based on navbar height */
-            margin-top: 80px; /* Adjust based on navbar height */
             padding: 20px; /* Added padding to ensure content is not stuck to edges */
         }
 
@@ -301,7 +241,7 @@ $_SESSION['paymentMethod'] = "Credit Card";
             </div>
         </div>
     </div>
-
+    <?php include "../includes/footer.php"; ?>
     <script>
         function formatCardNumber(input) {
             const value = input.value.replace(/\D/g, ''); 

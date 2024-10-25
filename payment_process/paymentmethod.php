@@ -19,7 +19,11 @@ $_SESSION['paymentMethod'] = "Cash On Delivery";
  
     <style>
         .bg-neemwood {
-            background-color: #a67b5b; 
+            background: url('../resources/images/bg4.png');
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+                font-family: sans-serif;
         }
     </style>
 </head>
@@ -28,10 +32,10 @@ $_SESSION['paymentMethod'] = "Cash On Delivery";
     
 <?php include '../includes/navbar.php'; ?>
 
-   
-    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md mx-auto mt-10">
-        <h2 class="text-xl md:text-2xl font-semibold text-center mb-6">Select Your Payment Method</h2>
-        <div class="space-y-4">
+   <div class="container mx-auto max-w-4xl px-4 py-24 flex-grow">
+   <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg m-auto mt-14">
+        <h2 class="text-2xl md:text-3xl font-semibold text-center mb-10">Select Your Payment Method</h2>
+        <div class="space-y-6">
            
             <a href="credit-card.php" class="flex items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition">
                 <img src="pictures/creditcard.jpg" alt="Credit/Debit Card" class="w-12 h-12 object-contain mr-4">
@@ -63,6 +67,12 @@ $_SESSION['paymentMethod'] = "Cash On Delivery";
             </button>
         </div>
     </div>
+   </div>
+  
+
+    
+    <?php include "../includes/footer.php"; ?>
+    
 
     <script>
         function responsive() {

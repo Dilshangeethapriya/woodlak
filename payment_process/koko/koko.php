@@ -18,7 +18,7 @@ $installments = number_format($totalprice / 3, 2);
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            background: url("../../resources/images/bg1.png");
+            background: url("../../resources/images/bg4.png");
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover; 
@@ -98,7 +98,7 @@ $installments = number_format($totalprice / 3, 2);
         </div>
     </div>
 </div>
-
+<?php include "../../includes/footer.php"; ?>
 <script>
 // Format date as 'D M'
 function formatDate(date) {

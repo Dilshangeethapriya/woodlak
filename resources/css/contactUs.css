@@ -7,7 +7,7 @@
 }
 
 body {
-    background-image: url('../images/bg1.png');
+    background-image: url('../images/bg4.png');
     background-repeat: no-repeat;
     background-attachment: fixed;
      background-size: cover; 
@@ -61,7 +61,7 @@ input::placeholder {
 
 
 .inquiry-container {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.8);
     border-radius: 0.75rem; 
     padding: 2rem;
     margin-bottom: 2rem;
@@ -69,7 +69,7 @@ input::placeholder {
   }
 
   .reply-container {
-    background-color: rgba(255, 255, 255, 0.7); 
+    background-color: rgba(255, 255, 255, 0.8); 
     border-left: 4px solid #43A047; 
     padding: 0.75rem;
     margin-top: 1rem;

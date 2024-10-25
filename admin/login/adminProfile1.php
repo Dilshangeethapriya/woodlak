@@ -101,20 +101,21 @@ $base_url = "http://localhost/woodlak";
 
 <div class="profile">
     <form action="EditProfile.php" method="get">
-        <h1><?php echo $fetch ? htmlspecialchars($fetch['name']) : 'No admin found'; ?> Profile </h1>
+        <h1><?php echo $fetch ? htmlspecialchars($fetch['name']) : 'No admin found'; ?></h1>
         <div class="flex">
-            <div class="input-roup">
+            <div class="input-roup w-full">
                 <span class="span">Name: </span>
-                <input type="text" name="profile_name" value="<?php echo $fetch ? htmlspecialchars($fetch['name']) : 'No admin found'; ?>" class="box" readonly style="width:200px;">
+                <input type="text" name="profile_name" value="<?php echo $fetch ? htmlspecialchars($fetch['name']) : 'No admin found'; ?>" class="box" readonly style="width:100%;">
 
                 <span>Email: </span>
-                <input type="email" name="profile_email" value="<?php echo $fetch ? htmlspecialchars($fetch['email']) : 'No admin found'; ?>" class="box" readonly style="width: 200px;">
+                <input type="email" name="profile_email" value="<?php echo $fetch ? htmlspecialchars($fetch['email']) : 'No admin found'; ?>" class="box" readonly style="width: 100%;">
 
                 <span>Password: </span>
-                <input type="password" id="profile_password" name="profile_password" value="<?php echo $fetch ? htmlspecialchars($fetch['password']) : ''; ?>" class="box" readonly style="width: 200px" class="fas fa-eye eye-icon" id="togglePassword" onclick="togglePassword()">
+                <input type="password" id="profile_password" name="profile_password" value="<?php echo $fetch ? htmlspecialchars($fetch['password']) : ''; ?>" class="box" readonly style="width: 100%" class="fas fa-eye eye-icon" id="togglePassword" onclick="togglePassword()">
                 <i ></i>
             </div>
         </div>
+        <p>Change password? <a href="resetpassword.php">Reset here</a></p>
     </form>
 </div>
 

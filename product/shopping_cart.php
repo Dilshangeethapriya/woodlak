@@ -51,7 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../resources/css/cart.css">
     <style>
         body{
-            background-color:#c19a6b;
+            /*background-color:#c19a6b;*/
+            background: url('../resources/images/bg4.png');
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+                font-family: sans-serif;
         }
         .table-header {
             background-color: #5a2b09;

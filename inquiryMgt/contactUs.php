@@ -82,6 +82,7 @@ $conn->close();
     <title>Contact Us - WOODLAK</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css">
     <link rel="stylesheet" href="../resources/css/contactUs.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -90,25 +91,27 @@ $conn->close();
 
   <?php include "../includes/navbar.php"; ?>
 
-    <div class="bg bg-transparent text-white p-10 mb-20">
-        <h2 class="text-center text-5xl font-semibold mt-20 mb-10">GET IN TOUCH  <? echo "$customerName" ?></h2>
+    <div class="bg bg-transparent text-white p-10 mb-10">
+        <h2 class="text-center text-5xl text-[#785b3a] font-semibold mt-20 mb-10">GET IN TOUCH </h2>
         <div class="container mx-auto px-4 py-8">
         <div class="flex flex-wrap justify-center gap-6 py-10">
     <!-- Address Card -->
     <div class="flex flex-col items-center bg-white bg-opacity-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 p-8 w-full sm:w-64 backdrop-blur-md">
         <div class="mb-4">
-            <img src="../resources/images/inquiry/circle.png" alt="address" class="w-14 h-14 object-contain">
+        <i class="fa-solid fa-location-dot text-5xl text-green-600"></i>
+            <!-- <img src="../resources/images/inquiry/circle.png" alt="address" class="w-14 h-14 object-contain"> -->
         </div>
         <h3 class="uppercase font-bold text-lg tracking-wider text-teal-700 mb-2">Address</h3>
         <p class="text-gray-600 text-sm text-center">
             Piliyandala, Sri Lanka, 10300
         </p>
     </div>
-
+    
     <!-- Phone Card -->
     <div class="flex flex-col items-center bg-white bg-opacity-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 p-8 w-full sm:w-64 backdrop-blur-md">
         <div class="mb-4">
-            <img src="../resources/images/inquiry/phone-call.png" alt="phone" class="w-14 h-14 object-contain">
+        <i class="fa-solid fa-phone text-5xl text-green-600"></i>
+            <!-- <img src="../resources/images/inquiry/phone-call.png" alt="phone" class="w-14 h-14 object-contain"> -->
         </div>
         <h3 class="uppercase font-bold text-lg tracking-wider text-teal-700 mb-2">Phone</h3>
         <p class="text-gray-600 text-sm text-center">
@@ -119,7 +122,8 @@ $conn->close();
     <!-- Email Card -->
     <div class="flex flex-col items-center bg-white bg-opacity-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 p-8 w-full sm:w-64 backdrop-blur-md">
         <div class="mb-4">
-            <img src="../resources/images/inquiry/email.png" alt="email" class="w-14 h-14 object-contain">
+        <i class="fa-solid fa-envelope text-5xl text-green-600"></i>
+            <!-- <img src="../resources/images/inquiry/email.png" alt="email" class="w-14 h-14 object-contain"> -->
         </div>
         <h3 class="uppercase font-bold text-lg tracking-wider text-teal-700 mb-2">Email</h3>
         <p class="text-gray-600 text-sm text-center">

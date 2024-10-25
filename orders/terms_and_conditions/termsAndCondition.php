@@ -59,7 +59,7 @@
 
         <h3>Product warrenty</h3>
         <ul>
-            <li>We give 6months warranty</li>
+            <li>We give 6 months warranty</li>
             <li>Any damages within this period will be replaced new comb free of charge. Damaged comb photo should be sent on whatsapp</li>
         </ul>
 
@@ -71,10 +71,7 @@
     </main>
     
    </div>
-
-
-    
-
+   <?php include  '../../includes/footer.php'; ?>
 </body>
 
 </html>

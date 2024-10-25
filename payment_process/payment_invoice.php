@@ -263,7 +263,11 @@ session_destroy();
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20;
-            background-color: #f4f4f4;
+            background: url('../resources/images/bg4.png');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: sans-serif;
         }
         .receipt-container {
             background-color: #ffffff;
@@ -324,7 +328,7 @@ session_destroy();
 
 <?php include "../includes/navbar.php"; ?>
 
-<div class="receipt-container">
+<div class="receipt-container mt-14">
     <div class="receipt-header">
        <center> <img src="pictures/logo.png" alt="Company Logo"> </center>
         <h1>Official Payment Receipt</h1>
@@ -363,6 +367,7 @@ session_destroy();
     <p>If you have any questions, please contact our support team at woodlak@gmail.com</p>
 </div>
 
+<?php include "../includes/footer.php"; ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 <script>
     function downloadReceipt() {

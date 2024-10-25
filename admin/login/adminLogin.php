@@ -14,10 +14,9 @@ if (isset($_POST['submit'])) {
         $row = mysqli_fetch_assoc($select);
         
         if ($password == $row['password']) {  
-            $_SESSION['user_id'] = $row['adminID']; 
+            $_SESSION['admin_id'] = $row['adminID']; 
             $_SESSION['loggedin'] = true; 
             header('Location: ../dashboard.php');
-            
             exit;
         } else {
             $message[] = 'Incorrect password';
@@ -117,7 +116,6 @@ $base_url = "http://localhost/woodlak";
         </div>
         
         <button type="submit" name="submit" class="btn">Login Now</button>
-        <p>Change your password? <a href="resetpassword.php">Reset here</a></p>
     </form>
 </div>
 

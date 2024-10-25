@@ -10,8 +10,8 @@ use Infobip\Api\SendSmsApi;
 use Infobip\Model\SmsAdvancedTextualRequest;
 
 // Set your Infobip API credentials
-$apiKey = 'e76a6b926e8de2f66bf83dd884525699-a8dc54fb-45a2-4c41-9e30-b461b17b9553';
-$baseUrl = 'https://nm8m8j.api.infobip.com';
+$apiKey = '089bb92afb31c0fbda1ccdfd52bf6968-a71016d0-68fc-4bf7-a062-439ee5739c25';
+$baseUrl = 'http://nmdm8y.api.infobip.com';
 
 $configuration = new Configuration($baseUrl, $apiKey);
 $smsClient = new SendSmsApi($configuration);  // Make sure the class is found

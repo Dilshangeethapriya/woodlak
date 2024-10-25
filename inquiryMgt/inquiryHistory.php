@@ -24,7 +24,7 @@ $base_url = "http://localhost/woodlak";
 
   <!-- Main Content -->
   <div class="container mx-auto max-w-4xl px-4 py-8 flex-grow">
-    <h2 class="text-center text-4xl font-bold text-white my-8">My Inquiry History</h2>
+    <h2 class="text-center text-4xl font-bold text-[#785b3a] my-8">My Inquiry History</h2>
 
     <!-- Inquiry List -->
     <div class="grid grid-cols-1 gap-6">
