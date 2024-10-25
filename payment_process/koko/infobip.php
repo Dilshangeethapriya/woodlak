@@ -9,22 +9,22 @@ use Infobip\Configuration;
 use Infobip\Api\SendSmsApi;
 use Infobip\Model\SmsAdvancedTextualRequest;
 
-// Set your Infobip API credentials
-$apiKey = '089bb92afb31c0fbda1ccdfd52bf6968-a71016d0-68fc-4bf7-a062-439ee5739c25';
-$baseUrl = 'http://nmdm8y.api.infobip.com';
+
+$apiKey = 'fe4fc10b0c4884d7c6f9b9d95fd0ac86-04a6b439-4da5-4fd0-b11d-471ea0bd994d';
+$baseUrl = 'https://nmdm8y.api.infobip.com';
 
 $configuration = new Configuration($baseUrl, $apiKey);
-$smsClient = new SendSmsApi($configuration);  // Make sure the class is found
+$smsClient = new SendSmsApi($configuration); 
 
 $request = new SmsAdvancedTextualRequest();
 $request->setFrom('InfoSMS')
         ->setTo(['+94741857482'])
         ->setText('Hello from Infobip!');
 
-// Send SMS
+
 try {
     $response = $smsClient->sendSmsMessage($request);
-    print_r($response);  // This will display the response details
+    print_r($response); 
 } catch (Exception $e) {
     echo 'Caught exception: ',  $e->getMessage(), "\n";
 }

@@ -13,6 +13,8 @@ $username = "root";
 $password = "";
 $dbname = "WoodLak";
 
+function truncateText($text, $maxLength) { return (strlen($text) > $maxLength) ? substr($text, 0, $maxLength) . '...' : $text; }
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -23,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $paymentMethod = $_POST['paymentMethod'];
 
     // Fetch data based on the selected payment method
-    $sql = "SELECT OrderID, customerID, name, total, paymentMethod, orderStatus FROM Orders WHERE paymentMethod = ?";
+    $sql = "SELECT * FROM Orders WHERE paymentMethod = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $paymentMethod);
     $stmt->execute();
@@ -42,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(30, 10, 'OrderID', 1);
     $pdf->Cell(40, 10, 'Customer Name', 1);
-    $pdf->Cell(50, 10, 'Product Name', 1);
+    $pdf->Cell(50, 10, 'Contact Number', 1);
     $pdf->Cell(30, 10, 'Total Amount', 1);
     $pdf->Cell(30, 10, 'Status', 1);
     $pdf->Ln();
@@ -51,11 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pdf->SetFont('Arial', '', 12);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $pdf->Cell(30, 10, $row['OrderID'], 1);
-            $pdf->Cell(40, 10, $row['customerID'], 1);
-            $pdf->Cell(50, 10, $row['name'], 1);
-            $pdf->Cell(30, 10, $row['total'], 1);
-            $pdf->Cell(30, 10, $row['orderStatus'], 1);
+            $pdf->Cell(30, 20, $row['orderID'], 1);
+            $pdf->Cell(40, 20, $row['name'], 1);
+            $pdf->Cell(50, 20, $row['phoneNumber'], 1);
+            $pdf->Cell(30, 20, $row['total'], 1);
+            $pdf->Cell(30, 20, $row['orderStatus'], 1);
             $pdf->Ln();
         }
     } else {

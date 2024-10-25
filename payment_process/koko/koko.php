@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Set session variables
+
 $_SESSION['paymentMethod'] = "Koko";
 $totalprice = $_SESSION['totalPrice'];
 $installments = number_format($totalprice / 3, 2); 
@@ -18,19 +18,19 @@ $installments = number_format($totalprice / 3, 2);
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            background: url("../../resources/images/bg4.png");
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size: cover; 
+            background: url('../../resources/images/bg4.png');
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
         }
         .button-fade {
             transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-        .otp-hidden {
+        .my-hidden {
             opacity: 0;
             visibility: hidden;
         }
-        .otp-visible {
+        .my-visible {
             opacity: 1;
             visibility: visible;
         }
@@ -72,7 +72,7 @@ $installments = number_format($totalprice / 3, 2);
             </div>
         </div>
 
-        <!-- Phone Number Input -->
+        
         <div class="mt-6">
             <p class="text-gray-600 text-center">To complete your purchase, enter your mobile number</p>
             <div class="flex mt-4">
@@ -81,16 +81,16 @@ $installments = number_format($totalprice / 3, 2);
             </div>
         </div>
 
-        <!-- OTP (Password) Section (Initially hidden) -->
-        <div id="passwordSection" class="mt-4 otp-hidden">
+   
+        <div id="passwordSection" class="my-hidden hidden">
             <p class="text-gray-600 text-center">Enter the OTP sent to your phone</p>
             <input type="text" id="otp" class="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none" placeholder="Enter your OTP">
         </div>
 
-        <!-- Buttons -->
+       
         <div class="mt-6">
             <button id="continueButton" class="w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">CONTINUE</button>
-            <button id="verifyButton" class="w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition button-fade otp-hidden">VERIFY</button>
+            <button id="verifyButton" class="w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition button-fade my-hidden">VERIFY</button>
         </div>
 
         <div class="mt-4 text-center text-gray-500 text-sm">
@@ -98,73 +98,73 @@ $installments = number_format($totalprice / 3, 2);
         </div>
     </div>
 </div>
-<?php include "../../includes/footer.php"; ?>
+<?php include '../../includes/footer.php'; ?>
 <script>
-// Format date as 'D M'
+
 function formatDate(date) {
     const options = { day: 'numeric', month: 'short' };
     return date.toLocaleDateString('en-US', options);
 }
 
-// Add days to the current date
+
 function addDays(date, days) {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
 }
 
-// Get today's date and calculate the future dates
+
 const today = new Date();
 const date30 = addDays(today, 30);
 const date60 = addDays(today, 60);
 
-// Update the HTML with the calculated dates
+
 document.getElementById('date30').textContent = formatDate(date30);
 document.getElementById('date60').textContent = formatDate(date60);
 
-// Handle Continue button click (to send OTP)
+
 document.getElementById('continueButton').addEventListener('click', function () {
     const mobileNumber = document.getElementById('mobileNumber').value;
 
-    if (mobileNumber && document.getElementById('passwordSection').classList.contains('otp-hidden')) {
-        // Disable continue button to prevent multiple SMS sends
+    if (mobileNumber && document.getElementById('passwordSection').classList.contains('my-hidden')) {
+ 
         this.disabled = true;
 
-        // Send AJAX request to send the OTP
         const xhr = new XMLHttpRequest();
         xhr.open("POST", "send_sms.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
         xhr.onload = function () {
             if (xhr.status === 200) {
-                // Show the OTP input field and verify button with transition
-                document.getElementById('passwordSection').classList.remove('otp-hidden');
-                document.getElementById('continueButton').classList.add('otp-hidden');
+
+                document.getElementById('passwordSection').classList.remove('my-hidden');
+                document.getElementById('passwordSection').classList.toggle('hidden');
+                document.getElementById('continueButton').classList.add('my-hidden');
                 const verifyButton = document.getElementById('verifyButton');
-                verifyButton.classList.remove('otp-hidden');
-                verifyButton.classList.add('otp-visible');
+                verifyButton.classList.remove('my-hidden');
+                verifyButton.classList.add('my-visible');
             } else {
                 alert("Failed to send OTP. Please try again.");
-                // Re-enable the continue button in case of failure
+
                 document.getElementById('continueButton').disabled = false;
             }
         };
 
-        // Send mobile number (+94 prefix added automatically)
+
         xhr.send("mobileNumber=" + "+94" + mobileNumber);
     } else if (!mobileNumber) {
         alert("Please enter your mobile number.");
     }
 });
 
-// Handle OTP verification
+
 document.getElementById('verifyButton').addEventListener('click', function () {
     verifyOTP();
 });
 
-// Handle OTP verification (when Enter key is pressed)
+
 document.getElementById('otp').addEventListener('keyup', function(event) {
-    if (event.key === 'Enter') { // Handle Enter key press for OTP submission
+    if (event.key === 'Enter') { 
         verifyOTP();
     }
 });
@@ -173,7 +173,6 @@ function verifyOTP() {
     const enteredOTP = document.getElementById('otp').value;
 
     if (enteredOTP) {
-        // Send AJAX request to verify OTP
         const xhr = new XMLHttpRequest();
         xhr.open("POST", "verify_otp.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -191,14 +190,12 @@ function verifyOTP() {
             }
         };
 
-        // Send the entered OTP for verification
         xhr.send("otp=" + enteredOTP);
     } else {
         displayError("Please enter the OTP.");
     }
 }
 
-// Display error below OTP input
 function displayError(message) {
     let errorDiv = document.getElementById('errorDiv');
     if (!errorDiv) {

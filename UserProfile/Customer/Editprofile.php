@@ -2,11 +2,11 @@
 include 'config.php';
 session_start();
 
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
-
 $user_id = $_SESSION['user_id'];
 $message = [];
 
@@ -65,7 +65,7 @@ if (isset($_POST['saveProfile'])) {
 
 
 if (!empty($_POST['update_pw']) || !empty($_POST['new_pw']) || !empty($_POST['confirm_pw'])) {
-    $old_pw = $_POST['old_pw'];
+    // $old_pw = $_POST['old_pw'];
     $update_pw = $_POST['update_pw'];
     $new_pw = $_POST['new_pw'];
     $confirm_pw = $_POST['confirm_pw'];
@@ -73,7 +73,7 @@ if (!empty($_POST['update_pw']) || !empty($_POST['new_pw']) || !empty($_POST['co
     $select = mysqli_query($conn, "SELECT password FROM `customer` WHERE customerID='$user_id'") or die('Query failed');
     $fetch = mysqli_fetch_assoc($select);
 
-    if (!($old_pw== $fetch['password'])) {
+    if (!($update_pw == $fetch['password'])) {
         $message[] = 'Old password does not match!';
     } elseif ($new_pw !== $confirm_pw) {
         $message[] = 'New password and confirmation do not match!';
@@ -118,7 +118,7 @@ if (!empty($_POST['update_pw']) || !empty($_POST['new_pw']) || !empty($_POST['co
             if (isset($fetch['image']) && $fetch['image'] != '') {
                 echo '<img src="../../resources/images/profile/uploaded_img/'.$fetch['image'].'" alt="Profile Picture">';
             } else {
-                echo '<img src="images/avatar.png" alt="Default Avatar">';
+                echo '<img src="../../resources/images/profile/avatar.png" alt="Default Avatar">';
             }
             
             if (!empty($message)) {
@@ -157,8 +157,6 @@ if (!empty($_POST['update_pw']) || !empty($_POST['new_pw']) || !empty($_POST['co
                 <input type="text" name="edit_streetName" value="<?php echo htmlspecialchars($fetch['streetName']); ?>" class="box">
                 <span>City: </span>
                 <input type="text" name="edit_city" value="<?php echo htmlspecialchars($fetch['city']); ?>" class="box">
-                
-                <input type="hidden" name="old_pw" value="<?php echo htmlspecialchars($fetch['password']); ?>">
                 
                 <span>Current Password: </span>
                 <input type="password" name="update_pw" placeholder="Enter current password" class="box">

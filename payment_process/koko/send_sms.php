@@ -1,35 +1,30 @@
 <?php
 session_start();
 
-// Enable error reporting to catch issues
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Import necessary Infobip classes
+
 use Infobip\Configuration;
 use Infobip\Api\SmsApi;
 use Infobip\Model\SmsDestination;
 use Infobip\Model\SmsTextualMessage;
 use Infobip\Model\SmsAdvancedTextualRequest;
 
-require __DIR__ . "/vendor/autoload.php"; // Correct path to autoload.php
+require __DIR__ . "/vendor/autoload.php"; 
 
 if (isset($_POST["mobileNumber"])) {
     $phoneNumber = $_POST["mobileNumber"];
-    $message = rand(100000, 999999); // Generate a 6-digit OTP
+    $message = rand(100000, 999999);
 
-    // Store OTP in session to verify later
     $_SESSION['otp'] = $message;
 
-    // Infobip credentials
-    $apiURL = "699vy5.api.infobip.com"; // Make sure this is correct
-    $apiKey = "8feeb80acc392b10926d0e650adc35a7-e92ca7f6-a55d-472b-a229-d7e38c9c1300"; // Use a valid API key
+    $apiURL = "nmdm8y.api.infobip.com"; 
+    $apiKey = "fe4fc10b0c4884d7c6f9b9d95fd0ac86-04a6b439-4da5-4fd0-b11d-471ea0bd994d"; // Use a valid API key
 
-    // Create configuration object
     $configuration = new Configuration(host: $apiURL, apiKey: $apiKey);
     $api = new SmsApi(config: $configuration);
 
-    // Create destination and message
     $destination = new SmsDestination(to: $phoneNumber);
     $theMessage = new SmsTextualMessage(
         destinations: [$destination],
@@ -37,7 +32,6 @@ if (isset($_POST["mobileNumber"])) {
         from: "InfoSMS"
     );
 
-    // Send the request
     $request = new SmsAdvancedTextualRequest(messages: [$theMessage]);
 
     try {
