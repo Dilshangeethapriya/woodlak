@@ -59,10 +59,10 @@ session_start();
     <body>
     <?php include  '../includes/navbar.php'; ?>
     <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="flex: 1; text-align: center; margin: 0; font-size:50px; margin-left:20px; margin-top:40px; margin-bottom:20px" class="text-[#543310]"><b>The Natural Choice for Healthier Hair</b></h1>
+            <h1 style="flex: 1; text-align: center; margin: 0; font-size:50px; margin-left:20px; margin-top:30px; margin-bottom:20px" class="text-[#543310]"><b>The Natural Choice for Healthier Hair</b></h1>
         </div>
         <div class="flex justify-center">
-        <button class="add_new bg-[#74512D;] hover:bg-[#543310] m-auto" onclick="openFindForm()">Find Your Comb</button>
+        <button class="add_new bg-[#74512D] hover:bg-[#543310] m-auto px-6 py-3 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-transform duration-200 transform hover:scale-105" onclick="openFindForm()">Find Your Comb</button>
         </div>
         
 

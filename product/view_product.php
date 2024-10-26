@@ -12,7 +12,7 @@ $result = mysqli_query($conn, $sql);
 if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
         $MyProductName =  $row['productName'];
-        $MyProductImage = $row['image'];
+        $MyProductImage = "../".$row['image'];
         $MyProductPrice = $row['price'];
         $MyDescription = $row['description'];
         $MyProductID =  $row['productID'];
