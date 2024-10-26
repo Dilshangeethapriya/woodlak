@@ -1,10 +1,8 @@
 <?php
-include '../config/dbconnect.php'; // Adjust the path to your DB config
+include '../config/dbconnect.php'; 
 
-// Get product ID (this could be passed via GET or POST)
 $productID = intval($_GET['PRODUCTC']);
 
-// Initialize rating counts
 $ratingCounts = [
     '5' => 0,
     '4' => 0,
@@ -25,7 +23,6 @@ while ($row = $result->fetch_assoc()) {
     $totalRatings += $row['count'];
 }
 
-// Initialize average rating and percentages
 $averageRating = 0;
 $ratingPercentages = [
     '5' => 0,
@@ -35,11 +32,9 @@ $ratingPercentages = [
     '1' => 0
 ];
 
-// Calculate the average rating and percentages only if there are ratings
 if ($totalRatings > 0) {
     $averageRating = (5 * $ratingCounts['5'] + 4 * $ratingCounts['4'] + 3 * $ratingCounts['3'] + 2 * $ratingCounts['2'] + 1 * $ratingCounts['1']) / $totalRatings;
 
-    // Calculate percentage for each rating
     foreach ($ratingCounts as $stars => $count) {
         $ratingPercentages[$stars] = ($count / $totalRatings) * 100;
     }

@@ -15,7 +15,7 @@ if (isset($_SESSION['user_name'])) {
     $customerID = $_SESSION['user_id'];
     $customerName = $_SESSION['user_name'];
 
-    // Fetch customer data
+  
     $CustomerDataSql = "SELECT * FROM `customer` WHERE customerID = '$customerID'";
     $customerData = mysqli_query($conn, $CustomerDataSql) or die('query failed');
     if (mysqli_num_rows($customerData) > 0) {
@@ -95,11 +95,10 @@ $conn->close();
         <h2 class="text-center text-5xl text-[#785b3a] font-semibold mt-20 mb-10">GET IN TOUCH </h2>
         <div class="container mx-auto px-4 py-8">
         <div class="flex flex-wrap justify-center gap-6 py-10">
-    <!-- Address Card -->
+   
     <div class="flex flex-col items-center bg-white bg-opacity-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 p-8 w-full sm:w-64 backdrop-blur-md">
         <div class="mb-4">
         <i class="fa-solid fa-location-dot text-5xl text-green-600"></i>
-            <!-- <img src="../resources/images/inquiry/circle.png" alt="address" class="w-14 h-14 object-contain"> -->
         </div>
         <h3 class="uppercase font-bold text-lg tracking-wider text-teal-700 mb-2">Address</h3>
         <p class="text-gray-600 text-sm text-center">
@@ -107,11 +106,10 @@ $conn->close();
         </p>
     </div>
     
-    <!-- Phone Card -->
+   
     <div class="flex flex-col items-center bg-white bg-opacity-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 p-8 w-full sm:w-64 backdrop-blur-md">
         <div class="mb-4">
         <i class="fa-solid fa-phone text-5xl text-green-600"></i>
-            <!-- <img src="../resources/images/inquiry/phone-call.png" alt="phone" class="w-14 h-14 object-contain"> -->
         </div>
         <h3 class="uppercase font-bold text-lg tracking-wider text-teal-700 mb-2">Phone</h3>
         <p class="text-gray-600 text-sm text-center">
@@ -119,11 +117,10 @@ $conn->close();
         </p>
     </div>
 
-    <!-- Email Card -->
+   
     <div class="flex flex-col items-center bg-white bg-opacity-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 p-8 w-full sm:w-64 backdrop-blur-md">
         <div class="mb-4">
         <i class="fa-solid fa-envelope text-5xl text-green-600"></i>
-            <!-- <img src="../resources/images/inquiry/email.png" alt="email" class="w-14 h-14 object-contain"> -->
         </div>
         <h3 class="uppercase font-bold text-lg tracking-wider text-teal-700 mb-2">Email</h3>
         <p class="text-gray-600 text-sm text-center">
@@ -146,41 +143,39 @@ $conn->close();
             
             <div id="inquiry" class="tab-content hidden">
                 <h2 class="text-3xl text-center font-semibold mb-10">Send Your Inquiry</h2>
-    <form method="post" action="">
-        <div class="flex flex-col  max-w-3xl mx-auto">
-        
-            <input type="text" id="name" name="name" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
-                placeholder="Name" value="<?= isset($customerName) ? htmlspecialchars($customerName) : '' ?>" required>
-
-            <input type="text" id="phone" name="phone" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
-                placeholder="Contact No" value="<?= isset($customerContact) ? htmlspecialchars($customerContact) : '' ?>" required>
-
-            <input type="email" id="email" name="email" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
-                placeholder="Email" value="<?= isset($customerEmail) ? htmlspecialchars($customerEmail) : '' ?>" required>
-          
-            <input type="text" id="subject" name="subject" class="flex-1 p-2  bg-transparent  border-b-2 border-green-500 " placeholder="Subject" required>
-     
-            <textarea id="message" name="message" rows="5" class="flex-1 p-2 ra  bg-transparent  border-b-2 border-green-500 " placeholder="Message" required></textarea>
-  
-
-        <div class="flex justify-center">
-            <button type="submit" name="inquiry_submit" class="mt-5 p-2 mb-4 w-1/3 bg-green-500 text-white rounded-md   hover:bg-[#543310]" >Send</button>
-        </div>
-      </div>
-    </form>
-
+             <form method="post" action="">
+                 <div class="flex flex-col  max-w-3xl mx-auto">
+                 
+                     <input type="text" id="name" name="name" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
+                         placeholder="Name" value="<?= isset($customerName) ? htmlspecialchars($customerName) : '' ?>" required minlength="2">
+         
+                     <input type="text" id="phone" name="phone" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
+                         placeholder="Contact No" value="<?= isset($customerContact) ? htmlspecialchars($customerContact) : '' ?>" required pattern="^\d{10}$" title="Enter a valid phone number with 10 digits.">
+         
+                     <input type="email" id="email" name="email" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
+                         placeholder="Email" value="<?= isset($customerEmail) ? htmlspecialchars($customerEmail) : '' ?>" required>
+                   
+                     <input type="text" id="subject" name="subject" class="flex-1 p-2  bg-transparent  border-b-2 border-green-500 " placeholder="Subject" required minlength="3">
+              
+                     <textarea id="message" name="message" rows="5" class="flex-1 p-2 ra  bg-transparent  border-b-2 border-green-500 " placeholder="Message" required minlength="10"></textarea>
+           
+         
+                 <div class="flex justify-center">
+                     <button type="submit" name="inquiry_submit" class="mt-5 p-2 mb-4 w-1/3 bg-green-500 text-white rounded-md   hover:bg-[#543310]" >Send</button>
+                 </div>
+               </div>
+             </form>
             </div>
 
-          
             <div id="callback" class="tab-content hidden">
                 <h2 class="text-3xl text-center font-semibold my-10">Request a Callback</h2>
                 <form method="post" action="">
     <div class="flex flex-col max-w-3xl mx-auto">
     <input type="text" id="name" name="name" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
-                placeholder="Name" value="<?= isset($customerName) ? htmlspecialchars($customerName) : '' ?>" required>
+                placeholder="Name" value="<?= isset($customerName) ? htmlspecialchars($customerName) : '' ?>" required minlength="2">
     
             <input type="text" id="phone" name="phone" class="flex-1 p-2 bg-transparent border-b-2 border-green-500" 
-                placeholder="Phone" value="<?= isset($customerContact) ? htmlspecialchars($customerContact) : '' ?>" required>
+                placeholder="Phone" value="<?= isset($customerContact) ? htmlspecialchars($customerContact) : '' ?>" required pattern="^\d{10}$" title="Enter a valid phone number with 10 digits.">
 
         <legend class="mt-4 text-xl font-bold text-gray-400">Available Time</legend>
         <div class="flex items-center mt-2">

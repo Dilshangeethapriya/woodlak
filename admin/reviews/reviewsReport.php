@@ -1,5 +1,5 @@
 <?php
-// Include the database connection
+
 include '../../config/dbconnect.php';
 session_start();
 
@@ -11,10 +11,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 $base_url = "http://localhost/woodlak"; 
 
-// Get selected productID from GET request (if any)
 $productID = isset($_GET['productID']) ? intval($_GET['productID']) : null;
 
-// Fetch all products for dropdown
 $products = [];
 $query = "SELECT productID, productName FROM product";
 $stmt = $conn->prepare($query);
@@ -24,7 +22,6 @@ while ($row = $result->fetch_assoc()) {
     $products[] = $row;
 }
 
-// Initialize variables for the report
 $totalRatings = 0;
 $averageRating = 0;
 $ratingsBreakdown = [
@@ -37,10 +34,8 @@ $ratingsBreakdown = [
 $topRatedProducts = [];
 $mostReviewedProducts = [];
 
-// Build the WHERE clause for product filtering
 $whereClause = $productID ? "WHERE productID = ?" : "";
 
-// Get the total number of ratings
 $query = "SELECT COUNT(*) as totalRatings FROM review $whereClause";
 $stmt = $conn->prepare($query);
 if ($productID) {
@@ -50,8 +45,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 $totalRatings = $result->fetch_assoc()['totalRatings'];
 
-// Get the overall average rating
-// Get the overall average rating
 $query = "SELECT AVG(rating) as averageRating FROM review $whereClause";
 $stmt = $conn->prepare($query);
 if ($productID) {
@@ -60,12 +53,10 @@ if ($productID) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Fetch the result and assign the averageRating value
 $row = $result->fetch_assoc();
 $averageRating = ($row['averageRating'] !== null) ? round($row['averageRating'], 1) : 0;
 
 
-// Get the ratings breakdown
 $query = "SELECT rating, COUNT(*) as count FROM review $whereClause GROUP BY rating";
 $stmt = $conn->prepare($query);
 if ($productID) {
@@ -77,7 +68,6 @@ while ($row = $result->fetch_assoc()) {
     $ratingsBreakdown[$row['rating']] = $row['count'];
 }
 
-// Get the top 5 rated products (only if no product is selected)
 if (!$productID) {
     $query = "SELECT productID, AVG(rating) as averageRating, COUNT(*) as totalRatings 
               FROM review 
@@ -93,7 +83,6 @@ if (!$productID) {
     }
 }
 
-// Get the top 5 most reviewed products (only if no product is selected)
 if (!$productID) {
     $query = "SELECT productID, COUNT(*) as totalRatings 
               FROM review 
@@ -131,13 +120,11 @@ if (!$productID) {
 <body>
 <header class="bg-[#543310] h-20 w-full z-50 fixed top-0 flex items-center">
     <div class="flex justify-between items-center w-[95%] mx-auto h-full">
-        <!-- Back Button -->
         <a href="reviews.php" 
            class="flex items-center px-4 py-2 border border-transparent rounded-md text-white hover:scale-105 focus:outline-none transition-transform duration-200">
            <img src="<?= $base_url ?>/resources/images/inquiry/arrow.png" alt="Back" class="w-6 h-6 mr-2">
         </a>
 
-        <!-- Form for Product Selection -->
         <form method="GET" action="" class="flex items-center space-x-4">
             <select name="productID" id="productID" class="px-4 py-2 rounded-md bg-white text-black focus:outline-none" onchange="this.form.submit()">
                 <option value="">All Products</option>
@@ -149,15 +136,14 @@ if (!$productID) {
             </select>
         </form>
 
-        <!-- Download Report Button -->
         <button class="bg-[#74512D] text-white px-5 py-2 rounded-full hover:text-[#D0B8A8] hover:bg-[#543310] transition-colors duration-200" 
         onclick="generatePDF('Customer-ratings-analytics')">Download Report</button>
     </div>
 </header>
 
-<!-- Add padding to the top of the content to avoid overlap with the fixed header -->
+
 <div class="mt-20">
-    <!-- Main content here -->
+
 </div>
 
 

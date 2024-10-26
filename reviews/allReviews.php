@@ -2,14 +2,12 @@
 <?php
 session_start();
 include '../config/dbconnect.php'; 
-include '../includes/phpInsight-master/autoload.php'; // Include sentiment analysis library
+include '../includes/phpInsight-master/autoload.php'; 
 
-use PHPInsight\Sentiment; // Use PHPInsight for sentiment analysis
+use PHPInsight\Sentiment; 
 
-// Get the product ID
 $productID = intval($_REQUEST["PRODUCTC"]);
 
-// Fetch all reviews for this product
 $reviewsQuery = $conn->prepare("SELECT * FROM review WHERE productID = ? ORDER BY createdAt DESC");
 $reviewsQuery->bind_param('i', $productID);
 $reviewsQuery->execute();
@@ -26,7 +24,6 @@ if ($productData->num_rows > 0) {
     echo "Product not found.";
 }
 
-// Handle review submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
     $productID = intval($_REQUEST["PRODUCTC"]);
     $customerID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
@@ -34,24 +31,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
     $rating = $_POST['rating'];
     $reviewText = $_POST['reviewText'];
 
-    // Sanitize input
     $customerName = htmlspecialchars($customerName);
     $reviewText = htmlspecialchars($reviewText);
 
-    // Prepare and execute the insert statement
     $stmt = $conn->prepare("INSERT INTO review (productID, customerID, customerName, rating, reviewText) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param('iisis', $productID, $customerID, $customerName, $rating, $reviewText);
     
     if ($stmt->execute()) {
-        // Get the ID of the newly inserted review
         $reviewID = $stmt->insert_id;
 
-        // Run sentiment analysis on the submitted review
         $sentiment = new Sentiment();
-        $scores = $sentiment->score($reviewText);  // Get sentiment scores (positive, negative, neutral)
-        $category = $sentiment->categorise($reviewText); // Get the sentiment category
+        $scores = $sentiment->score($reviewText);  
+        $category = $sentiment->categorise($reviewText); 
         
-        // Insert sentiment analysis result into the review_sentiment table
         $sentimentStmt = $conn->prepare("
             INSERT INTO review_sentiment (reviewID, positive_score, negative_score, neutral_score, sentiment_category, last_analyzed)
             VALUES (?, ?, ?, ?, ?, NOW())
@@ -59,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
         $sentimentStmt->bind_param('iddds', $reviewID, $scores['pos'], $scores['neg'], $scores['neu'], $category);
         $sentimentStmt->execute();
 
-        // Redirect to the same product page after submission
         header("Location: allReviews.php?PRODUCTC=$productID");
         exit();
     } else {
@@ -67,14 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
     }
 }
 
-// Handle reply submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     $reviewID = intval($_POST['reviewID']);
-    $replyText = htmlspecialchars($_POST['replyText']); // Sanitize reply text
+    $replyText = htmlspecialchars($_POST['replyText']); 
     $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : $_POST['userName'];
     $userName = htmlspecialchars($userName);
 
-    // Prepare and execute the insert statement
     $stmt = $conn->prepare("INSERT INTO reviewreply (reviewID, userName, replyText) VALUES (?, ?, ?)");
     $stmt->bind_param('iss', $reviewID, $userName, $replyText);
 
@@ -106,16 +95,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 
     <?php include '../includes/navbar.php' ?>
 
-    <!-- Main Content -->
+    
     <div class="container mx-auto my-10">
         <div class="review-section max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(225, 255, 225, 0.8);">
              <h2 class="text-[#785b3a] text-4xl mb-8 text-center">Customer Reviews</h2>
           <div class="ratings-summary my-1 0 bg-[#1f2937] p-8 rounded-lg shadow-lg">
              <div class="flex items-center space-x-6">
-                 <!-- Product Image -->
+                
                  <img src="<?php echo $productImage ?>" alt="<?php echo $productName ?>" class="w-40 h-40 object-cover rounded-lg border-2 border-[#C4A484] shadow-md">
 
-                  <!-- Product Name -->
+                 
                  <div>
                      <h3 class="text-2xl font-bold text-[#C4A484] mb-2"><?php echo $productName ?></h3>
                      <p class="text-sm text-gray-400">See all the reviews and ratings for this product below</p>
@@ -123,10 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
               </div>
 
               <?php include 'ratingCounts.php' ?>
-                 <!-- Button to toggle the review form -->
+                
     <button onclick="toggleVisibility('reviewForm')" class="bg-[#78350f] hover:bg-[#5a2b09] text-white rounded px-4 py-2 mb-4">Leave a Review</button>
     
-    <!-- Review form, hidden by default -->
+    
            <div id="reviewForm" style="display:none;" class="mx-auto bg-[#1f2937] p-6 rounded-lg shadow-lg">
              <form action="" method="POST" class="space-y-4">
                 <?php if (!isset($_SESSION['user_name'])): ?>
@@ -164,9 +153,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
              <hr> 
 
               <div class="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-6 bg-[#1f2937] p-8 rounded-md">
-                    <!-- Hidden input field for productID -->
+                    
                  <input type="hidden" id="productID" value="<?php echo $productID; ?>">
-                   <!-- Rating Filter -->
+                   
                    <div class="flex flex-col items-center w-full lg:w-auto">
                        <label for="stars" class="block text-lg font-semibold text-[#C4A484] mb-2 w-full">Filter by Stars:</label>
                        <select name="stars" id="stars" class="mt-2 p-2 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-green-600">
@@ -179,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
                        </select>
                    </div>
                
-                   <!-- Sorting Options -->
+                  
                    <div class="flex flex-col items-center w-full lg:w-auto">
                        <label for="sortReview" class="block text-lg font-semibold text-[#C4A484] mb-2 w-full">Sort by:</label>
                        <select name="sortReview" id="sortReview" class="mt-2 p-2 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-green-600">
@@ -191,16 +180,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
                
          </div>
 
-          <!-- Include the ratingCounts.php to display the rating summary -->
-         
-          
-                
-               <!-- Container for dynamically updating reviews -->
+ 
                <div id="reviewsContainer">
-                   <!-- Reviews will be dynamically loaded here -->
                </div>
                
-           
         </div>
     </div>
     <div id="deleteModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden" style="display: none;">
@@ -230,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 $(document).ready(function() {
    
 
-    // Fetch reviews dynamically as you did before
+    
     window.fetchReviews = function(page = 1) {
         var productID = $('#productID').val();
         var stars = $('#stars').val();
@@ -243,12 +226,11 @@ $(document).ready(function() {
                 productID: productID, 
                 stars: stars, 
                 sortReview: sortReview,
-                page: page // Pass the page number
+                page: page 
             },
             success: function(response) {
-                $('#reviewsContainer').html(response); // Update the reviews section with the response data
+                $('#reviewsContainer').html(response); 
 
-                // Re-attach delete confirmation modal after dynamically loading content
                 attachDeleteConfirmation();
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -257,58 +239,58 @@ $(document).ready(function() {
         });
     };
 
-    // Fetch reviews when filters change or the page loads
+    
     $('#stars, #sortReview').change(function() {
-        fetchReviews(1); // Reload reviews on filter change
+        fetchReviews(1); 
     });
 
-    fetchReviews(); // Initial load
+    fetchReviews(); 
 
 
     // delete confirmation-----------
 
-    var deleteForm = null; // To store the form reference for delete
+    var deleteForm = null; 
 
-// Function to show the custom confirmation modal
+
 function showDeleteModal(form) {
-    deleteForm = form; // Store the form to submit later if confirmed
+    deleteForm = form; 
     document.getElementById('deleteModal').style.display = 'flex';
 }
 
-// Function to hide the custom confirmation modal
+
 function hideDeleteModal() {
     document.getElementById('deleteModal').style.display = 'none';
 }
 
-// Attach delete confirmation modal to forms
+
 function attachDeleteConfirmation() {
-    $('form[onsubmit]').off('submit'); // Remove any previous handler
+    $('form[onsubmit]').off('submit'); 
     $('form[onsubmit]').on('submit', function(e) {
-        e.preventDefault(); // Prevent default form submission
-        showDeleteModal(this); // Show modal and store the form reference
+        e.preventDefault();
+        showDeleteModal(this); 
     });
 }
 
-// To show the modal
+
 document.getElementById('deleteModal').style.display = 'flex';
 
-// To hide the modal
+
 document.getElementById('deleteModal').style.display = 'none';
 
-// Confirm delete action
+
 $('#confirmDeleteBtn').click(function() {
     if (deleteForm) {
-        deleteForm.submit(); // Submit the form if confirmed
+        deleteForm.submit(); 
     }
-    hideDeleteModal(); // Hide the modal
+    hideDeleteModal(); 
 });
 
-// Cancel delete action
+
 $('#cancelDeleteBtn').click(function() {
-    hideDeleteModal(); // Just hide the modal if canceled
+    hideDeleteModal(); 
 });
 
-// Initially attach the confirmation modal
+
 attachDeleteConfirmation();
 });
 

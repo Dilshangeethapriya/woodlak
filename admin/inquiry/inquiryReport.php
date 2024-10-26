@@ -11,19 +11,19 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 include "../../config/dbconnect.php";
 $base_url = "http://localhost/woodlak"; 
 
-// Fetch total inquiries and callbacks
+
 $totalInquiries = $conn->query("SELECT COUNT(*) as totalInquiries FROM tickets")->fetch_assoc()['totalInquiries'];
 $totalCallbacks = $conn->query("SELECT COUNT(*) as totalCallbacks FROM callback_requests")->fetch_assoc()['totalCallbacks'];
 
-// Fetch inquiries timeline data (last 3 months)
+// inquiry chart
 $inquiriesTimelineResult = $conn->query("SELECT DATE(created_at) AS inquiryDate, COUNT(*) AS inquiryCount FROM tickets WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH) GROUP BY inquiryDate");
 $inquiriesTimeline = $inquiriesTimelineResult->fetch_all(MYSQLI_ASSOC);
 
-// Fetch callbacks timeline data (last 3 months)
+// callbacks chart
 $callbacksTimelineResult = $conn->query("SELECT DATE(created_at) AS callbackDate, COUNT(*) AS callbackCount FROM callback_requests WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH) GROUP BY callbackDate");
 $callbacksTimeline = $callbacksTimelineResult->fetch_all(MYSQLI_ASSOC);
 
-// Prepare the data for JavaScript (inquiries)
+
 $inquiryDates = [];
 $inquiryCounts = [];
 foreach ($inquiriesTimeline as $inquiry) {
@@ -31,7 +31,7 @@ foreach ($inquiriesTimeline as $inquiry) {
     $inquiryCounts[] = $inquiry['inquiryCount'];
 }
 
-// Prepare the data for JavaScript (callbacks)
+
 $callbackDates = [];
 $callbackCounts = [];
 foreach ($callbacksTimeline as $callback) {
@@ -47,7 +47,6 @@ foreach ($callbacksTimeline as $callback) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Inquiry Analytics Report</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Include Moment.js and Chart.js adapter for Moment.js -->
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -77,19 +76,19 @@ foreach ($callbacksTimeline as $callback) {
         <p><strong>Total Callbacks Requested:</strong> <?php echo $totalCallbacks; ?></p>
     </div>
 
-    <!-- Inquiries Received Timeline -->
+    
     <div class="chart-container mb-6 px-10">
         <h3 class="text-lg font-bold">Inquiries Received Over Time</h3>
         <canvas id="inquiriesTimelineChart"></canvas>
     </div>
 
-    <!-- Callbacks Received Timeline -->
+   
     <div class="chart-container px-10">
         <h3 class="text-lg font-bold ">Callbacks Received Over Time</h3>
         <canvas id="callbacksTimelineChart"></canvas>
     </div>
 
-    <!-- Inquiries by Status -->
+ 
     <div class="inquiries-by-status px-10">
         <h3 class="text-lg font-bold">Inquiries by Status</h3>
         <table>
@@ -110,7 +109,7 @@ foreach ($callbacksTimeline as $callback) {
         </table>
     </div>
 
-    <!-- Callbacks by Status -->
+
     <div class="callbacks-by-status px-10">
         <h3 class="text-lg font-bold">Callbacks by Status</h3>
         <table>
@@ -133,11 +132,11 @@ foreach ($callbacksTimeline as $callback) {
 </div>
 
 <script>
-    // Inquiry Timeline Data
+  
     const inquiryDates = <?php echo json_encode($inquiryDates); ?>;
     const inquiryCounts = <?php echo json_encode($inquiryCounts); ?>;
 
-    // Callback Timeline Data
+  
     const callbackDates = <?php echo json_encode($callbackDates); ?>;
     const callbackCounts = <?php echo json_encode($callbackCounts); ?>;
 
@@ -161,10 +160,10 @@ new Chart(inquiriesCtx, {
             x: {
                 type: 'time',
                 time: {
-                    parser: 'YYYY-MM-DD HH:mm:ss', // Parse your date-time format
-                    unit: 'day', // Group by day
+                    parser: 'YYYY-MM-DD HH:mm:ss', 
+                    unit: 'day', 
                     displayFormats: {
-                        day: 'MMM D', // Format: Sep 5
+                        day: 'MMM D', 
                     }
                 },
                 title: {
@@ -175,9 +174,9 @@ new Chart(inquiriesCtx, {
             y: {
                 beginAtZero: true,
                 ticks: {
-                    stepSize: 1, // Ensure the y-axis only displays integers
+                    stepSize: 1, 
                     callback: function(value) {
-                        return Number.isInteger(value) ? value : null; // Display only integer values
+                        return Number.isInteger(value) ? value : null; 
                     }
                 },
                 title: {
@@ -189,7 +188,7 @@ new Chart(inquiriesCtx, {
     }
 });
 
-// Callback Timeline Chart
+
 const callbacksCtx = document.getElementById('callbacksTimelineChart').getContext('2d');
 new Chart(callbacksCtx, {
     type: 'bar',
@@ -209,10 +208,10 @@ new Chart(callbacksCtx, {
             x: {
                 type: 'time',
                 time: {
-                    parser: 'YYYY-MM-DD HH:mm:ss', // Parse your date-time format
-                    unit: 'day', // Group by day
+                    parser: 'YYYY-MM-DD HH:mm:ss', 
+                    unit: 'day', 
                     displayFormats: {
-                        day: 'MMM D', // Format: Sep 5
+                        day: 'MMM D', 
                     }
                 },
                 title: {
@@ -223,9 +222,9 @@ new Chart(callbacksCtx, {
             y: {
                 beginAtZero: true,
                 ticks: {
-                    stepSize: 1, // Ensure the y-axis only displays integers
+                    stepSize: 1, 
                     callback: function(value) {
-                        return Number.isInteger(value) ? value : null; // Display only integer values
+                        return Number.isInteger(value) ? value : null; 
                     }
                 },
                 title: {

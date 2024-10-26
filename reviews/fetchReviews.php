@@ -2,30 +2,30 @@
 session_start();
 include '../config/dbconnect.php'; 
 
-// Get product ID and filter/sorting options
+
 $productID = intval($_POST['productID']);
 $stars = isset($_POST['stars']) ? intval($_POST['stars']) : 0;
 $sortInquiry = isset($_POST['sortReview']) ? $_POST['sortReview'] : 'date_desc';
-$currentPage = isset($_POST['page']) ? intval($_POST['page']) : 1; // Get current page, default to 1
-$reviewsPerPage = 10; // Number of reviews to show per page
-$offset = ($currentPage - 1) * $reviewsPerPage; // Calculate the offset
+$currentPage = isset($_POST['page']) ? intval($_POST['page']) : 1; 
+$reviewsPerPage = 10; 
+$offset = ($currentPage - 1) * $reviewsPerPage; 
 
-// Determine the sorting condition based on the selected option
+
 switch ($sortInquiry) {
     case 'date_desc':
-        $sortBy = 'createdAt DESC'; // Most recent
+        $sortBy = 'createdAt DESC'; 
         break;
     case 'rating_desc':
-        $sortBy = 'rating DESC'; // Top Reviews (Highest rated first)
+        $sortBy = 'rating DESC'; 
         break;
     default:
-        $sortBy = 'createdAt DESC'; // Default to most recent
+        $sortBy = 'createdAt DESC'; 
 }
 
-// Get logged-in user information
+
 $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
-// Modify the SQL query to prioritize logged-in user's reviews and filter by rating if selected
+
 if ($userID && $stars > 0) {
     $reviewsQuery = $conn->prepare("
         SELECT * FROM review 
@@ -54,8 +54,7 @@ if ($userID && $stars > 0) {
 $reviewsQuery->execute();
 $reviews = $reviewsQuery->get_result();
 
-// Get the total number of reviews (without LIMIT for pagination)
-// Adjust the totalReviews query to include the stars filter if it's selected
+
 if ($stars > 0) {
     $totalReviewsQuery = $conn->prepare("SELECT COUNT(*) AS total FROM review WHERE productID = ? AND rating = ?");
     $totalReviewsQuery->bind_param('ii', $productID, $stars);
@@ -67,14 +66,14 @@ if ($stars > 0) {
 $totalReviewsQuery->execute();
 $totalResult = $totalReviewsQuery->get_result();
 $totalReviews = $totalResult->fetch_assoc()['total'];
-$totalPages = ceil($totalReviews / $reviewsPerPage); // Calculate total pages
+$totalPages = ceil($totalReviews / $reviewsPerPage); 
 
 
-// Dynamically generate the reviews HTML
+
 while ($review = $reviews->fetch_assoc()) {
     $reviewID = $review['reviewID'];
-    $isUserReview = isset($userID) && $userID == $review['customerID']; // Check if it's the logged-in user's review
-    $isEditable = (strtotime($review['createdAt']) >= strtotime('-14 days')); // Check if review is within 14 days
+    $isUserReview = isset($userID) && $userID == $review['customerID']; 
+    $isEditable = (strtotime($review['createdAt']) >= strtotime('-14 days')); 
     ?>
     <div class="review bg-[#1f2937] p-4 rounded-lg mb-4">
         <h4 class="text-[#C4A484] text-lg"><b><?php echo htmlspecialchars($review['customerName']); ?></b></h4>
@@ -85,7 +84,7 @@ while ($review = $reviews->fetch_assoc()) {
         <p class="text-white"><?php echo htmlspecialchars(html_entity_decode($review['reviewText'])); ?></p>
         <p><small class="text-gray-400"><?php echo $review['createdAt']; ?></small></p>
 
-        <!-- If it's the user's review and is less than 14 days old, allow edit and delete -->
+       
         <?php if ($isUserReview && $isEditable): ?>
             <div class="mt-4">
                 <button onclick="toggleVisibility('editReview_<?php echo $reviewID; ?>')" class="text-[#C4A484] hover:underline mr-1">Edit</button>
@@ -97,7 +96,7 @@ while ($review = $reviews->fetch_assoc()) {
             </div>
             
 
-            <!-- Edit form -->
+          
             <div id="editReview_<?php echo $reviewID; ?>" style="display:none;" class="mt-3">
                 <form action="editReview.php" method="POST">
                     <input type="hidden" name="reviewID" value="<?php echo $reviewID; ?>">
@@ -125,10 +124,10 @@ while ($review = $reviews->fetch_assoc()) {
             </div>
         <?php endif; ?>
 
-        <!-- Button to toggle replies -->
+      
         <button onclick="toggleVisibility('replies_<?php echo $review['reviewID']; ?>')" class="bg-transparent hover:text-white hover:underline text-[#C4A484] rounded px-3 py-1 mt-2">Show/Hide Replies</button>
 
-        <!-- Display replies, hidden by default -->
+      
         <div id="replies_<?php echo $review['reviewID']; ?>" style="display:none; margin-top: 10px;">
             <?php
             $replies = $conn->query("SELECT * FROM reviewreply WHERE reviewID = $reviewID ORDER BY createdAt ASC");
@@ -143,7 +142,7 @@ while ($review = $reviews->fetch_assoc()) {
             }
             ?>
 
-            <!-- Reply form -->
+           
             <form action="" method="POST" class="mt-3">
                 <input type="hidden" name="reviewID" value="<?php echo $review['reviewID']; ?>">
                 <?php if (!isset($_SESSION['user_name'])): ?>
@@ -170,12 +169,12 @@ while ($review = $reviews->fetch_assoc()) {
         if ($totalPages > 1) {
             echo '<div class="pagination mt-4 flex flex-wrap justify-center">';
         
-            // Previous Button
+            
             if ($currentPage > 1) {
                 echo '<button onclick="fetchReviews('.($currentPage - 1).')" class="bg-[#9b734b] hover:bg-[#785937] text-white px-3 py-1 md:px-4 md:py-2 rounded-md m-1 text-sm md:text-base">Previous</button>';
             }
         
-            // First page button and ellipsis if needed
+            
             if ($currentPage > 3) {
                 echo '<button onclick="fetchReviews(1)" class="bg-[#C4A484] text-black px-3 py-1 md:px-4 md:py-2 rounded-md m-1 text-sm md:text-base">1</button>';
                 if ($currentPage > 4) {
@@ -183,7 +182,7 @@ while ($review = $reviews->fetch_assoc()) {
                 }
             }
         
-            // Pages around current page
+           
             for ($i = max(1, $currentPage - 2); $i <= min($totalPages, $currentPage + 2); $i++) {
                 if ($i == $currentPage) {
                     echo '<button class="bg-[#9b734b] text-white px-3 py-1 md:px-4 md:py-2 rounded-md m-1 text-sm md:text-base">'.$i.'</button>';
@@ -192,7 +191,7 @@ while ($review = $reviews->fetch_assoc()) {
                 }
             }
         
-            // Last page button and ellipsis if needed
+            
             if ($currentPage < $totalPages - 2) {
                 if ($currentPage < $totalPages - 3) {
                     echo '<span class="text-gray-500 px-2 text-sm md:text-base">...</span>';
@@ -200,7 +199,7 @@ while ($review = $reviews->fetch_assoc()) {
                 echo '<button onclick="fetchReviews('.$totalPages.')" class="bg-[#C4A484] text-black px-3 py-1 md:px-4 md:py-2 rounded-md m-1 text-sm md:text-base">'.$totalPages.'</button>';
             }
         
-            // Next Button
+            
             if ($currentPage < $totalPages) {
                 echo '<button onclick="fetchReviews('.($currentPage + 1).')" class="bg-[#9b734b] hover:bg-[#785937] text-white px-3 py-1 md:px-4 md:py-2 rounded-md m-1 text-sm md:text-base">Next</button>';
             }

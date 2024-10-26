@@ -1,16 +1,13 @@
 <?php
-include '../../config/dbconnect.php'; // Adjust the path if needed
+include '../../config/dbconnect.php'; 
 
-// Function to calculate percentage
 function calculatePercentage($count, $total) {
     return ($total > 0) ? round(($count / $total) * 100) : 0;
 }
 
-// Check if a product ID is provided or if we should show ratings for all products
 if (isset($_POST['productID']) && !empty($_POST['productID'])) {
     $productID = intval($_POST['productID']);
     
-    // Query to fetch the summary of reviews for the selected product
     $query = "SELECT rating, COUNT(*) AS count FROM review WHERE productID = $productID GROUP BY rating";
     $result = $conn->query($query);
     
@@ -21,42 +18,34 @@ if (isset($_POST['productID']) && !empty($_POST['productID'])) {
             $product = $productData->fetch_assoc();
             $productName = $product['productName'];
         } else {
-            // Handle case where product not found
             echo "Product not found.";
         }
 
-    // Initialize variables for total ratings and star count
     $ratingCounts = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
     $totalRatings = 0;
     
-    // Fetch results and count ratings
     while ($row = $result->fetch_assoc()) {
         $ratingCounts[$row['rating']] = $row['count'];
         $totalRatings += $row['count'];
     }
     
-    // Calculate the average rating
     $averageRating = 0;
     if ($totalRatings > 0) {
         $averageRating = (1 * $ratingCounts[1] + 2 * $ratingCounts[2] + 3 * $ratingCounts[3] + 4 * $ratingCounts[4] + 5 * $ratingCounts[5]) / $totalRatings;
     }
 
 } else {
-    // If no product is selected, fetch the rating summary for all products
     $query = "SELECT rating, COUNT(*) AS count FROM review GROUP BY rating";
     $result = $conn->query($query);
 
-    // Initialize variables for total ratings and star count
     $ratingCounts = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
     $totalRatings = 0;
     
-    // Fetch results and count ratings
     while ($row = $result->fetch_assoc()) {
         $ratingCounts[$row['rating']] = $row['count'];
         $totalRatings += $row['count'];
     }
     
-    // Calculate the average rating for all products
     $averageRating = 0;
     if ($totalRatings > 0) {
         $averageRating = (1 * $ratingCounts[1] + 2 * $ratingCounts[2] + 3 * $ratingCounts[3] + 4 * $ratingCounts[4] + 5 * $ratingCounts[5]) / $totalRatings;

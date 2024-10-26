@@ -8,11 +8,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit;
 }
 
-// Fetch all products to populate the dropdown menu
+
 $productsQuery = "SELECT productID, productName FROM product ORDER BY productName ASC";
 $productsResult = $conn->query($productsQuery);
 
-// Fetch the most positive review
+
 $mostPositiveQuery = $conn->prepare("
     SELECT rs.*, r.reviewText, r.customerName, r.rating 
     FROM review_sentiment rs
@@ -25,7 +25,7 @@ $mostPositiveQuery = $conn->prepare("
 $mostPositiveQuery->execute();
 $mostPositiveReview = $mostPositiveQuery->get_result()->fetch_assoc();
 
-// Fetch the most negative review
+
 $mostNegativeQuery = $conn->prepare("
     SELECT rs.*, r.reviewText, r.customerName, r.rating 
     FROM review_sentiment rs
@@ -38,10 +38,10 @@ $mostNegativeQuery = $conn->prepare("
 $mostNegativeQuery->execute();
 $mostNegativeReview = $mostNegativeQuery->get_result()->fetch_assoc();
 
-// Handle reply submission
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     $reviewID = intval($_POST['reviewID']);
-    $replyText = htmlspecialchars($_POST['replyText']); // Sanitize reply text
+    $replyText = htmlspecialchars($_POST['replyText']); 
     $userName = "Admin";
     
     $stmt = $conn->prepare("INSERT INTO reviewreply (reviewID,userName, replyText) VALUES (?, ?, ?)");
@@ -81,10 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     </a>
 
        
-    <!-- Product and Rating Filter Form -->
+   
     <form id="filterForm" class="mb-6 mt-20 p-6 rounded-lg shadow-md w-full mx-auto bg-[#111827]">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Product Selection -->
+       
         <div class="flex flex-col">
             <label for="productID" class="block text-lg font-semibold text-[#C4A484] mb-3">Select Product:</label>
             <select name="productID" id="productID" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-600 bg-white text-gray-800">
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
             </select>
         </div>
 
-        <!-- Star Rating Filter -->
+       
         <div class="flex flex-col">
             <label for="stars" class="block text-lg font-semibold text-[#C4A484] mb-3">Filter by Stars:</label>
             <select name="stars" id="stars" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-600 bg-white text-gray-800">
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
             </select>
         </div>
 
-        <!-- Sorting Options -->
+      
         <div class="flex flex-col lg:col-span-1 sm:col-span-2">
             <label for="sortInquiry" class="block text-lg font-semibold text-[#C4A484] mb-3">Sort by:</label>
             <select name="sortInquiry" id="sortInquiry" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-600 bg-white text-gray-800">
@@ -123,19 +123,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 
      <div id="ratingSummary"></div>
 
-      <!-- Display most positive review -->
+      
     <div id="mostPositiveReviewSection" >
-        <!-- This will be dynamically updated by JavaScript -->
+      
     </div>
 
-    <!-- Display most negative review -->
+  
     <div id="mostNegativeReviewSection" >
-        <!-- This will be dynamically updated by JavaScript -->
+       
     </div>
 
     <div id="reviewsSection"></div>
 </div>
-<!-- <script src="../../resources/JS/ratingSummery.js"></script> -->
+
 <script>
     
 
@@ -143,11 +143,11 @@ $(document).ready(function() {
 
     $(document).ready(function() {
 
-        // Fetch reviews with pagination and filters
+        
         window.fetchReviews = function(page = 1) {
             var productID = $('#productID').val();
             var stars = $('#stars').val();
-            var sortInquiry = $('#sortInquiry').val(); // Get the sorting option
+            var sortInquiry = $('#sortInquiry').val(); 
         
             $.ajax({
                 url: 'fetchReviews.php',
@@ -156,11 +156,11 @@ $(document).ready(function() {
                     productID: productID, 
                     stars: stars, 
                     sortInquiry: sortInquiry,
-                    page: page // Send the current page number
+                    page: page 
                 },
                 success: function(response) {
                     console.log('Received response:', response);
-                    $('#reviewsSection').html(response); // Update the reviews section with the response data
+                    $('#reviewsSection').html(response); 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log('Error in Ajax request:', textStatus, errorThrown);
@@ -168,24 +168,24 @@ $(document).ready(function() {
             });
         }
         
-        // Trigger the fetch when any filter or sort option is changed
+        
         $('#productID, #stars, #sortInquiry').change(function() {
-            fetchReviews(1); // Fetch page 1 after any filter change
+            fetchReviews(1); 
         });
         
-        // Trigger initial load of reviews when the page loads
+        
         fetchReviews();
         });
 
 
-         // Function to fetch the rating summary
+        
          function fetchRatingSummary(productID) {
                         $.ajax({
-                            url: 'ratingSummery.php', // Your PHP file to handle the request
+                            url: 'ratingSummery.php',
                             method: 'POST',
                             data: { productID: productID },
                             success: function(response) {
-                                $('#ratingSummary').html(response); // Display the response in the div
+                                $('#ratingSummary').html(response); 
                             },
                             error: function() {
                                 $('#ratingSummary').html('<p>Error fetching rating summary.</p>');
@@ -193,19 +193,19 @@ $(document).ready(function() {
                         });
                     }
         
-                    // Fetch rating summary when the page loads and when the product selection changes
+                    
                     $('#productID').change(function() {
-                        var productID = $(this).val(); // Get selected product ID
-                        fetchRatingSummary(productID);  // Call function to fetch summary
+                        var productID = $(this).val(); 
+                        fetchRatingSummary(productID);  
                     });
         
-                    // Fetch rating summary initially (for the default option)
+                    
                     fetchRatingSummary($('#productID').val());
           
            
         });
 
-         // Fetch most positive and negative reviews
+         
     function fetchTopReviews(productID = '') {
         $.ajax({
             url: 'fetchTopReviews.php',
@@ -222,14 +222,14 @@ $(document).ready(function() {
         });
     }
 
-    // Trigger the fetch for reviews and rating summary
+    
     $('#productID').change(function() {
         const productID = $(this).val();
-        fetchTopReviews(productID); // Fetch most positive and most negative reviews for the selected product
-        fetchReviews(1); // Fetch main reviews
+        fetchTopReviews(productID); 
+        fetchReviews(1); 
     });
 
-    // Initially load top reviews for all products
+    
     fetchTopReviews();
 
         function toggleVisibility(id) {

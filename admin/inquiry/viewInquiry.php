@@ -35,7 +35,7 @@ if (isset($_GET['id'])) {
     }
 
 
-    // Query to get replies associated with the inquiry
+    
     $repliesQuery = "SELECT * FROM ticket_replies WHERE ticketID = ? ORDER BY created_at ASC";
 
     $replies = [];
@@ -92,13 +92,13 @@ $conn->close();
 
             <div class="p-6">
 
-            <!-- success and error msg -->
+            
             <?php if (isset($_SESSION['success'])): ?>
                     <div class="bg-green-500 text-white p-4 rounded-md mb-4">
                         <span class="font-bold cursor-pointer float-right text-xl leading-none" onclick="this.parentElement.style.display='none';">&times;</span>
                         <?php echo $_SESSION['success']; ?>
                     </div>
-                    <?php unset($_SESSION['success']); // Unset the message after displaying it ?>
+                    <?php unset($_SESSION['success']); ?>
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION['error'])): ?>
@@ -106,7 +106,7 @@ $conn->close();
                         <span class="font-bold cursor-pointer float-right text-xl leading-none" onclick="this.parentElement.style.display='none';">&times;</span>
                         <?php echo $_SESSION['error']; ?>
                     </div>
-                    <?php unset($_SESSION['error']); // Unset the message after displaying it ?>
+                    <?php unset($_SESSION['error']); ?>
                 <?php endif; ?>
               
 
@@ -140,7 +140,7 @@ $conn->close();
                     </div>
                 </div>
                
-                <!-- Subject and Message -->
+                
                 <div class="mb-6 p-4 bg-transparent border border-green-600 backdrop-blur-md bg-blur-sm rounded-lg shadow-sm">
                     <div class="mb-6 text-center">
                         <h3 class="text-xl font-semibold"><?php echo htmlspecialchars($inquiry['subject']); ?></h3>
@@ -148,7 +148,7 @@ $conn->close();
                     <p class="text-gray-600"><?php echo htmlspecialchars($inquiry['ticketText']); ?></p>
                 </div>
 
-                <!-- Inquiry Status -->
+                
                 <div class="mb-6">
                     <span class="inline-block px-4 py-2 text-lg font-semibold text-white
                         <?php if ($inquiry['ticketStatus'] == 'New') echo 'bg-blue-600'; 
@@ -158,7 +158,7 @@ $conn->close();
                     </span>
                 </div>
 
-          <!-- Replies section -->
+         
 <div class="mt-6 bg-transparent">
     <h3 class="text-xl font-semibold mb-4 bg-transparent">Old Replies</h3>
     <?php if (count($replies) > 0): ?>

@@ -48,7 +48,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     }
     ?>
 
-    <!-- Inquiry Form -->
+   
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-transparent">
         <div class="w-full sm:max-w-5xl my-6 px-6 py-4 bg-translucent shadow-md overflow-hidden sm:rounded-lg">
             <h2 class="text-center text-2xl font-semibold mb-6 text-gray-700">Customer Inquiries</h2>

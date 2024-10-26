@@ -11,7 +11,7 @@ $base_url = "http://localhost/woodlak";
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Inquiry History</title>
 
-  <!-- Tailwind CSS -->
+  
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../resources/css/contactUs.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -19,20 +19,18 @@ $base_url = "http://localhost/woodlak";
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
 
-  <!-- Include the navbar -->
+  
   <?php include "../includes/navbar.php"; ?>
 
-  <!-- Main Content -->
+ 
   <div class="container mx-auto max-w-4xl px-4 py-8 flex-grow">
     <h2 class="text-center text-4xl font-bold text-[#785b3a] my-8">My Inquiry History</h2>
 
-    <!-- Inquiry List -->
+   
     <div class="grid grid-cols-1 gap-6">
       <?php
-        // Assuming you have the customerID
-        $customerID = $_SESSION['user_id']; // Replace with the actual customerID
+        $customerID = $_SESSION['user_id']; 
 
-        // Fetch user's tickets
         $query = "SELECT * FROM tickets WHERE customerID = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $customerID);
@@ -83,7 +81,6 @@ $base_url = "http://localhost/woodlak";
     </div>
   </div>
 
-  <!-- Include the footer -->
   <?php include '../includes/footer.php'; ?>
 
 </body>

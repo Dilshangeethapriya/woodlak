@@ -1,13 +1,12 @@
 <?php
 include '../config/dbconnect.php'; 
-include '../includes/phpInsight-master/autoload.php'; // Include the sentiment analysis library
+include '../includes/phpInsight-master/autoload.php'; 
 
-use PHPInsight\Sentiment; // Use the PHPInsight sentiment analysis library
+use PHPInsight\Sentiment; 
 
 $productID = intval($_REQUEST["PRODUCTC"]);
 $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
-// Fetch reviews and prioritize the logged-in user's reviews
 if ($userID) {
     $reviewsQuery = $conn->prepare("
         SELECT * FROM review 
@@ -17,14 +16,12 @@ if ($userID) {
     ");
     $reviewsQuery->bind_param('ii', $productID, $userID);
 } else {
-    // If no user is logged in, fetch reviews normally
     $reviewsQuery = $conn->prepare("SELECT * FROM review WHERE productID = ? ORDER BY createdAt DESC LIMIT 10");
     $reviewsQuery->bind_param('i', $productID);
 }
 $reviewsQuery->execute();
 $reviews = $reviewsQuery->get_result();
 
-// Handle review submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
     $productID = intval($_REQUEST["PRODUCTC"]);
     $customerID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
@@ -32,24 +29,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
     $rating = $_POST['rating'];
     $reviewText = $_POST['reviewText'];
 
-    // Sanitize input
     $customerName = htmlspecialchars($customerName);
     $reviewText = htmlspecialchars($reviewText);
 
-    // Prepare and execute the insert statement for the review
     $stmt = $conn->prepare("INSERT INTO review (productID, customerID, customerName, rating, reviewText) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param('iisis', $productID, $customerID, $customerName, $rating, $reviewText);
     
     if ($stmt->execute()) {
-        // Get the ID of the newly inserted review
         $reviewID = $stmt->insert_id;
 
-        // Run sentiment analysis on the submitted review
         $sentiment = new Sentiment();
-        $scores = $sentiment->score($reviewText);  // Get sentiment scores (positive, negative, neutral)
-        $category = $sentiment->categorise($reviewText); // Get the sentiment category
+        $scores = $sentiment->score($reviewText);  
+        $category = $sentiment->categorise($reviewText); 
         
-        // Insert sentiment analysis result into the review_sentiment table
         $sentimentStmt = $conn->prepare("
             INSERT INTO review_sentiment (reviewID, positive_score, negative_score, neutral_score, sentiment_category, last_analyzed)
             VALUES (?, ?, ?, ?, ?, NOW())
@@ -57,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
         $sentimentStmt->bind_param('iddds', $reviewID, $scores['pos'], $scores['neg'], $scores['neu'], $category);
         $sentimentStmt->execute();
 
-        // Redirect to the same product page after submission
         header("Location: view_product.php?PRODUCTC=$productID");
         exit();
     } else {
@@ -65,14 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
     }
 }
 
-// Handle reply submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     $reviewID = intval($_POST['reviewID']);
-    $replyText = htmlspecialchars($_POST['replyText']); // Sanitize reply text
+    $replyText = htmlspecialchars($_POST['replyText']);
     $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : $_POST['userName'];
     $userName = htmlspecialchars($userName);
 
-    // Prepare and execute the insert statement
     $stmt = $conn->prepare("INSERT INTO reviewreply (reviewID, userName, replyText) VALUES (?, ?, ?)");
     $stmt->bind_param('iss', $reviewID, $userName, $replyText);
 
@@ -86,17 +75,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 }
 ?>
 
-<!-- HTML and review display goes here -->
+
 
 <div class="review-section my-24  max-w-screen-lg mx-auto rounded-md p-5" style="background-color: rgba(220, 255, 220, 0.0);">
     <h2 class="text-[#78350f] text-4xl mb-8 text-center">Customer Reviews</h2>
 
     <?php include "ratingCounts.php" ?>
 
-    <!-- Button to toggle the review form -->
+    
     <button onclick="toggleVisibility('reviewForm')" class="bg-[#78350f] hover:bg-[#5a2b09] text-white rounded px-4 py-2 mb-4">Leave a Review</button>
     
-    <!-- Review form, hidden by default -->
+   
     <div id="reviewForm" style="display:none;" class="mx-auto bg-[#1f2937] p-6 rounded-lg shadow-lg">
         <form action="" method="POST" class="space-y-4">
             <?php if (!isset($_SESSION['user_name'])): ?>
@@ -142,8 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
         <?php while ($review = $reviews->fetch_assoc()): ?>
             <?php
               $reviewID = $review['reviewID'];
-              $isUserReview = isset($userID) && $userID == $review['customerID'];  // Check if this is the logged-in user's review
-              $isEditable = (strtotime($review['createdAt']) >= strtotime('-14 days')); // Check if the review is less than 14 days old
+              $isUserReview = isset($userID) && $userID == $review['customerID'];  
+              $isEditable = (strtotime($review['createdAt']) >= strtotime('-14 days')); 
             ?>
             <div class="review bg-[#1f2937] p-4 rounded-lg mb-4">
                 <h4 class="text-[#C4A484] text-lg"><b><?php echo htmlspecialchars($review['customerName']); ?></b></h4>
@@ -155,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 
                 <?php if ($isUserReview && $isEditable): ?>
 
-            <!-- Edit and Delete buttons -->
+            
             <div class="mt-4">
                 <button onclick="toggleVisibility('editReview_<?php echo $reviewID; ?>')" class="text-[#C4A484] border border-[#C4A484] p-1 rounded-md mr-3">Edit</button>
                 <form action="../reviews/deleteReview.php" method="POST" class="inline delete-form">
@@ -176,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 </div>
             </div>
 
-            <!-- Edit form, hidden by default -->
+            
             <div id="editReview_<?php echo $reviewID; ?>" style="display:none;" class="mt-3">
                 <form action="../reviews/editReview.php" method="POST">
                     <input type="hidden" name="reviewID" value="<?php echo $reviewID; ?>">
@@ -186,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
                         <textarea name="reviewText" rows="4" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" required><?php echo htmlspecialchars($review['reviewText']); ?></textarea>
                     </div>
 
-                    <!-- Review Rating -->
+                    
                     <div class="mb-3">
                         <label for="editRating" class="block text-sm font-medium text-white">Edit Rating:</label>
                         <select name="rating" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" required>
@@ -205,10 +194,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
             </div>
         <?php endif; ?>
 
-                <!-- Button to toggle replies -->
+                
                 <button onclick="toggleVisibility('replies_<?php echo $review['reviewID']; ?>')" class="bg-transparent hover:text-white hover:underline text-[#C4A484] rounded px-3 py-1 mt-2">Show/Hide Replies</button>
 
-                <!-- Display replies, hidden by default -->
+                
                 <div id="replies_<?php echo $review['reviewID']; ?>" style="display:none; margin-top: 10px;">
                     <?php
                     $reviewID = $review['reviewID'];
@@ -225,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
                     }
                     ?>
 
-                    <!-- Reply form -->
+                   
                     <form action="" method="POST" class="mt-3">
                           <input type="hidden" name="reviewID" value="<?php echo $review['reviewID']; ?>">
                           <?php if (!isset($_SESSION['user_name'])): ?>
@@ -274,38 +263,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
 
        // delete confirmation-----------
 
-       var deleteForm = null; // Store reference to the form that is to be submitted
+       var deleteForm = null; 
 
-// Function to show the custom confirmation modal
 function showDeleteModal(form) {
-    deleteForm = form; // Store the form reference
-    document.getElementById('deleteModal').style.display = 'flex'; // Show the modal
+    deleteForm = form; 
+    document.getElementById('deleteModal').style.display = 'flex'; 
 }
 
-// Function to hide the custom confirmation modal
+
 function hideDeleteModal() {
-    document.getElementById('deleteModal').style.display = 'none'; // Hide the modal
+    document.getElementById('deleteModal').style.display = 'none'; 
 }
 
-// Attach delete confirmation to all delete buttons
+
 document.querySelectorAll('.delete-btn').forEach(button => {
     button.addEventListener('click', function() {
-        var form = this.closest('.delete-form'); // Get the parent form of the clicked button
-        showDeleteModal(form); // Show the modal and pass the form
+        var form = this.closest('.delete-form'); 
+        showDeleteModal(form); 
     });
 });
 
-// Confirm delete action
+
 document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
     if (deleteForm) {
-        deleteForm.submit(); // Submit the form if confirmed
+        deleteForm.submit();
     }
-    hideDeleteModal(); // Hide the modal
+    hideDeleteModal(); 
 });
 
-// Cancel delete action
+
 document.getElementById('cancelDeleteBtn').addEventListener('click', function() {
-    hideDeleteModal(); // Hide the modal if cancelled
+    hideDeleteModal(); 
 });    
 </script>
 

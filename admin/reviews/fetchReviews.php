@@ -5,63 +5,63 @@ include '../../config/dbconnect.php';
 $productID = isset($_POST['productID']) ? intval($_POST['productID']) : 0;
 $stars = isset($_POST['stars']) ? intval($_POST['stars']) : 0;
 $sortInquiry = isset($_POST['sortInquiry']) ? $_POST['sortInquiry'] : 'date_desc';
-$currentPage = isset($_POST['page']) ? intval($_POST['page']) : 1; // Get current page number (default is 1)
-$reviewsPerPage = 10; // Number of reviews per page
-$offset = ($currentPage - 1) * $reviewsPerPage; // Calculate the offset for the query
+$currentPage = isset($_POST['page']) ? intval($_POST['page']) : 1; 
+$reviewsPerPage = 10; 
+$offset = ($currentPage - 1) * $reviewsPerPage; 
 
-// Determine the sorting condition based on the selected option
+
 switch ($sortInquiry) {
     case 'date_desc':
-        $sortBy = 'createdAt DESC'; // Most recent reviews
+        $sortBy = 'createdAt DESC'; 
         break;
     case 'rating_desc':
-        $sortBy = 'rating DESC'; // Top Reviews (highest rated)
+        $sortBy = 'rating DESC'; 
         break;
     default:
-        $sortBy = 'createdAt DESC'; // Default to most recent
+        $sortBy = 'createdAt DESC'; 
 }
 
-// Build the base SQL query for reviews
-$query = "SELECT * FROM review WHERE 1"; // Base query to match all reviews
 
-// Filter by productID if not "All"
+$query = "SELECT * FROM review WHERE 1"; 
+
+
 if (!empty($productID)) {
     $query .= " AND productID = ?";
 }
 
-// Filter by star rating if a rating is selected
+
 if ($stars > 0) {
     $query .= " AND rating = ?";
 }
 
-// Add sorting and pagination (LIMIT and OFFSET)
+
 $query .= " ORDER BY $sortBy LIMIT ? OFFSET ?";
 
-// Prepare the SQL statement
+
 if (!empty($productID) && $stars > 0) {
-    // Bind both productID and rating
+    
     $stmt = $conn->prepare($query);
     $stmt->bind_param('iiii', $productID, $stars, $reviewsPerPage, $offset);
 } elseif (!empty($productID)) {
-    // Bind only productID
+   
     $stmt = $conn->prepare($query);
     $stmt->bind_param('iii', $productID, $reviewsPerPage, $offset);
 } elseif ($stars > 0) {
-    // Bind only rating
+    
     $stmt = $conn->prepare($query);
     $stmt->bind_param('iii', $stars, $reviewsPerPage, $offset);
 } else {
-    // No filters applied, only sorting and pagination
+
     $stmt = $conn->prepare($query);
     $stmt->bind_param('ii', $reviewsPerPage, $offset);
 }
 
-// Execute the query
+
 $stmt->execute();
 $reviews = $stmt->get_result();
 
 
-// number of pages
+
 $totalQuery = "SELECT COUNT(*) as totalReviews FROM review WHERE 1";
 if (!empty($productID)) {
     $totalQuery .= " AND productID = $productID";
@@ -71,7 +71,7 @@ if ($stars > 0) {
 }
 $totalResult = $conn->query($totalQuery);
 $totalReviews = $totalResult->fetch_assoc()['totalReviews'];
-$totalPages = ceil($totalReviews / $reviewsPerPage); // Calculate total pages
+$totalPages = ceil($totalReviews / $reviewsPerPage); 
 
 
 
@@ -124,20 +124,19 @@ if ($reviews && $reviews->num_rows > 0) {
   if ($totalPages > 1) {
     echo '<div class="pagination mt-4 flex flex-wrap justify-center">';
 
-    // Previous Button
     if ($currentPage > 1) {
         echo '<button onclick="fetchReviews('.($currentPage - 1).')" class="bg-[#9b734b] hover:bg-[#785937] text-white px-3 py-1 md:px-4 md:py-2 rounded-md m-1 text-sm md:text-base">Previous</button>';
     }
 
-    // Always show first page
+    
     if ($currentPage > 3) {
         echo '<button onclick="fetchReviews(1)" class="bg-[#C4A484] text-black px-3 py-1 md:px-4 md:py-2 rounded-md m-1 text-sm md:text-base">1</button>';
         if ($currentPage > 4) {
-            echo '<span class="text-gray-500 px-2 text-sm md:text-base">...</span>'; // Ellipsis for skipped pages
+            echo '<span class="text-gray-500 px-2 text-sm md:text-base">...</span>'; 
         }
     }
 
-    // Show pages near current page
+    
     for ($i = max(1, $currentPage - 2); $i <= min($totalPages, $currentPage + 2); $i++) {
         if ($i == $currentPage) {
             echo '<button class="bg-[#9b734b] text-white px-3 py-1 md:px-4 md:py-2 rounded-md m-1 text-sm md:text-base">'.$i.'</button>';
@@ -146,15 +145,15 @@ if ($reviews && $reviews->num_rows > 0) {
         }
     }
 
-    // Always show last page
+  
     if ($currentPage < $totalPages - 2) {
         if ($currentPage < $totalPages - 3) {
-            echo '<span class="text-gray-500 px-2 text-sm md:text-base">...</span>'; // Ellipsis for skipped pages
+            echo '<span class="text-gray-500 px-2 text-sm md:text-base">...</span>'; 
         }
         echo '<button onclick="fetchReviews('.$totalPages.')" class="bg-[#C4A484] text-black px-3 py-1 md:px-4 md:py-2 rounded-md m-1 text-sm md:text-base">'.$totalPages.'</button>';
     }
 
-    // Next Button
+   
     if ($currentPage < $totalPages) {
         echo '<button onclick="fetchReviews('.($currentPage + 1).')" class="bg-[#9b734b] hover:bg-[#785937] text-white px-3 py-1 md:px-4 md:py-2 rounded-md m-1 text-sm md:text-base">Next</button>';
     }

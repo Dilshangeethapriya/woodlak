@@ -66,7 +66,7 @@ function sendReplyEmailToCustomer($ticketID, $replyText) {
             $to = $customer['email'];  
             $name = $customer['name']; 
 
-            // PHPMailer instance
+            
             $mail = new PHPMailer(true);
 
             try {
@@ -79,7 +79,7 @@ function sendReplyEmailToCustomer($ticketID, $replyText) {
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
 
-                // creating email content
+                // email content
                 $mail->setFrom('customersupport@woodlak.com', 'WOODLAK');
                 $mail->addAddress($to, $name);  
                 $mail->isHTML(true);  

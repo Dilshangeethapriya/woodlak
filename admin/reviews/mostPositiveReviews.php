@@ -9,17 +9,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit;
 }
 
-// Define reviews per page and get current page number
 $reviewsPerPage = 10;
 $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $offset = ($currentPage - 1) * $reviewsPerPage;
 
-// Get the productID from the URL, if present
 $productID = isset($_GET['productID']) ? intval($_GET['productID']) : null;
 
-// Fetch most positive reviews with pagination
 if ($productID) {
-    // Fetch most positive reviews for a specific product
     $mostPositiveQuery = $conn->prepare("
         SELECT rs.*, r.reviewID, r.reviewText, r.customerName, r.rating, r.createdAt
         FROM review_sentiment rs
@@ -30,7 +26,6 @@ if ($productID) {
     ");
     $mostPositiveQuery->bind_param('iii', $productID, $offset, $reviewsPerPage);
 } else {
-    // Fetch most positive reviews across all products
     $mostPositiveQuery = $conn->prepare("
         SELECT rs.*, r.reviewID, r.reviewText, r.customerName, r.rating, r.createdAt 
         FROM review_sentiment rs
@@ -44,7 +39,6 @@ if ($productID) {
 $mostPositiveQuery->execute();
 $mostPositiveReviews = $mostPositiveQuery->get_result();
 
-// Get total number of most positive reviews for pagination
 $totalQuery = "SELECT COUNT(*) AS total FROM review_sentiment rs JOIN review r ON rs.reviewID = r.reviewID";
 if ($productID) {
     $totalQuery .= " WHERE r.productID = $productID";
@@ -53,10 +47,9 @@ $totalResult = $conn->query($totalQuery);
 $totalReviews = $totalResult->fetch_assoc()['total'];
 $totalPages = ceil($totalReviews / $reviewsPerPage);
 
-// Handle reply submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     $reviewID = intval($_POST['reviewID']);
-    $replyText = htmlspecialchars($_POST['replyText']); // Sanitize reply text
+    $replyText = htmlspecialchars($_POST['replyText']); 
     $userName = "Admin";
     
     $stmt = $conn->prepare("INSERT INTO reviewreply (reviewID, userName, replyText) VALUES (?, ?, ?)");
@@ -70,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_reply'])) {
     }
 }
 
-// Function to fetch replies for a review
 function fetchReplies($conn, $reviewID) {
     $repliesQuery = $conn->prepare("SELECT * FROM reviewreply WHERE reviewID = ? ORDER BY createdAt ASC");
     $repliesQuery->bind_param('i', $reviewID);
@@ -102,7 +94,7 @@ function fetchReplies($conn, $reviewID) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../../resources/css/admin/reviews.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- Add jQuery for Ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
 </head>
 <body>
 <?php include '../../includes/adminNavbar.php' ?>
@@ -121,10 +113,10 @@ function fetchReplies($conn, $reviewID) {
                     <p class="text-white"><?php echo htmlspecialchars(html_entity_decode($review['reviewText'])); ?></p>
                     <p><small class="text-gray-400"><?php echo $review['createdAt']; ?></small></p>
 
-                    <!-- Button to toggle replies and reply form -->
+                   
                     <button onclick="toggleVisibility('replies_<?php echo $review['reviewID']; ?>')" class="bg-transparent hover:text-white hover:underline text-[#C4A484] rounded px-3 py-1 mt-2">Show/Hide Replies</button>
 
-                    <!-- Replies section and reply form -->
+                    
                     <div id="replies_<?php echo $review['reviewID']; ?>" style="display:none; margin-top: 10px;">
                         <div><?php echo fetchReplies($conn, $review['reviewID']); ?></div>
                         <form action="" method="POST" class="mt-3">
@@ -146,7 +138,7 @@ function fetchReplies($conn, $reviewID) {
         <?php endif; ?>
     </div>
 
-    <!-- Pagination -->
+  
     <?php if ($totalPages > 1): ?>
         <div class="pagination mt-4 flex flex-wrap justify-center">
             <?php if ($currentPage > 1): ?>

@@ -1,15 +1,15 @@
 <?php
 include '../../config/dbconnect.php';
 
-// Get the selected product ID from the request, or set it to null if no product is selected
+
 $productID = isset($_POST['productID']) ? intval($_POST['productID']) : null;
 
 $mostPositiveReviewsURL = $productID ? "mostPositiveReviews.php?productID={$productID}" : "mostPositiveReviews.php";
 $mostNegativeReviewsURL = $productID ? "mostNegativeReviews.php?productID={$productID}" : "mostNegativeReviews.php";
 
-// Fetch most positive review
+
 if ($productID) {
-    // Fetch most positive review for a specific product
+    
     $mostPositiveQuery = $conn->prepare("
         SELECT rs.*, r.reviewText, r.customerName, r.rating 
         FROM review_sentiment rs
@@ -20,7 +20,7 @@ if ($productID) {
     ");
     $mostPositiveQuery->bind_param('i', $productID);
 } else {
-    // Fetch the most positive review across all products
+    
     $mostPositiveQuery = $conn->prepare("
         SELECT rs.*, r.reviewText, r.customerName, r.rating 
         FROM review_sentiment rs
@@ -32,9 +32,9 @@ if ($productID) {
 $mostPositiveQuery->execute();
 $mostPositiveReview = $mostPositiveQuery->get_result()->fetch_assoc();
 
-// Fetch most negative review
+
 if ($productID) {
-    // Fetch most negative review for a specific product
+    
     $mostNegativeQuery = $conn->prepare("
         SELECT rs.*, r.reviewText, r.customerName, r.rating 
         FROM review_sentiment rs
@@ -45,7 +45,7 @@ if ($productID) {
     ");
     $mostNegativeQuery->bind_param('i', $productID);
 } else {
-    // Fetch the most negative review across all products
+    
     $mostNegativeQuery = $conn->prepare("
         SELECT rs.*, r.reviewText, r.customerName, r.rating 
         FROM review_sentiment rs
@@ -57,7 +57,7 @@ if ($productID) {
 $mostNegativeQuery->execute();
 $mostNegativeReview = $mostNegativeQuery->get_result()->fetch_assoc();
 
-// Function to fetch replies for a review
+
 function fetchReplies($conn, $reviewID) {
     $repliesQuery = $conn->prepare("SELECT * FROM reviewreply WHERE reviewID = ? ORDER BY createdAt ASC");
     $repliesQuery->bind_param('i', $reviewID);
@@ -77,13 +77,13 @@ function fetchReplies($conn, $reviewID) {
     return $repliesHTML;
 }
 
-// Fetch replies for the most positive review
+
 $positiveRepliesHTML = $mostPositiveReview ? fetchReplies($conn, $mostPositiveReview['reviewID']) : '';
 
-// Fetch replies for the most negative review
+
 $negativeRepliesHTML = $mostNegativeReview ? fetchReplies($conn, $mostNegativeReview['reviewID']) : '';
 
-// HTML for the most positive review with reply form
+
 $mostPositiveHTML = $mostPositiveReview ? 
     "<div class='bg-[#111827] p-4 mb-6 rounded-lg shadow-lg'>
         <h3 class='text-2xl text-green-500 font-bold'>Most Positive Review</h3>
@@ -113,7 +113,7 @@ $mostPositiveHTML = $mostPositiveReview ?
        
     </div>";
 
-// HTML for the most negative review with reply form
+
 $mostNegativeHTML = $mostNegativeReview ? 
     "<div class='bg-[#111827] p-4 mb-6 rounded-lg shadow-lg'>
         <h3 class='text-2xl text-red-500 font-bold'>Most Negative Review</h3>
@@ -142,7 +142,7 @@ $mostNegativeHTML = $mostNegativeReview ?
     : "<div>
     </div>";
 
-// Return the HTML as a JSON response
+
 echo json_encode([
     'mostPositive' => $mostPositiveHTML,
     'mostNegative' => $mostNegativeHTML
